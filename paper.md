@@ -7,30 +7,28 @@ authors:
   - name: Sergei Rybakov
     affiliation: "2"
   - name: Philipp Angerer
-    affiliation: "2, 3, †"    
+    affiliation: "2, 3"    
   - name: F. Alexander Wolf
     orcid: 0000-0002-8760-7838
-    affiliation: "2, 3, †"
+    affiliation: "3, 2"
 affiliations:
- - name: University of Melbourne
+ - name: University of Melbourne.
    index: 1
  - name: Helmholtz Munich, Institute of Computational Biology, Munich, Germany.
    index: 2
  - name: Cellarity, Cambridge, MA.
    index: 3
- - name: Equal contributions
-   index: †
 date: 1 October 2020
 bibliography: paper.bib
 ---
-
+ 
 # Summary
 
 anndata is a python software package for handling annotated datasets.
 
 # Introduction
 
-Generating insight from high-dimensional data typically requires two steps. Condense them into efficient representations and assign semantic labels. Both is achieved by learning patterns in high dimensions based on existing annotations. Once insight is gained, knowledge is updated and assigned in form of learned annotations. This defines the general machine learning and data science paradigm, which, which anndata, we strive represent in a data structure that integrates well with the pytdata ecosystem.
+Generating insight from high-dimensional data often involves two steps: condensing them into useful representations and assigning semantic labels. Both is achieved by learning patterns in high dimensions based on existing annotations. Once insight is gained, knowledge is updated and assigned in form of learned annotations. This defines the general machine learning and data science paradigm, which, which anndata, we strive represent in a data structure that integrates well with the pytdata ecosystem.
 
 Within the pydata ecosystem the closest package that would be amenable to serve this paradigm is xarray `[@xarray_author:YYYY]`, which enables to deal with highly complex labelled data tensors of arbitrary dimensions. On the other hand, there is the highly popular package pandas`[@pandas_author:YYYY]`, which merely provides and operates on `DataFrames`, that is, single tables of data. anndata is positioned in between by providing the minimal additional structure to enable storing compact annotations and representations of high-dimensional data, making the book keeping during learning from it much simpler.
 
@@ -50,6 +48,25 @@ Recent advances in single cell methods mean that the number of observations in e
 
 Since the last advance in high throughput molecular profiling (micro-array -> rna-seq), Python has emerged as an extremely popular language for data analysis and machine learning.
 While the analysis of bio-molecular data has previously been focussed on in the R language.
+
+Another big advantage is the on-disk represention, which even for pandas DataFrames is not yet resolved in a canonical way. For instance, there is none of the binary persisent formats are able to represent all entry types of AnnData. For instance, even such a key data type a categorical data types are not yet represented in the HDF5 format. Pickled dataframes are able, but they are non-persistent. 
+
+An AnnData object captures a useful unit (the dataset) in the data analysis workflow. Providing a stable, and standard on disk format for this unit relieves the pain of working with many competing formats for each individual element.
+
+### Figure: Overview
+
+> Figure one will be more of a "schematic". Basically the idea of `obs x vars`, how this is commonly used in the literature, and a layout of the object. This could also include what kinds of representations can be stored. E.g. data matrix, annotation, graph, and unstructured.
+
+
+### Figure: Ecosystem/ usage
+
+> A figure looking at usage of the object. Represents things like:
+> * What projects use it (usage stats)
+> * What problem does it solve in the ecosystem
+>   * This would include at least idea of on-disk representation
+> * Benchmarks?
+
+A conflict in saving datasets and their annotations has been standards vs. ease of use. In the R ecosystem, ease of use has taken precidence. Objects are serialized and written to disk. This is problematic since that data cannot be read by another tool, and may become inaccessible even after software updates. If one chooses to use standard formats to represent all elements of a dataset, a set of standards has to be chosen. T
 
 <!-- 
 I think a big part of the value proposition of AnnData is that the representation works well with the kinds of operations we want to do with single cell data. 
@@ -86,9 +103,25 @@ It fits the semantics of the problem well. How do I describe these semantics.
     * One-to-one on disk representation (for HDF5 and Zarr)
     * Uses standard on disk formats, does not invent it's own
     * Out of core access
+    * Defined disk represenation, that will be consistent, and a way to make sure the data will be read in the future
+        * This doesn't happen when you've got pickled or RDA formats
 * Efficiency is key
     * Lengths have been taken to avoid copying uneccesary data
     * Lazyness in views
     * Sparse data
 
+### Figure: Examples
+
+> Illustrative examples of how anndata is used. Include case studies like:
+> * scvelo and layers
+> * different sets of variables (modality)
+> * spatial information (use of unstructured)
+
+# Author contributions
+
+...
+
 # References
+
+* \cite{Murphy2012}
+* \cite{Huber2015}
