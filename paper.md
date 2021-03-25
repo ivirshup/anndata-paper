@@ -55,10 +55,14 @@ An AnnData object captures a useful unit (the dataset) in the data analysis work
 
 ### Figure: Overview
 
+![**Overview**](figures/overview.pdf)
+
 > Figure one will be more of a "schematic". Basically the idea of `obs x vars`, how this is commonly used in the literature, and a layout of the object. This could also include what kinds of representations can be stored. E.g. data matrix, annotation, graph, and unstructured.
 
 
 ### Figure: Ecosystem/ usage
+
+![**Ecosystem**](figures/ecosystem.pdf)
 
 > A figure looking at usage of the object. Represents things like:
 > * What projects use it (usage stats)
@@ -111,6 +115,8 @@ It fits the semantics of the problem well. How do I describe these semantics.
     * Sparse data
 
 ### Figure: Examples
+
+![**Examples**](figures/examples.pdf)
 
 > Illustrative examples of how anndata is used. Include case studies like:
 > * scvelo and layers
