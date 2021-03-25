@@ -17,3 +17,6 @@
 
 # Editors
 .vscode
+
+# Built paper
+paper.pdf
