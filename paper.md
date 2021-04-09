@@ -53,9 +53,23 @@ Another big advantage is the on-disk represention, which even for pandas DataFra
 
 An AnnData object captures a useful unit (the dataset) in the data analysis workflow. Providing a stable, and standard on disk format for this unit relieves the pain of working with many competing formats for each individual element.
 
-### Figure: Overview
+### Figure:
 
-![**Overview**: *(a)* The AnnData object is a collection of arrays aligned to the common dimensions of observations and variables. Simple annotations/ 1d vectors are stored in obs/ var. Pairwise relationships in `obsp`, `varp`. Data which doesn’t fit this model, but should stay associated to the dataset can be stored in `uns`. Colors correspond to collections of elements with common aligned dimensions. This was designed to organize analysis results, fitting in with the common conventions of statistical/ machine learning. As examples, *(b)* derived representation ŷ of the data is stored as an annotation of it’s observations. Reduced dimensional representations PCA *(c)* are stored with observation/ variable loadings aligned to the main dimensions. *(d)* A K nearest neighbor representation of this PCA space is represented as an adjacency matrix, constituting a pairwise relationship of the observations, fitting in `obsp`. *(e)* Subsetting the `AnnData` object by observations produces a view subsetting all elements aligned to this dimension.
+![**Schema**:
+*(a)* The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
+This was designed to organize analysis results, fitting in with the common conventions of statistical/ machine learning.
+Here, color is used to denote elements of the object, with "warm" colors selected for elements aligned to the observations and "cool" colors for elements aligned to variables.
+The object is centered around the main data matrix `X`, whose two dimensions correspond to observations and variables respectivley.
+Primary labels for each of these dimensions are stored as `obs_names` and `var_names`.
+`layers` elements of the same shape as `X` to allow for multiple representations (e.g. different normalization strategies).
+Simple annotations (e.g. 1d vectors of labels or statistics) for each dimension are stored in dataframes `obs` and `var`.
+`obsm`, `varm` contain multidimensional arrays whose first dimension are aligned to their respective dimension.
+Pairwise relationships within each dimension can be stored in `obsp` and `varp`.
+Data which doesn’t fit this model, but should stay associated to the dataset can be stored in `uns`.
+As examples, *(b)* derived representation ŷ of the data is stored as an annotation of it’s observations.
+*(c)* Reduced dimensional representations PCA are stored with observation/ variable loadings aligned to the main dimensions.
+*(d)* A K nearest neighbor representation of this PCA space is represented as an adjacency matrix, constituting a pairwise relationship of the observations, fitting in `obsp`.
+*(e)* Subsetting the `AnnData` object by observations produces a view subsetting all elements aligned to this dimension.
 ](figures/overview.pdf)
 
 > Figure one will be more of a "schematic". Basically the idea of `obs x vars`, how this is commonly used in the literature, and a layout of the object. This could also include what kinds of representations can be stored. E.g. data matrix, annotation, graph, and unstructured.
