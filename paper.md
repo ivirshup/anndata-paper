@@ -28,7 +28,7 @@ anndata is a python software package for handling annotated datasets.
 
 # Introduction
 
-Generating insight from high-dimensional data often involves two steps: condensing them into useful representations and assigning semantic labels. Both is achieved by learning patterns in high dimensions based on existing annotations. Once insight is gained, knowledge is updated and assigned in form of learned annotations. This defines the general machine learning and data science paradigm, which, which anndata, we strive represent in a data structure that integrates well with the pytdata ecosystem.
+Generating insight from high-dimensional data often involves two steps: condensing them into useful representations and assigning semantic labels. Both is achieved by learning patterns in high dimensions based on existing annotations. Once insight is gained, knowledge is updated and assigned in form of learned annotations. This defines the general machine learning and data science paradigm, which, which anndata, we strive represent in a data structure that integrates well with the pydata ecosystem.
 
 Within the pydata ecosystem the closest package that would be amenable to serve this paradigm is xarray `[@xarray_author:YYYY]`, which enables to deal with highly complex labelled data tensors of arbitrary dimensions. On the other hand, there is the highly popular package pandas`[@pandas_author:YYYY]`, which merely provides and operates on `DataFrames`, that is, single tables of data. anndata is positioned in between by providing the minimal additional structure to enable storing compact annotations and representations of high-dimensional data, making the book keeping during learning from it much simpler.
 
@@ -55,14 +55,15 @@ An AnnData object captures a useful unit (the dataset) in the data analysis work
 
 ### Figure: Overview
 
-![**Overview**](figures/overview.pdf)
+![**Overview**: *(a)* The AnnData object is a collection of arrays aligned to the common dimensions of observations and variables. Simple annotations/ 1d vectors are stored in obs/ var. Pairwise relationships in `obsp`, `varp`. Data which doesn’t fit this model, but should stay associated to the dataset can be stored in `uns`. Colors correspond to collections of elements with common aligned dimensions. This was designed to organize analysis results, fitting in with the common conventions of statistical/ machine learning. As examples, *(b)* derived representation ŷ of the data is stored as an annotation of it’s observations. Reduced dimensional representations PCA *(c)* are stored with observation/ variable loadings aligned to the main dimensions. *(d)* A K nearest neighbor representation of this PCA space is represented as an adjacency matrix, constituting a pairwise relationship of the observations, fitting in `obsp`. *(e)* Subsetting the `AnnData` object by observations produces a view subsetting all elements aligned to this dimension.
+](figures/overview.pdf)
 
 > Figure one will be more of a "schematic". Basically the idea of `obs x vars`, how this is commonly used in the literature, and a layout of the object. This could also include what kinds of representations can be stored. E.g. data matrix, annotation, graph, and unstructured.
 
 
 ### Figure: Ecosystem/ usage
 
-![**Ecosystem**](figures/ecosystem.pdf)
+![**AnnData provides common conventions for data handling.** *(a)* AnnData provides an in-memory api for handling annotated matrix objects, proving a common base object for a number of analysis workflows. The on disk format for this model uses lanugage independent technologies, facilitating use by other tools and interchange with other ecosystems. *(b)* The on disk schema for maps the schema to a hierarchical model (mapping of elements indicated by color). Each element is annotated with a type and schema version to facilitate interchange. *(c)* AnnData is widely used in the single cell RNA seq ecosystem.](figures/ecosystem.pdf)
 
 > A figure looking at usage of the object. Represents things like:
 > * What projects use it (usage stats)
