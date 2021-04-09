@@ -55,7 +55,7 @@ An AnnData object captures a useful unit (the dataset) in the data analysis work
 
 ### Figure:
 
-![**Schema**:
+![**Schema.**
 *(a)* The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
 This was designed to organize analysis results, fitting in with the common conventions of statistical/ machine learning.
 Here, color is used to denote elements of the object, with "warm" colors selected for elements aligned to the observations and "cool" colors for elements aligned to variables.
@@ -77,7 +77,15 @@ As examples, *(b)* derived representation ŷ of the data is stored as an annota
 
 ### Figure: Ecosystem/ usage
 
-![**AnnData provides common conventions for data handling.** *(a)* AnnData provides an in-memory api for handling annotated matrix objects, proving a common base object for a number of analysis workflows. The on disk format for this model uses lanugage independent technologies, facilitating use by other tools and interchange with other ecosystems. *(b)* The on disk schema for maps the schema to a hierarchical model (mapping of elements indicated by color). Each element is annotated with a type and schema version to facilitate interchange. *(c)* AnnData is widely used in the single cell RNA seq ecosystem.](figures/ecosystem.pdf)
+![**AnnData provides common conventions for data handling.**
+*(a)* Data flows using the `anndata` model. `AnnData` objects can be created from a number of formats, including common delimited text files, or domain/ tool specific formats like `loom` or `cellranger` outputs.
+Once in memory, AnnData provides an api for handling annotated matrix objects, proving a common base object used by a range of analysis tools.
+The in memory format has a one to one relationship with it's on disk format.
+The on disk format for this model uses lanugage independent technologies, facilitating use by other tools and interchange with other ecosystems.
+*(b)* The on disk schema for maps the schema to a hierarchical model (mapping of elements indicated by color).
+Each element is annotated with a type and schema version to facilitate interchange.
+*(c)* AnnData is widely used in the single cell RNA seq ecosystem.
+](figures/ecosystem.pdf)
 
 > A figure looking at usage of the object. Represents things like:
 > * What projects use it (usage stats)
@@ -131,7 +139,10 @@ It fits the semantics of the problem well. How do I describe these semantics.
 
 ### Figure: Examples
 
-![**Examples**](figures/examples.pdf)
+![
+**Examples:**
+
+](figures/examples.pdf)
 
 > Illustrative examples of how anndata is used. Include case studies like:
 > * scvelo and layers
