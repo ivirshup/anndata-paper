@@ -55,7 +55,7 @@ An AnnData object captures a useful unit (the dataset) in the data analysis work
 
 ### Figure:
 
-![**Schema.**
+![**Structure of the AnnData object.**
 *(a)* The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
 This was designed to organize analysis results, fitting in with the common conventions of statistical/ machine learning.
 Here, color is used to denote elements of the object, with "warm" colors selected for elements aligned to the observations and "cool" colors for elements aligned to variables.
@@ -66,7 +66,7 @@ Simple annotations (e.g. 1d vectors of labels or statistics) for each dimension 
 `obsm`, `varm` contain multidimensional arrays whose first dimension are aligned to their respective dimension.
 Pairwise relationships within each dimension can be stored in `obsp` and `varp`.
 Data which doesn’t fit this model, but should stay associated to the dataset can be stored in `uns`.
-As examples, *(b)* derived representation ŷ of the data is stored as an annotation of it’s observations.
+As examples, *(b)* the response variable ŷ learned from the data is stored as an annotation of it’s observations.
 *(c)* Reduced dimensional representations PCA are stored with observation/ variable loadings aligned to the main dimensions.
 *(d)* A K nearest neighbor representation of this PCA space is represented as an adjacency matrix, constituting a pairwise relationship of the observations, fitting in `obsp`.
 *(e)* Subsetting the `AnnData` object by observations produces a view subsetting all elements aligned to this dimension.
