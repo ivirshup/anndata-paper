@@ -105,13 +105,24 @@ It fits the semantics of the problem well. How do I describe these semantics.
 
 ## General features
 
+### Labels
+
+### Kinds of elements
+
+* Pairwise elements/ graph operations
+### On disk representation
+
 <!-- figure out how to cite zarr and hdf5, zarr has zenodo entry here: https://doi.org/10.5281/zenodo.3773449 -->
 
 A conflict in saving datasets and their annotations has been standards vs. ease of use. In the R ecosystem, ease of use has taken precidence. Objects are serialized and written to disk. This is problematic since that data cannot be read by another tool, and may become inaccessible even after software updates. If one chooses to use standard formats to represent all elements of a dataset, a set of standards has to be chosen. AnnData has chosen self-describing hierarchichal data formats such as HDF5 and `zarr` for this purpose. AnnData objects can be efficiently saved to disk using standardized formats \autoref{fig:ecosystem}. This means the data is accessible from other programming environments, as opposed to a serialized format like `pickle` or `Rdata`.
 
 By choosing standardized formats, stored data can be accessed from a variety of ecosystems including `python`, `julia`, `R`, `java`, and `javascript`. While the project has tried to stick to standardized formats, there are a few cases where no standards existed within our models. An especially important example of this is sparse array formats, which are critical for efficient processing of scRNA-seq data. To account for this, we define schemas for these types, which specify how these elements can be read from disk to memory. These specifications are versioned and stored in an internal registry. Versioning allows the specifications to evolve with the project while maintaining the ability to access older data.
 
-Like the AnnData object itself, the on-disk representations of these objects closely mirrors their in-memory representation.
+<!-- Sparse matrix citation? -->
+
+Like the AnnData object itself, the on-disk representations of these objects closely mirrors their in-memory representation. Compressed sparse matrices (CSR and CSC format) are stored as a collection of three arrays, `data`, `indices`, and `indptr`, while tabular data is stored as a collection of arrays with the same lenght (similar to the conventions of Parquet and Arrow).
+
+
 
 * Reading and writing
     * Usability
@@ -163,6 +174,3 @@ Like the AnnData object itself, the on-disk representations of these objects clo
 ...
 
 # References
-
-* \cite{Murphy2012}
-* \cite{Huber2015}
