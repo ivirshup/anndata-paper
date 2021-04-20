@@ -30,11 +30,11 @@ anndata is a python software package for handling annotated datasets.
 
 Generating insight from high-dimensional data often involves two steps: condensing them into useful representations and assigning semantic labels. Both is achieved by learning patterns in high dimensions based on existing annotations. Once insight is gained, knowledge is updated and assigned in form of learned annotations. This defines the general machine learning and data science paradigm, which, which anndata, we strive represent in a data structure that integrates well with the pydata ecosystem.
 
-Within the pydata ecosystem the closest package that would be amenable to serve this paradigm is xarray `[@xarray_author:YYYY]`, which enables to deal with highly complex labelled data tensors of arbitrary dimensions. On the other hand, there is the highly popular package pandas`[@pandas_author:YYYY]`, which merely provides and operates on `DataFrames`, that is, single tables of data. anndata is positioned in between by providing the minimal additional structure to enable storing compact annotations and representations of high-dimensional data, making the book keeping during learning from it much simpler.
+Within the pydata ecosystem the closest package that would be amenable to serve this paradigm is xarray [@Hoyer2017], which enables to deal with highly complex labelled data tensors of arbitrary dimensions. On the other hand, there is the highly popular package pandas [@McKinney2010], which merely provides and operates on `DataFrames`, that is, single tables of data. anndata is positioned in between by providing the minimal additional structure to enable storing compact annotations and representations of high-dimensional data, making the book keeping during learning from it much simpler.
 
-With that, anndata perfectly integrates into scikit-learn `[@scikit_author:YYYY]`, statsmodels `[@statsmodels_author:YYYY]`, seaborn `[@waskom:2016]`, and easily interfaces with pytorch and tensorflow.
+With that, anndata perfectly integrates into scikit-learn [@Buitinck2013], statsmodels `[@statsmodels_author:YYYY]`, seaborn [@Waskom2021], and easily interfaces with pytorch and tensorflow.
 
-Specifically, the central `AnnData` class stores observations (samples) of variables (features) in the rows of a matrix. This is the convention of the modern classics of statistics [Hastie09] and machine learning [Murphy12], the convention of dataframes both in R and Python and the established statistics and machine learning packages in Python (statsmodels, scikit-learn).
+Specifically, the central `AnnData` class stores observations (samples) of variables (features) in the rows of a matrix. This is the convention of the modern classics of statistics [@Hastie09] and machine learning [@Murphy2012], the convention of dataframes both in R and Python and the established statistics and machine learning packages in Python (statsmodels, scikit-learn).
 
 Machine learning/ data analysis methods in python work well with data "shaped-like" data from scRNA-seq (e.g. methods in scikit-learn).
 By making it easy to handle this data in python, we can more easily take advantage of these libraries. While these libraries have great computational tools, they frequently work with unlabelled numpy arrays/ scipy sparse arrays.
@@ -70,6 +70,7 @@ As examples, *(b)* the response variable ŷ learned from the data is stored as 
 *(c)* Reduced dimensional representations PCA are stored with observation/ variable loadings aligned to the main dimensions.
 *(d)* A K nearest neighbor representation of this PCA space is represented as an adjacency matrix, constituting a pairwise relationship of the observations, fitting in `obsp`.
 *(e)* Subsetting the `AnnData` object by observations produces a view subsetting all elements aligned to this dimension.
+\label{fig:overview}
 ](figures/overview.pdf)
 
 > Figure one will be more of a "schematic". Basically the idea of `obs x vars`, how this is commonly used in the literature, and a layout of the object. This could also include what kinds of representations can be stored. E.g. data matrix, annotation, graph, and unstructured.
@@ -85,6 +86,7 @@ The on disk format for this model uses lanugage independent technologies, facili
 *(b)* The on disk schema for maps the schema to a hierarchical model (mapping of elements indicated by color).
 Each element is annotated with a type and schema version to facilitate interchange.
 *(c)* AnnData is widely used in the single cell RNA seq ecosystem.
+\label{fig:ecosystem}
 ](figures/ecosystem.pdf)
 
 > A figure looking at usage of the object. Represents things like:
@@ -93,7 +95,6 @@ Each element is annotated with a type and schema version to facilitate interchan
 >   * This would include at least idea of on-disk representation
 > * Benchmarks?
 
-A conflict in saving datasets and their annotations has been standards vs. ease of use. In the R ecosystem, ease of use has taken precidence. Objects are serialized and written to disk. This is problematic since that data cannot be read by another tool, and may become inaccessible even after software updates. If one chooses to use standard formats to represent all elements of a dataset, a set of standards has to be chosen. T
 
 <!-- 
 I think a big part of the value proposition of AnnData is that the representation works well with the kinds of operations we want to do with single cell data. 
@@ -103,6 +104,14 @@ It fits the semantics of the problem well. How do I describe these semantics.
 # What is anndata?
 
 ## General features
+
+<!-- figure out how to cite zarr and hdf5, zarr has zenodo entry here: https://doi.org/10.5281/zenodo.3773449 -->
+
+A conflict in saving datasets and their annotations has been standards vs. ease of use. In the R ecosystem, ease of use has taken precidence. Objects are serialized and written to disk. This is problematic since that data cannot be read by another tool, and may become inaccessible even after software updates. If one chooses to use standard formats to represent all elements of a dataset, a set of standards has to be chosen. AnnData has chosen self-describing hierarchichal data formats such as HDF5 and `zarr` for this purpose. AnnData objects can be efficiently saved to disk using standardized formats \autoref{fig:ecosystem}. This means the data is accessible from other programming environments, as opposed to a serialized format like `pickle` or `Rdata`.
+
+By choosing standardized formats, stored data can be accessed from a variety of ecosystems including `python`, `julia`, `R`, `java`, and `javascript`. While the project has tried to stick to standardized formats, there are a few cases where no standards existed within our models. An especially important example of this is sparse array formats, which are critical for efficient processing of scRNA-seq data. To account for this, we define schemas for these types, which specify how these elements can be read from disk to memory. These specifications are versioned and stored in an internal registry. Versioning allows the specifications to evolve with the project while maintaining the ability to access older data.
+
+Like the AnnData object itself, the on-disk representations of these objects closely mirrors their in-memory representation.
 
 * Reading and writing
     * Usability
@@ -141,7 +150,7 @@ It fits the semantics of the problem well. How do I describe these semantics.
 
 ![
 **Examples:**
-
+\label{fig:examples}
 ](figures/examples.pdf)
 
 > Illustrative examples of how anndata is used. Include case studies like:
