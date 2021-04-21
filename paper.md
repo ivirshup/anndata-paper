@@ -34,7 +34,7 @@ Within the pydata ecosystem the closest package that would be amenable to serve 
 
 With that, anndata perfectly integrates into scikit-learn [@Buitinck2013], statsmodels `[@statsmodels_author:YYYY]`, seaborn [@Waskom2021], and easily interfaces with pytorch and tensorflow.
 
-Specifically, the central `AnnData` class stores observations (samples) of variables (features) in the rows of a matrix. This is the convention of the modern classics of statistics [@Hastie09] and machine learning [@Murphy2012], the convention of dataframes both in R and Python and the established statistics and machine learning packages in Python (statsmodels, scikit-learn).
+Specifically, the central `AnnData` class stores observations (samples) of variables (features) in the rows of a matrix. This is the convention of the modern classics of statistics [@Hastie2009] and machine learning [@Murphy2012], the convention of dataframes both in R and Python and the established statistics and machine learning packages in Python (statsmodels, scikit-learn).
 
 Machine learning/ data analysis methods in python work well with data "shaped-like" data from scRNA-seq (e.g. methods in scikit-learn).
 By making it easy to handle this data in python, we can more easily take advantage of these libraries. While these libraries have great computational tools, they frequently work with unlabelled numpy arrays/ scipy sparse arrays.
