@@ -21,27 +21,45 @@ affiliations:
 date: 1 October 2020
 bibliography: paper.bib
 ---
- 
+
 # Summary
 
 anndata is a python software package for handling annotated datasets.
 
+# Statement of need
+
+* Structured representation of a machine learning dataset
+* scRNA-seq, looks like these datasets
+  * Specific needs for sparse data
+  * Interchange between ecosystems, on disk formar
+* Previous/ parallel solutions (xarray, netCDF / CF conventions) while close do not solve all these problems
+
 # Introduction
 
-Generating insight from high-dimensional data often involves two steps: condensing them into useful representations and assigning semantic labels. Both is achieved by learning patterns in high dimensions based on existing annotations. Once insight is gained, knowledge is updated and assigned in form of learned annotations. This defines the general machine learning and data science paradigm, which, which anndata, we strive represent in a data structure that integrates well with the pydata ecosystem.
+Generating insight from high-dimensional data often involves two steps: condensing them into useful representations and assigning semantic labels.
+Both is achieved by learning patterns in high dimensions based on existing annotations.
+Once insight is gained, knowledge is updated and assigned in form of learned annotations.
+This defines the general machine learning and data science paradigm, which, which anndata, we strive represent in a data structure that integrates well with the pydata ecosystem.
 
-Within the pydata ecosystem the closest package that would be amenable to serve this paradigm is xarray [@Hoyer2017], which enables to deal with highly complex labelled data tensors of arbitrary dimensions. On the other hand, there is the highly popular package pandas [@McKinney2010], which merely provides and operates on `DataFrames`, that is, single tables of data. anndata is positioned in between by providing the minimal additional structure to enable storing compact annotations and representations of high-dimensional data, making the book keeping during learning from it much simpler.
+<!-- Move to body? -->
+Within the pydata ecosystem the closest package that would be amenable to serve this paradigm is xarray [@Hoyer2017], which enables to deal with highly complex labelled data tensors of arbitrary dimensions. 
+On the other hand, there is the highly popular package pandas [@McKinney2010], which merely provides and operates on `DataFrames`, that is, single tables of data.
+anndata is positioned in between by providing the minimal additional structure to enable storing compact annotations and representations of high-dimensional data, making the book keeping during learning from it much simpler.
 
 With that, anndata perfectly integrates into scikit-learn [@Buitinck2013], statsmodels `[@statsmodels_author:YYYY]`, seaborn [@Waskom2021], and easily interfaces with pytorch and tensorflow.
 
-Specifically, the central `AnnData` class stores observations (samples) of variables (features) in the rows of a matrix. This is the convention of the modern classics of statistics [@Hastie2009] and machine learning [@Murphy2012], the convention of dataframes both in R and Python and the established statistics and machine learning packages in Python (statsmodels, scikit-learn).
+Specifically, the central `AnnData` class stores observations (samples) of variables (features) in the rows of a matrix.
+This is the convention of the modern classics of statistics [@Hastie2009] and machine learning [@Murphy2012], the convention of dataframes both in R and Python and the established statistics and machine learning packages in Python (statsmodels, scikit-learn).
 
 Machine learning/ data analysis methods in python work well with data "shaped-like" data from scRNA-seq (e.g. methods in scikit-learn).
-By making it easy to handle this data in python, we can more easily take advantage of these libraries. While these libraries have great computational tools, they frequently work with unlabelled numpy arrays/ scipy sparse arrays.
+By making it easy to handle this data in python, we can more easily take advantage of these libraries.
+While these libraries have great computational tools, they frequently work with unlabelled numpy arrays/ scipy sparse arrays.
 
-AnnData is a structured representation of high dimensional datasets. It was designed to efficiently represent large datasets in a user friendly way, and one that builds on existing standards rather than inventing it's own.
+AnnData is a structured representation of high dimensional datasets.
+It was designed to efficiently represent large datasets in a user friendly way, and one that builds on existing standards rather than inventing it's own.
 
-NGS datasets end up being represented as a matrix of values. These are scalar values of the probed variables for each observation in the dataset.
+NGS datasets end up being represented as a matrix of values.
+These are scalar values of the probed variables for each observation in the dataset.
 Recent advances in single cell methods mean that the number of observations in each study has exploded, along with a greater sparsity of values for each cell.
 
 <!-- Why do this in python/ what's the difference from SingleCellExperiment. -->
@@ -106,6 +124,14 @@ It fits the semantics of the problem well. How do I describe these semantics.
 ## General features
 
 ### Labels
+
+Keeping labels on data is useful [@Hoyer2017].
+Keeping those labels associated with the data as it moves through an analysis relieves a lot of cognitive burden on the scientist.
+Basic numeric structures like arrays forgo tracking this information for efficiency.
+
+Having a stuctured collection of objects which are aligned to the same set of labels allows for a number of higher order interactions.
+This includes maintaining relationships between the objects through metadata (e.g. observation and variable loadings of a PCA, the distance matrix a weighted representation was derived from).
+We can also keep further annotations on the dataset, e.g. colors associated with categorical labels, so these are preserved on subsetting \autoref{fig:overview}.
 
 ### Kinds of elements
 
