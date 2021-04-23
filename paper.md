@@ -31,15 +31,38 @@ anndata is a python software package for handling annotated datasets.
 * Structured representation of a machine learning dataset
 * scRNA-seq, looks like these datasets
   * Specific needs for sparse data
-  * Interchange between ecosystems, on disk formar
+  * Interchange between ecosystems, on disk format
 * Previous/ parallel solutions (xarray, netCDF / CF conventions) while close do not solve all these problems
-
-# Introduction
 
 Generating insight from high-dimensional data often involves two steps: condensing them into useful representations and assigning semantic labels.
 Both is achieved by learning patterns in high dimensions based on existing annotations.
 Once insight is gained, knowledge is updated and assigned in form of learned annotations.
 This defines the general machine learning and data science paradigm, which, which anndata, we strive represent in a data structure that integrates well with the pydata ecosystem.
+
+The recent advances in single cell high throughput sequencing have brought new classes of analysis problems to the field.
+While previous bulk studies had few samples with known labels, current datasets have many samples with little sample level information.
+This has introduced a number of challenges for the field, handling this large data and developing new methods to analyse it.
+The size of the data has been a problem as it's very high dimensional (>20k genes in standard human genome annotation) and ever increasing sizes of datasets.
+As a small fraction of genes are detected in a single cell, the data is highly sparse. <!-- This could go later, the main point is that tools like `xarray` and `pandas` don't handle sparse data, but it's needed -->
+
+On the analytical tools side, the characteristics of these new large datasets are a good fit for modern machine learning methods, which are increasingly implemented in the python ecosystem.
+Machine learning/ data analysis methods in python work well with data "shaped-like" data from scRNA-seq (e.g. methods in scikit-learn).
+By making it easy to handle this data in python, we can more easily take advantage of these libraries.
+However, siloing data in a single ecosystem benefits no one, and there is much to gain from making the data accesible from any ecosystem.
+
+These problems are addressed by anndata, an object which provides a powerful model for representing numeric datasets and associated models, has efficient storage and operations on sparse data, and provides an accesable on disk format. <!-- There's probably a better term than accesbile -->
+
+<!-- While these libraries have great computational tools, they frequently work with unlabelled numpy arrays/ scipy sparse arrays. -->
+
+# Introduction
+
+Specifically, the central `AnnData` class stores observations (samples) of variables (features) in the rows of a matrix.
+This is the convention of the modern classics of statistics [@Hastie2009] and machine learning [@Murphy2012], the convention of dataframes both in R and Python and the established statistics and machine learning packages in Python (statsmodels, scikit-learn).
+
+<!-- Is this more "statement of need"? -->
+NGS datasets end up being represented as a matrix of values.
+These are scalar values of the probed variables for each observation in the dataset.
+Recent advances in single cell methods mean that the number of observations in each study has exploded, along with a greater sparsity of values for each cell.
 
 <!-- Move to body? -->
 Within the pydata ecosystem the closest package that would be amenable to serve this paradigm is xarray [@Hoyer2017], which enables to deal with highly complex labelled data tensors of arbitrary dimensions. 
@@ -48,19 +71,10 @@ anndata is positioned in between by providing the minimal additional structure t
 
 With that, anndata perfectly integrates into scikit-learn [@Buitinck2013], statsmodels `[@statsmodels_author:YYYY]`, seaborn [@Waskom2021], and easily interfaces with pytorch and tensorflow.
 
-Specifically, the central `AnnData` class stores observations (samples) of variables (features) in the rows of a matrix.
-This is the convention of the modern classics of statistics [@Hastie2009] and machine learning [@Murphy2012], the convention of dataframes both in R and Python and the established statistics and machine learning packages in Python (statsmodels, scikit-learn).
-
-Machine learning/ data analysis methods in python work well with data "shaped-like" data from scRNA-seq (e.g. methods in scikit-learn).
-By making it easy to handle this data in python, we can more easily take advantage of these libraries.
-While these libraries have great computational tools, they frequently work with unlabelled numpy arrays/ scipy sparse arrays.
-
 AnnData is a structured representation of high dimensional datasets.
 It was designed to efficiently represent large datasets in a user friendly way, and one that builds on existing standards rather than inventing it's own.
 
-NGS datasets end up being represented as a matrix of values.
-These are scalar values of the probed variables for each observation in the dataset.
-Recent advances in single cell methods mean that the number of observations in each study has exploded, along with a greater sparsity of values for each cell.
+
 
 <!-- Why do this in python/ what's the difference from SingleCellExperiment. -->
 
