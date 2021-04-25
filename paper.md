@@ -18,15 +18,15 @@ affiliations:
    index: 2
  - name: Cellarity, Cambridge, MA.
    index: 3
-date: 1 October 2020
+date: May 1st, 2021
 bibliography: paper.bib
 ---
 
 # Summary
 
-anndata is a python software package for handling annotated datasets.
+anndata is a python software package for handling annotated datasets both in memory and on disk.
 
-# Statement of need
+# Statement of Need
 
 <!--
 
@@ -38,27 +38,23 @@ anndata is a python software package for handling annotated datasets.
 
 -->
 
-Generating insight from high-dimensional data often involves two steps: condensing them into useful representations and assigning semantic labels.
-Both is achieved by learning patterns in high dimensions based on existing annotations.
-Once insight is gained, knowledge is updated and assigned in form of learned annotations.
-This defines the general machine learning and data science paradigm, which, which anndata, we strive represent in a data structure that integrates well with the pydata ecosystem.
+Generating insight from high-dimensional data is typically achieved through learning patterns that allow (i) to condense data into meaningful lower-dimensional representations and (ii) to assign semantic meaning to observations and variables. Learning these patterns almost always involves workflows of iteratively training models on pre- and post-learned annotations of data, requiring to book-keep their representations and scalar annotations, such as labels and numerical scores. anndata's purpose is to make such workflows as efficient as possible through a data structure that naturally integrates book-keeping with model training and analysis. All of this, well-integrated with the pydata ecosystem.
 
-The recent advances in single cell high throughput sequencing have brought new classes of analysis problems to the field.
-While previous bulk studies had few samples with known labels, current datasets have many samples with little sample level information.
-This has introduced a number of challenges for the field, handling this large data and developing new methods to analyse it.
+A particularly relevant use case with high degrees of iterations and many annotations involved, concerns data in computational biology. Advances in single-cell high throughput sequencing have brought new classes of analysis problems to the field.
+While previous bulk studies had few observations with known labels, current datasets have many observations with little sample level information.
 The size of the data has been a problem as it's very high dimensional (>20k genes in standard human genome annotation) and ever increasing sizes of datasets.
 As a small fraction of genes are detected in a single cell, the data is highly sparse. <!-- This could go later, the main point is that tools like `xarray` and `pandas` don't handle sparse data, but it's needed -->
 
 On the analytical tools side, the characteristics of these new large datasets are a good fit for modern machine learning methods, which are increasingly implemented in the python ecosystem.
-Machine learning/ data analysis methods in python work well with data "shaped-like" data from scRNA-seq (e.g. methods in scikit-learn).
-By making it easy to handle this data in python, we can more easily take advantage of these libraries.
+Machine learning methods in python work well with the data matrices obtained from scRNA-seq.
+By making it easy to handle these data in python, we can more easily take advantage of these libraries.
 However, siloing data in a single ecosystem benefits no one, and there is much to gain from making the data accesible from any ecosystem.
 
 These problems are addressed by anndata, an object which provides a powerful model for representing numeric datasets and associated models, has efficient storage and operations on sparse data, and provides an accesable on disk format. <!-- There's probably a better term than accesbile -->
 
 <!-- While these libraries have great computational tools, they frequently work with unlabelled numpy arrays/ scipy sparse arrays. -->
 
-# Introduction/ background
+# The AnnData object
 
 Specifically, the central `AnnData` class stores observations (samples) of variables (features) in the rows of a matrix.
 This is the convention of the modern classics of statistics [@Hastie2009] and machine learning [@Murphy2012], the convention of dataframes both in R and Python and the established statistics and machine learning packages in Python (statsmodels, scikit-learn).
@@ -172,6 +168,8 @@ We can also keep further annotations on the dataset, e.g. colors associated with
 ### Kinds of elements
 
 * Pairwise elements/ graph operations
+
+
 ### On disk representation
 
 <!-- figure out how to cite zarr and hdf5, zarr has zenodo entry here: https://doi.org/10.5281/zenodo.3773449 -->
