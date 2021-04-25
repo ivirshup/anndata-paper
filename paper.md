@@ -82,8 +82,6 @@ While the analysis of bio-molecular data has previously been focussed on in the 
 An AnnData object captures a useful unit (the dataset) in the data analysis workflow.
 Providing a stable, and standard on disk format for this unit relieves the pain of working with many competing formats for each individual element.
 
-### Figure:
-
 ![**Structure of the AnnData object.**
 *(a)* The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
 This was designed to organize analysis results, fitting in with the common conventions of statistical/ machine learning.
@@ -102,10 +100,70 @@ As examples, *(b)* the response variable ŷ learned from the data is stored as 
 \label{fig:overview}
 ](figures/overview.pdf)
 
-> Figure one will be more of a "schematic". Basically the idea of `obs x vars`, how this is commonly used in the literature, and a layout of the object. This could also include what kinds of representations can be stored. E.g. data matrix, annotation, graph, and unstructured.
+* Representation of data
+    * Labelled arrays
+    * Multiple representations (layers/ obsm)
+    * Associated metadata/ computed values
+        * Kinds of representations
+* Manipulation of datasets
+    * Optimized for work with sparse, high dimensional data
+    * Efficient subsetting
+    * Combination
+    * Out of core access
+* Persistent representation
+    * One-to-one on disk representation (for HDF5 and Zarr)
+    * Uses standard on disk formats, does not invent it's own
+    * Out of core access
+    * Defined disk represenation, that will be consistent, and a way to make sure the data will be read in the future
+        * This doesn't happen when you've got pickled or RDA formats
+* Efficiency is key
+    * Lengths have been taken to avoid copying uneccesary data
+    * Lazyness in views
+    * Sparse data
 
 
-### Figure: Ecosystem/ usage
+Keeping labels on data is useful [@Hoyer2017].
+Keeping those labels associated with the data as it moves through an analysis relieves a lot of cognitive burden on the scientist.
+Basic numeric structures like arrays forgo tracking this information for efficiency.
+
+Having a stuctured collection of objects which are aligned to the same set of labels allows for a number of higher order interactions.
+This includes maintaining relationships between the objects through metadata (e.g. observation and variable loadings of a PCA, the distance matrix a weighted representation was derived from).
+We can also keep further annotations on the dataset, e.g. colors associated with categorical labels, so these are preserved on subsetting \autoref{fig:overview}.
+
+## AnnData's structure
+
+AnnData is a collection of arrays and sparse matrices for storing representations of data aligned with dataframes for scalar annotations. For instance, lower-dimensional manifolds of data are typically stored as graphs of pairwise associations between observations, for which the `.obsp` exists.
+
+
+## On disk representation
+
+<!-- figure out how to cite zarr and hdf5, zarr has zenodo entry here: https://doi.org/10.5281/zenodo.3773449 -->
+<!--
+Another big advantage is the on-disk represention, which even for pandas DataFrames is not yet resolved in a canonical way.
+For instance, there is none of the binary persisent formats are able to represent all entry types of AnnData.
+For instance, even such a key data type a categorical data types are not yet represented in the HDF5 format.
+Pickled dataframes are able, but they are non-persistent. -->
+
+In the R ecosystem, in-memory objects are serialized and written to disk. This is problematic since that data cannot be read by another tool, and may become inaccessible even after software updates. If one chooses to use standard formats to represent all elements of a dataset, a set of standards has to be chosen. AnnData has chosen self-describing hierarchichal data formats such as HDF5 and `zarr` for this purpose. AnnData objects can be efficiently saved to disk using standardized formats \autoref{fig:ecosystem}. This means the data is accessible from other programming environments, as opposed to a serialized format like `pickle` or `Rdata`.
+
+By choosing standardized formats, stored data can be accessed from a variety of ecosystems including `python`, `julia`, `R`, `java`, and `javascript`. While the project has tried to stick to standardized formats, there are a few cases where no standards existed within our models. An especially important example of this is sparse array formats, which are critical for efficient processing of scRNA-seq data. To account for this, we define schemas for these types, which specify how these elements can be read from disk to memory. These specifications are versioned and stored in an internal registry. Versioning allows the specifications to evolve with the project while maintaining the ability to access older data.
+
+Like the AnnData object itself, the on-disk representations of these objects closely mirrors their in-memory representation.
+Compressed sparse matrices (CSR and CSC format) are stored as a collection of three arrays, `data`, `indices`, and `indptr`, while tabular data is stored in a columnar format.
+
+* Reading and writing
+    * Usability
+        * Structured, common format which holds all information about the dataset
+    * Efficiency
+        * The field has typically used text based files for storing data. While there are many problems with this, that's a particularly bad way to hold large numeric data. Better solutions exist so we use them.
+* Holding annotations
+    * Associating semantic information with your dataset in an organized way (labelled arrays).
+        * Also in a way which does not incur much overhead.
+* Holding computed properties
+
+### Operations
+
+Mostly IO, subsetting, concatenation? Working on futher
 
 ![**AnnData provides common conventions for data handling.**
 *(a)* Data flows using the `anndata` model. `AnnData` objects can be created from a number of formats, including common delimited text files, or domain/ tool specific formats like `loom` or `cellranger` outputs.
@@ -131,76 +189,6 @@ It fits the semantics of the problem well. How do I describe these semantics.
 -->
 
 # What is anndata?
-
-## General features
-
-* Representation of data
-    * Labelled arrays
-    * Multiple representations (layers/ obsm)
-    * Associated metadata/ computed values
-        * Kinds of representations
-* Manipulation of datasets
-    * Optimized for work with sparse, high dimensional data
-    * Efficient subsetting
-    * Combination
-    * Out of core access
-* Persistent representation
-    * One-to-one on disk representation (for HDF5 and Zarr)
-    * Uses standard on disk formats, does not invent it's own
-    * Out of core access
-    * Defined disk represenation, that will be consistent, and a way to make sure the data will be read in the future
-        * This doesn't happen when you've got pickled or RDA formats
-* Efficiency is key
-    * Lengths have been taken to avoid copying uneccesary data
-    * Lazyness in views
-    * Sparse data
-
-### Labels
-
-Keeping labels on data is useful [@Hoyer2017].
-Keeping those labels associated with the data as it moves through an analysis relieves a lot of cognitive burden on the scientist.
-Basic numeric structures like arrays forgo tracking this information for efficiency.
-
-Having a stuctured collection of objects which are aligned to the same set of labels allows for a number of higher order interactions.
-This includes maintaining relationships between the objects through metadata (e.g. observation and variable loadings of a PCA, the distance matrix a weighted representation was derived from).
-We can also keep further annotations on the dataset, e.g. colors associated with categorical labels, so these are preserved on subsetting \autoref{fig:overview}.
-
-### Kinds of elements
-
-* Pairwise elements/ graph operations
-
-
-### On disk representation
-
-<!-- figure out how to cite zarr and hdf5, zarr has zenodo entry here: https://doi.org/10.5281/zenodo.3773449 -->
-<!--
-Another big advantage is the on-disk represention, which even for pandas DataFrames is not yet resolved in a canonical way.
-For instance, there is none of the binary persisent formats are able to represent all entry types of AnnData.
-For instance, even such a key data type a categorical data types are not yet represented in the HDF5 format.
-Pickled dataframes are able, but they are non-persistent. -->
-
-A conflict in saving datasets and their annotations has been standards vs. ease of use. In the R ecosystem, ease of use has taken precidence. Objects are serialized and written to disk. This is problematic since that data cannot be read by another tool, and may become inaccessible even after software updates. If one chooses to use standard formats to represent all elements of a dataset, a set of standards has to be chosen. AnnData has chosen self-describing hierarchichal data formats such as HDF5 and `zarr` for this purpose. AnnData objects can be efficiently saved to disk using standardized formats \autoref{fig:ecosystem}. This means the data is accessible from other programming environments, as opposed to a serialized format like `pickle` or `Rdata`.
-
-By choosing standardized formats, stored data can be accessed from a variety of ecosystems including `python`, `julia`, `R`, `java`, and `javascript`. While the project has tried to stick to standardized formats, there are a few cases where no standards existed within our models. An especially important example of this is sparse array formats, which are critical for efficient processing of scRNA-seq data. To account for this, we define schemas for these types, which specify how these elements can be read from disk to memory. These specifications are versioned and stored in an internal registry. Versioning allows the specifications to evolve with the project while maintaining the ability to access older data.
-
-<!-- Sparse matrix citation? -->
-
-Like the AnnData object itself, the on-disk representations of these objects closely mirrors their in-memory representation.
-Compressed sparse matrices (CSR and CSC format) are stored as a collection of three arrays, `data`, `indices`, and `indptr`, while tabular data is stored in a columnar format.
-
-* Reading and writing
-    * Usability
-        * Structured, common format which holds all information about the dataset
-    * Efficiency
-        * The field has typically used text based files for storing data. While there are many problems with this, that's a particularly bad way to hold large numeric data. Better solutions exist so we use them.
-* Holding annotations
-    * Associating semantic information with your dataset in an organized way (labelled arrays).
-        * Also in a way which does not incur much overhead.
-* Holding computed properties
-
-### Operations
-
-Mostly IO, subsetting, concatenation? Working on futher
 
 ## Examples of use
 
