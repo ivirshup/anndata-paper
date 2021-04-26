@@ -22,13 +22,15 @@ date: 1 October 2020
 bibliography: paper.bib
 ---
 
-# Summary
+# Abstract
 
 anndata is a python software package for handling annotated datasets.
 
 # Statement of need
 
 <!--
+Broadly define problem
+Specifics of how we handle it, what do we uniquely solve
 
 * Structured representation of a machine learning dataset
 * scRNA-seq, looks like these datasets
@@ -38,14 +40,21 @@ anndata is a python software package for handling annotated datasets.
 
 -->
 
+<!--
+Be more specific about iterative nature of exploratory analysis, especially when little is known about the data a-priori. Broader, less formal.
+
+We want to capture most of this process.
+-->
 Generating insight from high-dimensional data often involves two steps: condensing them into useful representations and assigning semantic labels.
 Both is achieved by learning patterns in high dimensions based on existing annotations.
 Once insight is gained, knowledge is updated and assigned in form of learned annotations.
-This defines the general machine learning and data science paradigm, which, which anndata, we strive represent in a data structure that integrates well with the pydata ecosystem.
+This defines core workflow within exploratory data analysis (/ data science?), which, which anndata, we strive represent in a data structure that integrates well with the pydata ecosystem.
+<!-- This defines the general machine learning and data science paradigm, which, which anndata, we strive represent in a data structure that integrates well with the pydata ecosystem. -->
 
+<!-- Put single cell motivation above? -->
 The recent advances in single cell high throughput sequencing have brought new classes of analysis problems to the field.
 While previous bulk studies had few samples with known labels, current datasets have many samples with little sample level information.
-This has introduced a number of challenges for the field, handling this large data and developing new methods to analyse it.
+This has introduced a number of challenges, handling this large data and developing new methods to analyse it.
 The size of the data has been a problem as it's very high dimensional (>20k genes in standard human genome annotation) and ever increasing sizes of datasets.
 As a small fraction of genes are detected in a single cell, the data is highly sparse. <!-- This could go later, the main point is that tools like `xarray` and `pandas` don't handle sparse data, but it's needed -->
 
@@ -181,6 +190,7 @@ For instance, there is none of the binary persisent formats are able to represen
 For instance, even such a key data type a categorical data types are not yet represented in the HDF5 format.
 Pickled dataframes are able, but they are non-persistent. -->
 
+<!-- Open with that we have a specified format, then discuss why this is important -->
 A conflict in saving datasets and their annotations has been standards vs. ease of use. In the R ecosystem, ease of use has taken precidence. Objects are serialized and written to disk. This is problematic since that data cannot be read by another tool, and may become inaccessible even after software updates. If one chooses to use standard formats to represent all elements of a dataset, a set of standards has to be chosen. AnnData has chosen self-describing hierarchichal data formats such as HDF5 and `zarr` for this purpose. AnnData objects can be efficiently saved to disk using standardized formats \autoref{fig:ecosystem}. This means the data is accessible from other programming environments, as opposed to a serialized format like `pickle` or `Rdata`.
 
 By choosing standardized formats, stored data can be accessed from a variety of ecosystems including `python`, `julia`, `R`, `java`, and `javascript`. While the project has tried to stick to standardized formats, there are a few cases where no standards existed within our models. An especially important example of this is sparse array formats, which are critical for efficient processing of scRNA-seq data. To account for this, we define schemas for these types, which specify how these elements can be read from disk to memory. These specifications are versioned and stored in an internal registry. Versioning allows the specifications to evolve with the project while maintaining the ability to access older data.
