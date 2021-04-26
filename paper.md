@@ -22,13 +22,15 @@ date: May 1st, 2021
 bibliography: paper.bib
 ---
 
-# Summary
+# Abstract
 
 anndata is a python software package for handling annotated datasets both in memory and on disk.
 
 # Statement of Need
 
 <!--
+Broadly define problem
+Specifics of how we handle it, what do we uniquely solve
 
 * Structured representation of a machine learning dataset
 * scRNA-seq, looks like these datasets
@@ -38,9 +40,19 @@ anndata is a python software package for handling annotated datasets both in mem
 
 -->
 
-Generating insight from high-dimensional data is typically achieved through learning patterns that allow (i) to condense data into meaningful lower-dimensional representations and (ii) to assign semantic meaning to observations and variables. Learning these patterns almost always involves workflows of iteratively training models on pre- and post-learned annotations of data, requiring to book-keep their representations and scalar annotations, such as labels and numerical scores. anndata's purpose is to make such workflows as efficient as possible through a data structure that naturally integrates book-keeping with model training and analysis. All of this, well-integrated with the pydata ecosystem.
+<!--
+Be more specific about iterative nature of exploratory analysis, especially when little is known about the data a-priori. Broader, less formal.
 
-A particularly relevant use case with high degrees of iterations and many annotations involved, concerns data in computational biology. Advances in single-cell high throughput sequencing have brought new classes of analysis problems to the field.
+We want to capture most of this process.
+-->
+
+Generating insight from high-dimensional data is typically achieved through learning patterns that allow (i) to condense data into meaningful lower-dimensional representations and (ii) to assign semantic meaning to observations and variables.
+Learning these patterns almost always involves workflows of iteratively training models on pre- and post-learned annotations of data, requiring to book-keep their representations and scalar annotations, such as labels and numerical scores.
+anndata's purpose is to make such workflows as efficient as possible through a data structure that naturally integrates book-keeping with model training and analysis.
+All of this, well-integrated with the pydata ecosystem.
+
+A particularly relevant use case with high degrees of iterations and many annotations involved, concerns data in computational biology.
+Advances in single-cell high throughput sequencing have brought new classes of analysis problems to the field.
 While previous bulk studies had few observations with known labels, current datasets have many observations with little sample level information.
 The size of the data has been a problem as it's very high dimensional (>20k genes in standard human genome annotation) and ever increasing sizes of datasets.
 As a small fraction of genes are detected in a single cell, the data is highly sparse. <!-- This could go later, the main point is that tools like `xarray` and `pandas` don't handle sparse data, but it's needed -->
@@ -144,7 +156,13 @@ For instance, there is none of the binary persisent formats are able to represen
 For instance, even such a key data type a categorical data types are not yet represented in the HDF5 format.
 Pickled dataframes are able, but they are non-persistent. -->
 
-In the R ecosystem, in-memory objects are serialized and written to disk. This is problematic since that data cannot be read by another tool, and may become inaccessible even after software updates. If one chooses to use standard formats to represent all elements of a dataset, a set of standards has to be chosen. AnnData has chosen self-describing hierarchichal data formats such as HDF5 and `zarr` for this purpose. AnnData objects can be efficiently saved to disk using standardized formats \autoref{fig:ecosystem}. This means the data is accessible from other programming environments, as opposed to a serialized format like `pickle` or `Rdata`.
+<!-- Open with that we have a specified format, then discuss why this is important -->
+In the R ecosystem, in-memory objects are serialized and written to disk.
+This is problematic since that data cannot be read by another tool, and may become inaccessible even after software updates.
+If one chooses to use standard formats to represent all elements of a dataset, a set of standards has to be chosen.
+AnnData has chosen self-describing hierarchichal data formats such as HDF5 and `zarr` for this purpose.
+AnnData objects can be efficiently saved to disk using standardized formats \autoref{fig:ecosystem}.
+This means the data is accessible from other programming environments, as opposed to a serialized format like `pickle` or `Rdata`.
 
 By choosing standardized formats, stored data can be accessed from a variety of ecosystems including `python`, `julia`, `R`, `java`, and `javascript`. While the project has tried to stick to standardized formats, there are a few cases where no standards existed within our models. An especially important example of this is sparse array formats, which are critical for efficient processing of scRNA-seq data. To account for this, we define schemas for these types, which specify how these elements can be read from disk to memory. These specifications are versioned and stored in an internal registry. Versioning allows the specifications to evolve with the project while maintaining the ability to access older data.
 
