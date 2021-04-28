@@ -88,8 +88,8 @@ It was designed to efficiently represent large datasets in a user friendly way, 
 
 <!-- Why do this in python/ what's the difference from SingleCellExperiment. -->
 
-Since the last advance in high throughput molecular profiling (micro-array -> rna-seq), Python has emerged as an extremely popular language for data analysis and machine learning.
-While the analysis of bio-molecular data has previously been focussed on in the R language.
+<!-- Since the last advance in high throughput molecular profiling (micro-array -> rna-seq), Python has emerged as an extremely popular language for data analysis and machine learning. -->
+<!-- While the analysis of bio-molecular data has previously been focussed on in the R language. -->
 
 An AnnData object captures a useful unit (the dataset) in the data analysis workflow.
 Providing a stable, and standard on disk format for this unit relieves the pain of working with many competing formats for each individual element.
@@ -164,7 +164,12 @@ AnnData has chosen self-describing hierarchichal data formats such as HDF5 and `
 AnnData objects can be efficiently saved to disk using standardized formats \autoref{fig:ecosystem}.
 This means the data is accessible from other programming environments, as opposed to a serialized format like `pickle` or `Rdata`.
 
-By choosing standardized formats, stored data can be accessed from a variety of ecosystems including `python`, `julia`, `R`, `java`, and `javascript`. While the project has tried to stick to standardized formats, there are a few cases where no standards existed within our models. An especially important example of this is sparse array formats, which are critical for efficient processing of scRNA-seq data. To account for this, we define schemas for these types, which specify how these elements can be read from disk to memory. These specifications are versioned and stored in an internal registry. Versioning allows the specifications to evolve with the project while maintaining the ability to access older data.
+By choosing standardized formats, stored data can be accessed from a variety of ecosystems including `python`, `julia`, `R`, `java`, and `javascript`.
+While the project has tried to stick to standardized formats, there are a few cases where no standards existed within our models.
+An especially important example of this is sparse array formats, which are critical for efficient processing of scRNA-seq data.
+To account for this, we define schemas for these types, which specify how these elements can be read from disk to memory.
+These specifications are versioned and stored in an internal registry.
+Versioning allows the specifications to evolve with the project while maintaining the ability to access older data.
 
 Like the AnnData object itself, the on-disk representations of these objects closely mirrors their in-memory representation.
 Compressed sparse matrices (CSR and CSC format) are stored as a collection of three arrays, `data`, `indices`, and `indptr`, while tabular data is stored in a columnar format.
@@ -179,9 +184,23 @@ Compressed sparse matrices (CSR and CSC format) are stored as a collection of th
         * Also in a way which does not incur much overhead.
 * Holding computed properties
 
-### Operations
+### Efficient Operations
 
-Mostly IO, subsetting, concatenation? Working on futher
+
+* chunked/ out of core conversions between dense and sparse data
+* lazy subsetting
+* per element operations for low total memory usage
+* in place subsetting
+* Combining with various merge strategies
+* Should probably say something about backed mode.
+
+<!-- benchmarks are probably important here -->
+Due to the ever increasing scale of data AnnData is working with, emphasis has been placed on providing efficient data handling operations. There has been an overall emphasis on having low memory and runtime overhead. This is accomplished in a number of ways.
+
+Deep support for sparse data. `AnnData` takes great pains to support effiecient operations with sparse data. While there currently is no equivalent API for working with sparse and dense data in the python ecosystem, `AnnData` abstracts over this making it much easier for novices to handle each. As mentioned above, on-disk formats for sparse data have also been defined, along with operations for out of core access to this data.
+
+Subsetting anndata objects is lazy. This takes advantage of the fact that a great deal of the exploratory data analysis process is read-only, and that data is often sliced just for access to a subset of one element.
+
 
 ![**AnnData provides common conventions for data handling.**
 *(a)* Data flows using the `anndata` model. `AnnData` objects can be created from a number of formats, including common delimited text files, or domain/ tool specific formats like `loom` or `cellranger` outputs.
