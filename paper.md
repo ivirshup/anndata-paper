@@ -3,14 +3,14 @@ title: 'anndata: annotated data'
 authors:
   - name: Isaac Virshup
     orcid: 0000-0002-1710-8945
-    affiliation: "1"    
+    affiliation: "1,†"    
   - name: Sergei Rybakov
     affiliation: "2"
   - name: Philipp Angerer
-    affiliation: "2, 3"    
+    affiliation: "2, 3,†"    
   - name: F. Alexander Wolf
     orcid: 0000-0002-8760-7838
-    affiliation: "3, 2"
+    affiliation: "2, 3,†"
 affiliations:
  - name: University of Melbourne.
    index: 1
@@ -18,6 +18,7 @@ affiliations:
    index: 2
  - name: Cellarity, Cambridge, MA.
    index: 3
+ - name: corresponding authors
 date: May 1st, 2021
 bibliography: paper.bib
 ---
@@ -232,6 +233,6 @@ The AnnData project is under active development and will have more features. The
 
 # Author contributions
 
-...
+Isaac has led the anndata project since v0.7, and contributed as a developer before. He rewrote wide parts of the code introducing high efficiency, robustness, concatenation, ... Sergei made diverse contributions to the code base, in particular, ... Phil suggested to replace Scanpy's initial unstructured annotated data object to one mimicking R's ExpressionSet, and wrote AnnData's [first implementation](https://github.com/theislab/scanpy/commit/315859c5586116434ea3b7ce97512a5e2a1030e2) with indexing, slicing, ... and ascertained good software practices in the project. ... Alex led the project until 0.7, introduced the idea of centering data science workflows around an [initially unstructured annotated data object](https://github.com/theislab/scanpy/tree/c22e48abe45a6ccca5918bbf689637caa4b31250), guided the user design of the first implementation, implemented most of the subsequent early functionality and wrote the documentation until 0.7: reading & writing, paired in-memory manipulation and on-disk format, sparse data support on disk and fast loading, backed mode, views, AnnData's slots beyond `.obs` and `.var`, and numerous smaller design choices to integrate AnnData well into Scanpy's workflows.
 
 # References
