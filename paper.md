@@ -68,6 +68,11 @@ These problems are addressed by anndata, an object which provides a powerful mod
 
 # The AnnData object
 
+# Introduction
+
+* Prior art
+* What do we do that others don't
+
 Specifically, the central `AnnData` class stores observations (samples) of variables (features) in the rows of a matrix.
 This is the convention of the modern classics of statistics [@Hastie2009] and machine learning [@Murphy2012], the convention of dataframes both in R and Python and the established statistics and machine learning packages in Python (statsmodels, scikit-learn).
 
@@ -122,16 +127,6 @@ As examples, *(b)* the response variable ŷ learned from the data is stored as 
     * Efficient subsetting
     * Combination
     * Out of core access
-* Persistent representation
-    * One-to-one on disk representation (for HDF5 and Zarr)
-    * Uses standard on disk formats, does not invent it's own
-    * Out of core access
-    * Defined disk represenation, that will be consistent, and a way to make sure the data will be read in the future
-        * This doesn't happen when you've got pickled or RDA formats
-* Efficiency is key
-    * Lengths have been taken to avoid copying uneccesary data
-    * Lazyness in views
-    * Sparse data
 
 
 Keeping labels on data is useful [@Hoyer2017].
@@ -174,25 +169,16 @@ Versioning allows the specifications to evolve with the project while maintainin
 Like the AnnData object itself, the on-disk representations of these objects closely mirrors their in-memory representation.
 Compressed sparse matrices (CSR and CSC format) are stored as a collection of three arrays, `data`, `indices`, and `indptr`, while tabular data is stored in a columnar format.
 
-* Reading and writing
-    * Usability
-        * Structured, common format which holds all information about the dataset
-    * Efficiency
-        * The field has typically used text based files for storing data. While there are many problems with this, that's a particularly bad way to hold large numeric data. Better solutions exist so we use them.
-* Holding annotations
-    * Associating semantic information with your dataset in an organized way (labelled arrays).
-        * Also in a way which does not incur much overhead.
-* Holding computed properties
 
 ### Efficient Operations
 
-
+<!-- 
 * chunked/ out of core conversions between dense and sparse data
 * lazy subsetting
 * per element operations for low total memory usage
 * in place subsetting
 * Combining with various merge strategies
-* Should probably say something about backed mode.
+* Should probably say something about backed mode. -->
 
 <!-- benchmarks are probably important here -->
 Due to the ever increasing scale of data AnnData is working with, emphasis has been placed on providing efficient data handling operations. There has been an overall emphasis on having low memory and runtime overhead. This is accomplished in a number of ways.
@@ -224,8 +210,6 @@ Each element is annotated with a type and schema version to facilitate interchan
 I think a big part of the value proposition of AnnData is that the representation works well with the kinds of operations we want to do with single cell data. 
 It fits the semantics of the problem well. How do I describe these semantics.
 -->
-
-# What is anndata?
 
 ## Examples of use
 
