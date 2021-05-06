@@ -74,7 +74,27 @@ These problems are addressed by anndata, an object which provides a powerful mod
 * What do we do that others don't
 
 Specifically, the central `AnnData` class stores observations (samples) of variables (features) in the rows of a matrix.
-This is the convention of the modern classics of statistics [@Hastie2009] and machine learning [@Murphy2012], the convention of dataframes both in R and Python and the established statistics and machine learning packages in Python (statsmodels, scikit-learn).
+This is the convention of the modern classics of statistics [@Hastie2009] and machine learning [@Murphy2012], tidy data [@Wickham2014], the convention of dataframes both in R and Python, and the established statistics and machine learning packages in Python (statsmodels, scikit-learn).
+
+<!-- Question for alex:
+
+Why are the access patterns different?
+
+For typical use cases of tidy-data (and for data frames), data storage is columnar (or "variable major").
+Our access patterns to X are typically row based, so we use CSR and C order arrays (or "observation major").
+This is also what scikit-learn does.
+
+What is different about the data we have here?
+Is it important that `X` is homogenous? That it's all "one kind" of variable? That each column was drawn from the same datasource.
+ -->
+
+<!-- 
+
+* Tidy data for large numeric datasets
+  * Seperate data from metadata
+  * Store metadata on the variables, but keep this associated
+  * Some organization conventions, to keep namespaces clean-ish
+ -->
 
 <!-- Is this more "statement of need"? -->
 NGS datasets end up being represented as a matrix of values.
