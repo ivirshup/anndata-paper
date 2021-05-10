@@ -97,9 +97,18 @@ Is it important that `X` is homogenous? That it's all "one kind" of variable? Th
  -->
 
 <!-- Is this more "statement of need"? -->
+## Data sets 
+
+<!-- Dataset structure -->
+
 NGS datasets end up being represented as a matrix of values.
 These are scalar values of the probed variables for each observation in the dataset.
 Recent advances in single cell methods mean that the number of observations in each study has exploded, along with a greater sparsity of values for each cell.
+
+<!-- Basically section 2.2 from scikit-learn paper -->
+
+Current practices in the data analysis libraries such as scikit-learn [@Buitinck2013] where input and output for each computation is expressed as a set of arrays.
+
 
 <!-- Move to body? -->
 Within the pydata ecosystem the closest package that would be amenable to serve this paradigm is xarray [@Hoyer2017], which enables to deal with highly complex labelled data tensors of arbitrary dimensions.
@@ -159,7 +168,23 @@ We can also keep further annotations on the dataset, e.g. colors associated with
 
 ## AnnData's structure
 
-AnnData is a collection of arrays and sparse matrices for storing representations of data aligned with dataframes for scalar annotations. For instance, lower-dimensional manifolds of data are typically stored as graphs of pairwise associations between observations, for which the `.obsp` exists.
+AnnData is a collection of arrays, sparse matrices, and dataframes for storing representations of data aligned with dataframes for scalar annotations. For instance, lower-dimensional manifolds of data are typically stored as graphs of pairwise associations between observations, for which the `.obsp` exists.
+
+
+## Data semantics
+
+AnnData models a dataset as a set of observations and variables with measured, annotated, and derived values \autoref{fig:overview}.
+Observations and variables here take much the same meaning as they do in the tidy data [@Wickham2014] framework.
+Measured values are recorded on the cross product of observations and variables, e.g. on the `X` or in the `layers` attributes.
+In this way, the observations and variables can be thought of as discretely valued principal dimensions of the dataset.
+Each value on these dimensions is given a label, stored in `obs_names` and `var_names` respectivley.
+
+Annotations and derived values can then be stored on the dimension specific axes.
+Simple annotations and derived values which can be stored in a single vector are added to the main annotation dataframes for each axis, `obs` and `var`.
+Annotations added here include values like alternative names (e.g. different identifier mappings or categories for each variable).
+Derived values added here can be descriptive statistics (e.g. mean and variance) or categories from clustering.
+
+
 
 
 ## On disk representation
@@ -206,6 +231,13 @@ Due to the ever increasing scale of data AnnData is working with, emphasis has b
 Deep support for sparse data. `AnnData` takes great pains to support effiecient operations with sparse data. While there currently is no equivalent API for working with sparse and dense data in the python ecosystem, `AnnData` abstracts over this making it much easier for novices to handle each. As mentioned above, on-disk formats for sparse data have also been defined, along with operations for out of core access to this data.
 
 Subsetting anndata objects is lazy. This takes advantage of the fact that a great deal of the exploratory data analysis process is read-only, and that data is often sliced just for access to a subset of one element.
+
+<!-- Concatenation and merging -->
+
+Datasets can be joined along variables or observations.
+That is, from multiple individual dataset can be combined to have a superset of either the observations or variables, depending on the direction of concatenation.
+The other dimensions are merged to contain either the union or intersection of labels.
+This is done by first finding either the intersection or union of the axis 
 
 
 ![**AnnData provides common conventions for data handling.**
