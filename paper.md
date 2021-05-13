@@ -7,10 +7,10 @@ authors:
   - name: Sergei Rybakov
     affiliation: "2"
   - name: Philipp Angerer
-    affiliation: "2, 3,†"    
+    affiliation: "2,3,†"    
   - name: F. Alexander Wolf
     orcid: 0000-0002-8760-7838
-    affiliation: "2, 3,†"
+    affiliation: "2,3,†"
 affiliations:
  - name: University of Melbourne.
    index: 1
@@ -19,6 +19,7 @@ affiliations:
  - name: Cellarity, Cambridge, MA.
    index: 3
  - name: corresponding authors
+   index: †
 date: May 1st, 2021
 bibliography: paper.bib
 ---
