@@ -26,8 +26,8 @@ bibliography: paper.bib
 
 anndata is a python software package for handling annotated datasets both in memory and on disk. It focuses on enabling intuitive iterative data science workflows.
 
-# Statement of need
 
+# Statement of need
 
 In exploratory data analysis, generating insight from high-dimensional data is typically achieved through learning patterns that allow (i) to condense data into meaningful lower-dimensional representations and (ii) to assign semantic meaning to observations and variables.
 Learning these patterns almost always involves workflows of iteratively training models on pre- and post-learned annotations of data, requiring to book-keep their representations and scalar annotations, such as labels and numerical scores.
@@ -42,64 +42,28 @@ While analysis of bioinformatic data has been dominated by the R ecosystem, the 
 
 # The AnnData object
 
+AnnData was inspired by similar data structures within the R ecosystem, in particular, ExpressionSet, and single-cell related more recent alternatives, like SingleCellExperiment and the Seurat on-disk format.
 
-* Prior art
-* What do we do that others don't
-
-Specifically, the central `AnnData` class stores observations (samples) of variables (features) in the rows of a matrix.
-This is the convention of the modern classics of statistics [@Hastie2009] and machine learning [@Murphy2012], tidy data [@Wickham2014], the convention of dataframes both in R and Python, and the established statistics and machine learning packages in Python (statsmodels, scikit-learn).
-
-<!-- Question for alex:
-
-Why are the access patterns different?
-
-For typical use cases of tidy-data (and for data frames), data storage is columnar (or "variable major").
-Our access patterns to X are typically row based, so we use CSR and C order arrays (or "observation major").
-This is also what scikit-learn does.
-
-What is different about the data we have here?
-Is it important that `X` is homogenous? That it's all "one kind" of variable? That each column was drawn from the same datasource.
- -->
-
-<!-- 
-
-* Tidy data for large numeric datasets
-  * Seperate data from metadata
-  * Store metadata on the variables, but keep this associated
-  * Some organization conventions, to keep namespaces clean-ish
- -->
-
-<!-- Is this more "statement of need"? -->
-## Data sets 
-
-<!-- Dataset structure -->
-
-NGS datasets end up being represented as a matrix of values.
-These are scalar values of the probed variables for each observation in the dataset.
-Recent advances in single cell methods mean that the number of observations in each study has exploded, along with a greater sparsity of values for each cell.
-
-<!-- Basically section 2.2 from scikit-learn paper -->
-
-Current practices in the data analysis libraries such as scikit-learn [@Buitinck2013] where input and output for each computation is expressed as a set of arrays.
+Within the pydata ecosystem the closest package that would be amenable to serve this paradigm is xarray [@Hoyer2017], which enables to deal with highly complex labelled data tensors of arbitrary dimensions - keeping labels on data is useful [@Hoyer2017].
+By contrast, the highly popular package pandas [@McKinney2010] operates only on `DataFrames`, that is, single tables of data.
+anndata is positioned in between by providing the minimal additional structure to enable storing compact annotations and representations of high-dimensional data, making the book keeping during learning from it much simpler. Current learning practices in data analysis libraries such as scikit-learn [@Buitinck2013](Sec. 2.2) model input and output for each computation as set of arrays. To organize process, AnnData first defines a particular data semantics for it.
 
 
-<!-- Move to body? -->
-Within the pydata ecosystem the closest package that would be amenable to serve this paradigm is xarray [@Hoyer2017], which enables to deal with highly complex labelled data tensors of arbitrary dimensions.
-On the other hand, there is the highly popular package pandas [@McKinney2010], which merely provides and operates on `DataFrames`, that is, single tables of data.
-anndata is positioned in between by providing the minimal additional structure to enable storing compact annotations and representations of high-dimensional data, making the book keeping during learning from it much simpler.
+## AnnData's data semantics
 
-With that, anndata perfectly integrates into scikit-learn [@Buitinck2013], statsmodels `[@statsmodels_author:YYYY]`, seaborn [@Waskom2021], and easily interfaces with pytorch and tensorflow.
+AnnData models a dataset as a set of observations and variables with measured, annotated, and derived values \autoref{fig:overview}.
+Observations (samples) and variables (features) here take much the same meaning as they do in the tidy data [@Wickham2014] framework.
+Measured values are recorded on the cross product of observations and variables, e.g. on the `X` or in the `layers` attributes.
+In this way, the observations and variables can be thought of as discretely valued principal dimensions of the dataset.
+Each value on these dimensions is given a label, stored in `obs_names` and `var_names` respectivley.
 
-AnnData is a structured representation of high dimensional datasets.
-It was designed to efficiently represent large datasets in a user friendly way, and one that builds on existing standards rather than inventing it's own.
+Annotations and derived values can then be stored on the dimension specific axes.
+Simple annotations and derived values which can be stored in a single vector are added to the main annotation dataframes for each axis, `obs` and `var`.
+Learned representations are added to `obsm` and low-dimensional manifold structure to `obsp`. 
+Annotations added here include values like alternative names (e.g. different identifier mappings or categories for each variable).
+Derived values added here can be descriptive statistics (e.g. mean and variance) or categories from clustering.
 
-<!-- Why do this in python/ what's the difference from SingleCellExperiment. -->
-
-<!-- Since the last advance in high throughput molecular profiling (micro-array -> rna-seq), Python has emerged as an extremely popular language for data analysis and machine learning. -->
-<!-- While the analysis of bio-molecular data has previously been focussed on in the R language. -->
-
-An AnnData object captures a useful unit (the dataset) in the data analysis workflow.
-Providing a stable, and standard on disk format for this unit relieves the pain of working with many competing formats for each individual element.
+In contrast to the R ecosystem, observations be in the rows and variables be in the columns is the convention of the modern classics of statistics [@Hastie2009] and machine learning [@Murphy2012], tidy data [@Wickham2014], the convention of dataframes both in R and Python, and the established statistics and machine learning packages in Python (statsmodels, scikit-learn).
 
 ![**Structure of the AnnData object.**
 *(a)* The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
@@ -119,48 +83,17 @@ As examples, *(b)* the response variable ŷ learned from the data is stored as 
 \label{fig:overview}
 ](figures/overview.pdf)
 
-* Representation of data
-    * Labelled arrays
-    * Multiple representations (layers/ obsm)
-    * Associated metadata/ computed values
-        * Kinds of representations
-* Manipulation of datasets
-    * Optimized for work with sparse, high dimensional data
-    * Efficient subsetting
-    * Combination
-    * Out of core access
 
+## The exploratory data analysis workflow - iteratively learning representations and scalar annotations
 
-Keeping labels on data is useful [@Hoyer2017].
-Keeping those labels associated with the data as it moves through an analysis relieves a lot of cognitive burden on the scientist.
-Basic numeric structures like arrays forgo tracking this information for efficiency.
-
-Having a stuctured collection of objects which are aligned to the same set of labels allows for a number of higher order interactions.
-This includes maintaining relationships between the objects through metadata (e.g. observation and variable loadings of a PCA, the distance matrix a weighted representation was derived from).
-We can also keep further annotations on the dataset, e.g. colors associated with categorical labels, so these are preserved on subsetting \autoref{fig:overview}.
-
-## AnnData's structure
-
-AnnData is a collection of arrays, sparse matrices, and dataframes for storing representations of data aligned with dataframes for scalar annotations. For instance, lower-dimensional manifolds of data are typically stored as graphs of pairwise associations between observations, for which the `.obsp` exists.
-
-
-## Data semantics
-
-AnnData models a dataset as a set of observations and variables with measured, annotated, and derived values \autoref{fig:overview}.
-Observations and variables here take much the same meaning as they do in the tidy data [@Wickham2014] framework.
-Measured values are recorded on the cross product of observations and variables, e.g. on the `X` or in the `layers` attributes.
-In this way, the observations and variables can be thought of as discretely valued principal dimensions of the dataset.
-Each value on these dimensions is given a label, stored in `obs_names` and `var_names` respectivley.
-
-Annotations and derived values can then be stored on the dimension specific axes.
-Simple annotations and derived values which can be stored in a single vector are added to the main annotation dataframes for each axis, `obs` and `var`.
-Annotations added here include values like alternative names (e.g. different identifier mappings or categories for each variable).
-Derived values added here can be descriptive statistics (e.g. mean and variance) or categories from clustering.
-
-
+Let us discuss a few canonical examples of the exploratory data analysis workflow. Fitting a classification, regression, or clustering to high dimensional data gives rise to a response variable ŷ learned from the data is stored as an annotation of its observations \autoref{fig:overview}[b].
+Reduced dimensional representations PCA are stored with observation/ variable loadings aligned to the main dimensions \autoref{fig:overview}(c). A K nearest neighbor representation of this PCA space is represented as an adjacency matrix, constituting a pairwise relationship of the observations, fitting in `obsp` \autoref{fig:overview}(d). Subsetting the `AnnData` object by observations produces a view subsetting all elements aligned to this dimension. \autoref{fig:overview}(e). 
 
 
 ## On disk representation
+
+An AnnData object captures a useful unit (the dataset) in the data analysis workflow.
+Providing a stable, and standard on disk format for this unit relieves the pain of working with many competing formats for each individual element.
 
 <!-- figure out how to cite zarr and hdf5, zarr has zenodo entry here: https://doi.org/10.5281/zenodo.3773449 -->
 <!--
@@ -250,6 +183,28 @@ AnnData is widley used in single cell analysis.
 > * scvelo and layers
 > * different sets of variables (modality)
 > * spatial information (use of unstructured)
+
+
+<!-- Question for alex:
+
+Why are the access patterns different?
+
+For typical use cases of tidy-data (and for data frames), data storage is columnar (or "variable major").
+Our access patterns to X are typically row based, so we use CSR and C order arrays (or "observation major").
+This is also what scikit-learn does.
+
+What is different about the data we have here?
+Is it important that `X` is homogenous? That it's all "one kind" of variable? That each column was drawn from the same datasource.
+ -->
+
+<!-- 
+
+* Tidy data for large numeric datasets
+  * Seperate data from metadata
+  * Store metadata on the variables, but keep this associated
+  * Some organization conventions, to keep namespaces clean-ish
+ -->
+
 
 # Future directions
 
