@@ -26,49 +26,22 @@ bibliography: paper.bib
 
 anndata is a python software package for handling annotated datasets both in memory and on disk. It focuses on enabling intuitive iterative data science workflows.
 
-# Statement of Need
+# Statement of need
 
-<!--
-Broadly define problem
-Specifics of how we handle it, what do we uniquely solve
 
-* Structured representation of a machine learning dataset
-* scRNA-seq, looks like these datasets
-  * Specific needs for sparse data
-  * Interchange between ecosystems, on disk format
-* Previous/ parallel solutions (xarray, netCDF / CF conventions) while close do not solve all these problems
-
--->
-
-<!--
-Be more specific about iterative nature of exploratory analysis, especially when little is known about the data a-priori. Broader, less formal.
-
-We want to capture most of this process.
--->
-
-Generating insight from high-dimensional data is typically achieved through learning patterns that allow (i) to condense data into meaningful lower-dimensional representations and (ii) to assign semantic meaning to observations and variables.
+In exploratory data analysis, generating insight from high-dimensional data is typically achieved through learning patterns that allow (i) to condense data into meaningful lower-dimensional representations and (ii) to assign semantic meaning to observations and variables.
 Learning these patterns almost always involves workflows of iteratively training models on pre- and post-learned annotations of data, requiring to book-keep their representations and scalar annotations, such as labels and numerical scores.
-anndata's purpose is to make such workflows as efficient as possible through a data structure that naturally integrates book-keeping with model training and analysis.
-All of this, well-integrated with the pydata ecosystem.
+anndata's purpose is to make such workflows as efficient as possible through a data structure that naturally integrates book-keeping with model training and analysis, well-integrated into the pydata ecosystem.
 
-A particularly relevant use case with high degrees of iterations and many annotations involved, concerns data in computational biology.
-Advances in single-cell high throughput sequencing have brought new classes of analysis problems to the field.
-While previous bulk studies had few observations with known labels, current datasets have many observations with little sample level information.
-The size of the data has been a problem as it's very high dimensional (>20k genes in standard human genome annotation) and ever increasing sizes of datasets.
-As a small fraction of genes are detected in a single cell, the data is highly sparse. <!-- This could go later, the main point is that tools like `xarray` and `pandas` don't handle sparse data, but it's needed -->
+A particularly relevant use case with high degrees of iterations and many annotations involved concerns computational biology, where 
+advances in single-cell high throughput sequencing (scRNA-seq) have given rise to new classes of analysis problems.
+While previous bulk studies had few observations with known labels, current datasets have many observations with little sample level information, in high dimensions, and with a high degree of sparsity. Neither xarray nor pandas meet these needs, anndata offers the sparse data support and efficiency needed.
 
-On the analytical tools side, the characteristics of these new large datasets are a good fit for modern machine learning methods, which are increasingly implemented in the python ecosystem.
-Machine learning methods in python work well with the data matrices obtained from scRNA-seq.
-By making it easy to handle these data in python, we can more easily take advantage of these libraries.
-However, siloing data in a single ecosystem benefits no one, and there is much to gain from making the data accesible from any ecosystem.
+While analysis of bioinformatic data has been dominated by the R ecosystem, the recent explosion in popularity and availability of machine learnings tools in the Python ecosystem is important to take advantage of. anndata offers an in-memory representation that seamlessly integrates with the Python ecosystem, while offering a cross-ecosystem on-disk format that allows interfacing with the R ecosystem.
 
-These problems are addressed by anndata, an object which provides a powerful model for representing numeric datasets and associated models, has efficient storage and operations on sparse data, and provides an accesable on disk format. <!-- There's probably a better term than accesbile -->
-
-<!-- While these libraries have great computational tools, they frequently work with unlabelled numpy arrays/ scipy sparse arrays. -->
 
 # The AnnData object
 
-# Introduction
 
 * Prior art
 * What do we do that others don't
