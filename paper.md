@@ -24,7 +24,7 @@ bibliography: paper.bib
 
 # Abstract
 
-anndata is a python software package for handling annotated datasets both in memory and on disk.
+anndata is a python software package for handling annotated datasets both in memory and on disk. It focuses on enabling intuitive iterative data science workflows.
 
 # Statement of Need
 
