@@ -1,5 +1,5 @@
 ---
-title: 'anndata: annotated data'
+title: 'anndata: Annotated data'
 authors:
   - name: Isaac Virshup
     orcid: 0000-0002-1710-8945
