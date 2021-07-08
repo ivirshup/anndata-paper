@@ -165,7 +165,7 @@ AnnData provides a common format and set of conventions for handling numeric dat
 *(a)* Data flows using the `anndata` model. `AnnData` objects can be created from a number of formats, including common delimited text files, or domain/ tool specific formats like `loom` or `cellranger` outputs.
 Once in memory, AnnData provides an api for handling annotated matrix objects, proving a common base object used by a range of analysis tools.
 The in memory format has a one to one relationship with it's on disk format.
-The on disk format for this model uses lanugage independent technologies, facilitating use by other tools and interchange with other ecosystems.
+The on disk format for this model uses language independent technologies, facilitating use by other tools and interchange with other ecosystems.
 *(b)* The on disk schema for maps the schema to a hierarchical model (mapping of elements indicated by color).
 Each element is annotated with a type and schema version to facilitate interchange.
 *(c)* AnnData is widely used in the single cell RNA seq ecosystem.
