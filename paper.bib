@@ -80,6 +80,20 @@ year = {2012},
 abstract = {A comprehensive introduction to machine learning that uses probabilistic models and inference as a unifying approach. Today’s Web-enabled deluge of electronic data calls for automated methods of data analysis. Machine learning provides these, developing methods that can automatically detect patterns in data and then use the uncovered patterns to predict future data. This textbook offers a comprehensive and self-contained introduction to the field of machine learning, based on a unified, probabilistic approach. The coverage combines breadth and depth, offering necessary background material on such topics as probability, optimization, and linear algebra as well as discussion of recent developments in the field, including conditional random fields, L1 regularization, and deep learning. The book is written in an informal, accessible style, complete with pseudo-code for the most important algorithms. All topics are copiously illustrated with color images and worked examples drawn from such application domains as biology, text processing, computer vision, and robotics. Rather than providing a cookbook of different heuristic methods, the book stresses a principled model-based approach, often using the language of graphical models to specify models in a concise and intuitive way. Almost all the models described have been implemented in a MATLAB software package---PMTK (probabilistic modeling toolkit)---that is freely available online. The book is suitable for upper-level undergraduates with an introductory-level college math background and beginning graduate students.}, 
 keywords = {Computers}}
 
+@Article{Hao2020,
+author = {Hao, Yuhan and Hao, Stephanie and Andersen-Nissen, Erica and Mauck, William M. and Zheng, Shiwei and Butler, Andrew and Lee, Maddie J. and Wilk, Aaron J. and Darby, Charlotte and Zagar, Michael and Hoffman, Paul and Stoeckius, Marlon and Papalexi, Efthymia and Mimitou, Eleni P. and Jain, Jaison and Srivastava, Avi and Stuart, Tim and Fleming, Lamar B. and Yeung, Bertrand and Rogers, Angela J. and McElrath, Juliana M. and Blish, Catherine A. and Gottardo, Raphael and Smibert, Peter and Satija, Rahul}, 
+editor = {}, 
+title = {Integrated analysis of multimodal single-cell data}, 
+journal = {}, 
+volume = {}, 
+number = {}, 
+pages = {}, 
+year = {2020}, 
+abstract = {<jats:title>Abstract</jats:title><jats:p>The simultaneous measurement of multiple modalities, known as multimodal analysis, represents an exciting frontier for single-cell genomics and necessitates new computational methods that can define cellular states based on multiple data types. Here, we introduce ‘weighted-nearest neighbor’ analysis, an unsupervised framework to learn the relative utility of each data type in each cell, enabling an integrative analysis of multiple modalities. We apply our procedure to a CITE-seq dataset of hundreds of thousands of human white blood cells alongside a panel of 228 antibodies to construct a multimodal reference atlas of the circulating immune system. We demonstrate that integrative analysis substantially improves our ability to resolve cell states and validate the presence of previously unreported lymphoid subpopulations. Moreover, we demonstrate how to leverage this reference to rapidly map new datasets, and to interpret immune responses to vaccination and COVID-19. Our approach represents a broadly applicable strategy to analyze single-cell multimodal datasets, including paired measurements of RNA and chromatin state, and to look beyond the transcriptome towards a unified and multimodal definition of cellular identity.</jats:p><jats:sec><jats:title>Availability</jats:title><jats:p>Installation instructions, documentation, tutorials, and CITE-seq datasets are available at <jats:ext-link xmlns:xlink=”http://www.w3.org/1999/xlink” ext-link-type=”uri” xlink:href=”http://www.satijalab.org/seurat”>http://www.satijalab.org/seurat</jats:ext-link></jats:p></jats:sec}, 
+location = {}, 
+keywords = {}}
+
+
 @Article{Waskom2021,
 author = {Waskom, Michael}, 
 editor = {}, 
@@ -147,6 +161,20 @@ location = {},
 keywords = {}}
 
 
+@Article{Gayoso2021,
+author = {Gayoso, Adam and Lopez, Romain and Xing, Galen and Boyeau, Pierre and Wu, Katherine and Jayasuriya, Michael and Melhman, Edouard and Langevin, Maxime and Liu, Yining and Samaran, Jules and Misrachi, Gabriel and Nazaret, Achille and Clivio, Oscar and Xu, Chenling and Ashuach, Tal and Lotfollahi, Mohammad and Svensson, Valentine and Beltrame, Eduardo da Veiga and Talavera-López, Carlos and Pachter, Lior and Theis, Fabian J. and Streets, Aaron and Jordan, Michael I. and Regier, Jeffrey and Yosef, Nir}, 
+editor = {}, 
+title = {scvi-tools: a library for deep probabilistic analysis of single-cell omics data}, 
+journal = {}, 
+volume = {}, 
+number = {}, 
+pages = {}, 
+year = {2021}, 
+abstract = {<jats:title>A<jats:sc>bstract</jats:sc></jats:title><jats:p>Probabilistic models have provided the underpinnings for state-of-the-art performance in many single-cell omics data analysis tasks, including dimensionality reduction, clustering, differential expression, annotation, removal of unwanted variation, and integration across modalities. Many of the models being deployed are amenable to scalable stochastic inference techniques, and accordingly they are able to process single-cell datasets of realistic and growing sizes. However, the community-wide adoption of probabilistic approaches is hindered by a fractured software ecosystem resulting in an array of packages with distinct, and often complex interfaces. To address this issue, we developed scvi-tools (<jats:ext-link xmlns:xlink=”http://www.w3.org/1999/xlink” ext-link-type=”uri” xlink:href=”https://scvi-tools.org”>https://scvi-tools.org</jats:ext-link>), a Python package that implements a variety of leading probabilistic methods. These methods, which cover many fundamental analysis tasks, are accessible through a standardized, easy-to-use interface with direct links to Scanpy, Seurat, and Bioconductor workflows. By standardizing the implementations, we were able to develop and reuse novel functionalities across different models, such as support for complex study designs through nonlinear removal of unwanted variation due to multiple covariates and reference-query integration via scArches. The extensible software building blocks that underlie scvi-tools also enable a developer environment in which new probabilistic models for single cell omics can be efficiently developed, benchmarked, and deployed. We demonstrate this through a code-efficient reimplementation of Stereoscope for deconvolution of spatial transcriptomics profiles. By catering to both the end user and developer audiences, we expect scvi-tools to become an essential software dependency and serve to formulate a community standard for probabilistic modeling of single cell omics.</jats:p}, 
+location = {}, 
+keywords = {}}
+
+
 @Article{Wickham2014,
 author = {Wickham, Hadley}, 
 editor = {}, 
@@ -172,6 +200,34 @@ pages = {1408--1414},
 year = {2020}, 
 abstract = {RNA velocity has opened up new ways of studying cellular differentiation in single-cell RNA-sequencing data. It describes the rate of gene expression change for an individual gene at a given time point based on the ratio of its spliced and unspliced messenger RNA (mRNA). However, errors in velocity estimates arise if the central assumptions of a common splicing rate and the observation of the full splicing dynamics with steady-state mRNA levels are violated. Here we present scVelo, a method that overcomes these limitations by solving the full transcriptional dynamics of splicing kinetics using a likelihood-based dynamical model. This generalizes RNA velocity to systems with transient cell states, which are common in development and in response to perturbations. We apply scVelo to disentangling subpopulation kinetics in neurogenesis and pancreatic endocrinogenesis. We infer gene-specific rates of transcription, splicing and degradation, recover each cell’s position in the underlying differentiation processes and detect putative driver genes. scVelo will facilitate the study of lineage decisions and gene regulation.}, 
 location = {Institute of Computational Biology, Helmholtz Center Munich, Munich, Germany. Department of Mathematics, Technical University of Munich, Munich, Germany. Institute of Computational Biology, Helmholtz Center Munich, Munich, Germany. Department of Mathematics, Technical University of Munich, Munich, Germany. Department of Mathematics, Technical University of Munich, Munich, Germany. Institute of Computational Biology, Helmholtz Center Munich, Munich, Germany. alex.wolf@helmholtz-muenchen.de. Institute of Computational Biology, Helmholtz Center Munich, Munich, Germany. fabian.theis@helmholtz-muenchen.de. Department of Mathematics, Technical University of Munich, Munich, Germany. fabian.theis@helmholtz-muenchen.de.}, 
+keywords = {}}
+
+
+@Article{Bredikhin2021,
+author = {Bredikhin, Danila and Kats, Ilia and Stegle, Oliver}, 
+editor = {}, 
+title = {Muon: multimodal omics analysis framework}, 
+journal = {}, 
+volume = {}, 
+number = {}, 
+pages = {}, 
+year = {2021}, 
+abstract = {<jats:title>Abstract</jats:title><jats:p>Advances in multi-omics technologies have led to an explosion of multimodal datasets to address questions ranging from basic biology to translation. While these rich data provide major opportunities for discovery, they also come with data management and analysis challenges, thus motivating the development of tailored computational solutions to deal with multi-omics data.</jats:p><jats:p>Here, we present a data standard and an analysis framework for multi-omics --- <jats:italic>MUON</jats:italic> --- designed to organise, analyse, visualise, and exchange multimodal data. MUON stores multimodal data in an efficient yet flexible data structure, supporting an arbitrary number of omics layers. The MUON data structure is interoperable with existing community standards for single omics, and it provides easy access to both data from individual omics as well as multimodal dataviews. Building on this data infrastructure, MUON enables a versatile range of analyses, from data preprocessing, the construction of multi-omics containers to flexible multi-omics alignment.</jats:p}, 
+location = {}, 
+keywords = {}}
+
+
+@Article{Ramos2017,
+author = {Ramos, Marcel and Schiffer, Lucas and Re, Angela and Azhar, Rimsha and Basunia, Azfar and Rodriguez, Carmen and Chan, Tiffany and Chapman, Phil and Davis, Sean R. and Gomez-Cabrero, David and Culhane, Aedin C. and Haibe-Kains, Benjamin and Hansen, Kasper D. and Kodali, Hanish and Louis, Marie S. and Mer, Arvind S. and Riester, Markus and Morgan, Martin and Carey, Vince and Waldron, Levi}, 
+editor = {}, 
+title = {Software for the Integration of Multiomics Experiments in Bioconductor}, 
+journal = {Cancer Research}, 
+volume = {77}, 
+number = {21}, 
+pages = {e39--e42}, 
+year = {2017}, 
+abstract = {}, 
+location = {}, 
 keywords = {}}
 
 
