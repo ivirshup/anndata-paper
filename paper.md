@@ -200,11 +200,24 @@ Each element is annotated with a type and schema version to facilitate interchan
 
 AnnData is widely used in single cell analysis across spatial transcriptomics, RNA velocity, and multiple modalities \autoref{fig:examples}.
 
-In spatial transcriptomics, each observation has spatial coordinates associated with it. Squidpy [@Palla2021] uses AnnData to model their data by storing spatial coordinates as an array in `obsm`. These coordinates are used to create a spatial graph, which is used to find features which are spatially coorelated. Values from the high dimensional experiment can be overlayed on an image of the sampled tissue (where the image array is stored in `uns`, or externally handled).
+In spatial transcriptomics, each observation has spatial coordinates associated with it.
+Squidpy [@Palla2021] uses AnnData to model their data by storing spatial coordinates as an array in `obsm`.
+These coordinates are used to create a spatial graph, which is used to find features which are spatially coorelated.
+Values from the high dimensional experiment can be overlayed on an image of the sampled tissue (where the image array is stored in `uns`, or externally handled).
 
-AnnData can also be used to model multimodal data, though multiple approaches for this can be used. In one approach, analyses specific to each modality are carried out seperate `AnnData` objects. These can then be combined along the variable axis (using the shared observations) for multimodal analyses. Here an indicator array can be used to separate which variables belong to which modality. From this, analyses inferring or annotations interactions between modalities can be stored as graphs in `varp`. Analyses using information from both modalities, like a joint manifold [@Hao2020], can be stored in `obsp`.
+AnnData can also be used to model multimodal data, though multiple approaches for this can be used.
+In one approach, analyses specific to each modality are carried out separate `AnnData` objects.
+These can then be combined along the variable axis (using the shared observations) for multimodal analyses.
+Here an indicator array can be used to separate which variables belong to which modality.
+From this, analyses inferring or annotations interactions between modalities can be stored as graphs in `varp`.
+Analyses using information from both modalities, like a joint manifold [@Hao2020], can be stored in `obsp`.
 
-Another approach for modelling multimodal data has been utilized by the `muon` package [@Bredikhin2021]. Here, a new `MuData` object is defined, which is essentially a collection of `AnnData` objects, one for each modality measured. Annotations shared across modalities are stored for the observations at the top layer. This structure extends to the on-disk format where individual `AnnData` objects are stored as discrete elements inside the `MuData`'s `h5mu` files. This approach signifigantly differs from the previous approach by allowing for disjoint sets of observations measured for each modality. This approach is quite similar to the MultiAssayExperiment from the bioconductor ecosystem [@Ramos2017].
+Another approach for modelling multimodal data has been utilized by the `muon` package [@Bredikhin2021].
+Here, a new `MuData` object is defined, which is essentially a collection of `AnnData` objects, one for each modality measured.
+Annotations shared across modalities are stored for the observations for the whole object.
+This structure extends to the on-disk format where individual `AnnData` objects are stored as discrete elements inside the `MuData`'s `h5mu` files.
+This approach significantly differs from the previous approach by allowing for disjoint sets of observations measured for each modality.
+This approach is quite similar to the MultiAssayExperiment from the bioconductor ecosystem [@Ramos2017].
 
 AnnData has been used to model the data for RNA velocity [@Bergen2020].
 
