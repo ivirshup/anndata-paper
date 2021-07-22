@@ -56,14 +56,35 @@ anndata is positioned in between by providing the minimal additional structure t
 Current learning practices in data analysis libraries such as scikit-learn [@Buitinck2013](Sec. 2.2) model input and output for each computation as set of arrays. 
 To organize process, AnnData first defines a particular data semantics for it.
 
+## Modelling data
+
+Having a consistent model of data facilitates exploratory analysis and distribution of data.
+Instead of spending time translating data between formats, it allows the analyst to focus on analysis.
+This is evident through the success of projects like scikit-learn and the tidyverse, which have consistent conventions for dataset representation.
+
+<!-- Move, I think? -->
+<!-- In contrast to the R ecosystem, observations are in the rows and variables be in the columns is the convention of the modern classics of statistics [@Hastie2009] and machine learning [@Murphy2012], tidy data [@Wickham2014], the convention of dataframes both in R and Python, and the established statistics and machine learning packages in Python (statsmodels, scikit-learn). -->
+
+<!-- In the convention of the modern classics of statistics [@Hastie2009] and machine learning [@Murphy2012] data is modelled as a function of observations and variables. -->
+<!-- In the tidy format, tabular data is normalized so that each row is an observation and each column is a variable. -->
+<!-- A regression or classification task is then d -->
+<!-- Each entry $x_{i,j} \in X$ -->
+
+<!-- By defining a standardized format, it allows many tools to operate on the same object without the analyst having to translate data between formats to work with different tools. -->
+
+<!-- Similarly, the scikit-learn API normalizes inputs and outputs around numpy and scipy data structures, with rows corresponding to observations and columns to variables. -->
+
+<!-- Normalized data formats are very useful for composablilty of data analysis tools.
+scikit-learn has exploited this to great effect with it's API.
+One thing scikit-learn lacks is the ability to include semantics with your data. -->
 
 ## AnnData's data semantics is designed for an exploratory data analysis workflow
 
-AnnData models a dataset as a set of observations and variables with measured, annotated, and derived values \autoref{fig:overview}.
-Observations (samples) and variables (features) here take much the same meaning as they do in the tidy data [@Wickham2014] framework.
-The object is centered around the measured values, recorded for the cross product of observations and variables – stored in the `X` and `layers` attributes.
-In this way, the observations and variables can be thought of as discretely valued principal dimensions of the dataset.  <!-- Reword? "principal dimensions" sounds wrong -->
-Each value on these dimensions is given a label, stored in `obs_names` and `var_names` respectivley.
+AnnData models datasets as collections of elements which are functions of it's observations (`obs_names`) and variables (`var_names`).
+This is based on both concepts of tidy data [@Wickham2014] and standard modelling of machine learning tasks [@Buitinck2013].
+At the core of the object are the measured values which we would like to understand more (`X`, `layers`).
+Each element here will contains a value (which can be "missing", like `nan`) for the product of the observations and variables.
+We build our understanding of the dataset by adding annotated and derived values onto the observations and variables \autoref{fig:overview}.
 
 Annotations and derived values can then be stored on the dimension specific axes.
 Simple annotations and derived values which can be stored in a single vector are added to the main annotation dataframes for each axis, `obs` and `var`.
@@ -71,12 +92,9 @@ Learned representations are added to `obsm` and low-dimensional manifold structu
 Annotations added here include values like alternative names (e.g. different identifier mappings) or categories for each variable.
 Derived values added here can be descriptive statistics (e.g. mean and variance), cluster assignments, or classifier scores.
 
-<!-- Move, I think? -->
-In contrast to the R ecosystem, observations be in the rows and variables be in the columns is the convention of the modern classics of statistics [@Hastie2009] and machine learning [@Murphy2012], tidy data [@Wickham2014], the convention of dataframes both in R and Python, and the established statistics and machine learning packages in Python (statsmodels, scikit-learn).
 
 ![**Structure of the AnnData object.**
 *(a)* The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
-This was designed to organize analysis results, fitting in with the common conventions of statistical/ machine learning.
 Here, color is used to denote elements of the object, with "warm" colors selected for elements aligned to the observations and "cool" colors for elements aligned to variables.
 The object is centered around the main data matrix `X`, whose two dimensions correspond to observations and variables respectivley.
 Primary labels for each of these dimensions are stored as `obs_names` and `var_names`.
@@ -165,7 +183,7 @@ AnnData provides a common format and set of conventions for handling numeric dat
 *(a)* Data flows using the `anndata` model. `AnnData` objects can be created from a number of formats, including common delimited text files, or domain/ tool specific formats like `loom` or `cellranger` outputs.
 Once in memory, AnnData provides an api for handling annotated matrix objects, proving a common base object used by a range of analysis tools.
 The in memory format has a one to one relationship with it's on disk format.
-The on disk format for this model uses lanugage independent technologies, facilitating use by other tools and interchange with other ecosystems.
+The on disk format for this model uses language independent technologies, facilitating use by other tools and interchange with other ecosystems.
 *(b)* The on disk schema for maps the schema to a hierarchical model (mapping of elements indicated by color).
 Each element is annotated with a type and schema version to facilitate interchange.
 *(c)* AnnData is widely used in the single cell RNA seq ecosystem.
@@ -174,13 +192,34 @@ Each element is annotated with a type and schema version to facilitate interchan
 
 ## Examples of use for analysis of spatial transcriptomics, RNA velocity, and multiple modalities
 
-AnnData is widely used in single cell analysis across spatial transcriptomics, RNA velocity, and multiple modalities.
 
 ![
 **Examples across spatial transcriptomics, RNA velocity, and multiple modalities.**
 \label{fig:examples}
 ](figures/examples.pdf)
 
+AnnData is widely used in single cell analysis across spatial transcriptomics, RNA velocity, and multiple modalities \autoref{fig:examples}.
+
+In spatial transcriptomics, each observation has spatial coordinates associated with it.
+Squidpy [@Palla2021] uses AnnData to model their data by storing spatial coordinates as an array in `obsm`.
+These coordinates are used to create a spatial graph, which is used to find features which are spatially coorelated.
+Values from the high dimensional experiment can be overlayed on an image of the sampled tissue (where the image array is stored in `uns`, or externally handled).
+
+AnnData can also be used to model multimodal data, though multiple approaches for this can be used.
+In one approach, analyses specific to each modality are carried out separate `AnnData` objects.
+These can then be combined along the variable axis (using the shared observations) for multimodal analyses.
+Here an indicator array can be used to separate which variables belong to which modality.
+From this, analyses inferring or annotations interactions between modalities can be stored as graphs in `varp`.
+Analyses using information from both modalities, like a joint manifold [@Hao2020], can be stored in `obsp`.
+
+Another approach for modelling multimodal data has been utilized by the `muon` package [@Bredikhin2021].
+Here, a new `MuData` object is defined, which is essentially a collection of `AnnData` objects, one for each modality measured.
+Annotations shared across modalities are stored for the observations for the whole object.
+This structure extends to the on-disk format where individual `AnnData` objects are stored as discrete elements inside the `MuData`'s `h5mu` files.
+This approach significantly differs from the previous approach by allowing for disjoint sets of observations measured for each modality.
+This approach is quite similar to the MultiAssayExperiment from the bioconductor ecosystem [@Ramos2017].
+
+AnnData has been used to model the data for RNA velocity [@Bergen2020].
 
 # Future directions, ongoing work
 
