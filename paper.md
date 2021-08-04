@@ -194,7 +194,11 @@ Each element is annotated with a type and schema version to facilitate interchan
 
 
 ![
-**Examples across spatial transcriptomics, RNA velocity, and multiple modalities.**
+**AnnData is used to model multiple data types.**
+Examples of how AnnData is used by packages in the eco system.
+*(a)* Squidpy uses AnnData objects for working with spatial data. The coordinates of each sample are stored as an array in `obsm`, an image to overlay the plot on is stored in `uns`, and spatial graph representation in `uns`.
+*(b)*
+*(c)*
 \label{fig:examples}
 ](figures/examples.pdf)
 
