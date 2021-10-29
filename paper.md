@@ -16,9 +16,9 @@ affiliations:
    index: 1
  - name: Helmholtz Munich, Institute of Computational Biology, Munich, Germany.
    index: 2
- - name: corresponding authors
+ - name: Corresponding authors.
    index: †
- - name: present address at Cellarity, Cambridge, MA.
+ - name: "Present address: Cellarity, Cambridge, MA."
    index: ‡   
 date: May 1st, 2021
 bibliography: paper.bib
