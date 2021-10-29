@@ -6,11 +6,11 @@ authors:
     affiliation: "1,*"
   - name: Sergei Rybakov
     affiliation: "2"
-  - name: Philipp Angerer^[Present address: Cellarity, Cambridge, MA.]
-    affiliation: "2,*"
-  - name: F. Alexander Wolf^[Present address: Cellarity, Cambridge, MA.]
+  - name: Philipp Angerer
+    affiliation: "2,*,†"
+  - name: F. Alexander Wolf
     orcid: 0000-0002-8760-7838
-    affiliation: "2,*"
+    affiliation: "2,*,†"
 affiliations:
  - name: University of Melbourne.
    index: 1
@@ -18,8 +18,10 @@ affiliations:
    index: 2
  - name: corresponding authors
    index: *
+ - name: present address: Cellarity, Cambridge, MA.
+   index: †
 
-date: May 1st, 2021
+date: November 1st, 2021
 bibliography: paper.bib
 ---
 
