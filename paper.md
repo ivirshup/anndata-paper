@@ -3,23 +3,22 @@ title: 'anndata: Annotated data'
 authors:
   - name: Isaac Virshup
     orcid: 0000-0002-1710-8945
-    affiliation: "1,†"    
+    affiliation: "1,*"
   - name: Sergei Rybakov
     affiliation: "2"
-  - name: Philipp Angerer
-    affiliation: "2,3,†"    
-  - name: F. Alexander Wolf
+  - name: Philipp Angerer^[Present address: Cellarity, Cambridge, MA.]
+    affiliation: "2,*"
+  - name: F. Alexander Wolf^[Present address: Cellarity, Cambridge, MA.]
     orcid: 0000-0002-8760-7838
-    affiliation: "2,3,†"
+    affiliation: "2,*"
 affiliations:
  - name: University of Melbourne.
    index: 1
  - name: Helmholtz Munich, Institute of Computational Biology, Munich, Germany.
    index: 2
- - name: Cellarity, Cambridge, MA.
-   index: 3
  - name: corresponding authors
-   index: †
+   index: *
+
 date: May 1st, 2021
 bibliography: paper.bib
 ---
