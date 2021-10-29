@@ -18,7 +18,7 @@ affiliations:
    index: 2
  - name: corresponding authors
    index: *
- - name: present address: Cellarity, Cambridge, MA.
+ - name: present address at Cellarity, Cambridge, MA
    index: †
 date: May 1st, 2021
 bibliography: paper.bib
