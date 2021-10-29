@@ -14,7 +14,7 @@ authors:
 affiliations:
  - name: University of Melbourne.
    index: 1
- - name: Helmholtz Munich, Institute of Computational Biology.
+ - name: "Helmholtz Munich, Institute of Computational Biology.   "
    index: 2
  - name: Corresponding authors.
    index: †
@@ -24,14 +24,14 @@ date: November 1st, 2021
 bibliography: paper.bib
 ---
 
-# Abstract
+# Summary
 
-anndata is a python software package for handling annotated datasets both in memory and on disk. It focuses on enabling intuitive iterative data science workflows.
+anndata is a Python software package for handling annotated data matrices in memory and on disk.
 
 
 # Statement of need
 
-In exploratory data analysis, generating insight from high-dimensional data is typically achieved through learning patterns that allow (i) to condense data into meaningful lower-dimensional representations and (ii) to assign semantic meaning to observations and variables.
+In exploratory data analysis based on, say sckit-learn [@Buitinck2013], generating insight from high-dimensional data is typically achieved through training models to learn patterns that allow (i) to condense data into meaningful lower-dimensional representations and (ii) to assign semantic meaning to observations and variables.
 Learning these patterns almost always involves workflows of iteratively training models on pre- and post-learned annotations of data, requiring to book-keep their representations and scalar annotations, such as labels and numerical scores.
 anndata's purpose is to make such workflows as efficient as possible through a data structure that naturally integrates book-keeping with model training and analysis, well-integrated into the pydata ecosystem.
 
