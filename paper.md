@@ -31,8 +31,8 @@ anndata is a Python software package for handling annotated data matrices in mem
 
 # Statement of need
 
-In exploratory data analysis based on, say sckit-learn [@Buitinck2013], generating insight from high-dimensional data is typically achieved through training models to learn patterns that allow (i) to condense data into meaningful lower-dimensional representations and (ii) to assign semantic meaning to observations and variables.
-Learning these patterns almost always involves workflows of iteratively training models on pre- and post-learned annotations of data, requiring to book-keep their representations and scalar annotations, such as labels and numerical scores.
+In exploratory data analysis -- say, based on sckit-learn [@scikit-learn] -- generating insight from high-dimensional data is typically achieved through training models to learn patterns that allow (i) to condense data into meaningful low-dimensional representations and (ii) to assign meaning to observations and variables.
+This almost always involves workflows of iteratively training models on pre- and post-learned annotations of data, requiring to book-keep their representations and scalar annotations, such as labels and numerical scores.
 anndata's purpose is to make such workflows as efficient as possible through a data structure that naturally integrates book-keeping with model training and analysis, well-integrated into the pydata ecosystem.
 
 A particularly relevant use case with high degrees of iterations and many annotations involved concerns computational biology, where
@@ -53,7 +53,7 @@ AnnData was inspired by similar data structures within the R ecosystem, in parti
 Within the pydata ecosystem the closest package that would be amenable to serve this paradigm is xarray [@Hoyer2017], which enables to deal with highly complex labelled data tensors of arbitrary dimensions - keeping labels on data is useful [@Hoyer2017].
 By contrast, the highly popular package pandas [@McKinney2010] operates only on `DataFrames`, that is, single tables of data.
 anndata is positioned in between by providing the minimal additional structure to enable storing compact annotations and representations of high-dimensional data, making the book keeping during learning from it much simpler.
-Current learning practices in data analysis libraries such as scikit-learn [@Buitinck2013](Sec. 2.2) model input and output for each computation as set of arrays.
+Current learning practices in data analysis libraries such as scikit-learn [@sklearn_api] model input and output for each computation as set of arrays.
 To organize process, AnnData first defines a particular data semantics for it.
 
 ## Modelling data
@@ -81,7 +81,7 @@ One thing scikit-learn lacks is the ability to include semantics with your data.
 ## AnnData's data semantics is designed for an exploratory data analysis workflow
 
 AnnData models datasets as collections of elements which are functions of it's observations (`obs_names`) and variables (`var_names`).
-This is based on both concepts of tidy data [@Wickham2014] and standard modelling of machine learning tasks [@Buitinck2013].
+This is based on both concepts of tidy data [@Wickham2014] and standard modelling of machine learning tasks [@sklearn_api].
 At the core of the object are the measured values which we would like to understand more (`X`, `layers`).
 Each element here will contains a value (which can be "missing", like `nan`) for the product of the observations and variables.
 We build our understanding of the dataset by adding annotated and derived values onto the observations and variables \autoref{fig:overview}.
