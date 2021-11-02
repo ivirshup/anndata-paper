@@ -3,39 +3,39 @@ title: 'anndata: Annotated data'
 authors:
   - name: Isaac Virshup
     orcid: 0000-0002-1710-8945
-    affiliation: "1,†"    
+    affiliation: "1,†"
   - name: Sergei Rybakov
     affiliation: "2"
   - name: Philipp Angerer
-    affiliation: "2,3,†"    
+    affiliation: "2,†,‡"
   - name: F. Alexander Wolf
     orcid: 0000-0002-8760-7838
-    affiliation: "2,3,†"
+    affiliation: "2,†,‡"
 affiliations:
  - name: University of Melbourne.
    index: 1
- - name: Helmholtz Munich, Institute of Computational Biology, Munich, Germany.
+ - name: "Helmholtz Munich, Institute of Computational Biology.   "
    index: 2
- - name: Cellarity, Cambridge, MA.
-   index: 3
- - name: corresponding authors
+ - name: Corresponding authors.
    index: †
-date: May 1st, 2021
+ - name: "Present address: Cellarity, Cambridge, MA."
+   index: ‡   
+date: November 1st, 2021
 bibliography: paper.bib
 ---
 
-# Abstract
+# Summary
 
-anndata is a python software package for handling annotated datasets both in memory and on disk. It focuses on enabling intuitive iterative data science workflows.
+anndata is a Python software package for handling annotated data matrices in memory and on disk.
 
 
 # Statement of need
 
-In exploratory data analysis, generating insight from high-dimensional data is typically achieved through learning patterns that allow (i) to condense data into meaningful lower-dimensional representations and (ii) to assign semantic meaning to observations and variables.
-Learning these patterns almost always involves workflows of iteratively training models on pre- and post-learned annotations of data, requiring to book-keep their representations and scalar annotations, such as labels and numerical scores.
+In exploratory data analysis -- say, based on sckit-learn [@scikit-learn] -- generating insight from high-dimensional data is typically achieved through training models to learn patterns that allow (i) to condense data into meaningful low-dimensional representations and (ii) to assign meaning to observations and variables.
+This almost always involves workflows of iteratively training models on pre- and post-learned annotations of data, requiring to book-keep their representations and scalar annotations, such as labels and numerical scores.
 anndata's purpose is to make such workflows as efficient as possible through a data structure that naturally integrates book-keeping with model training and analysis, well-integrated into the pydata ecosystem.
 
-A particularly relevant use case with high degrees of iterations and many annotations involved concerns computational biology, where 
+A particularly relevant use case with high degrees of iterations and many annotations involved concerns computational biology, where
 advances in single-cell high throughput sequencing (scRNA-seq) have given rise to new classes of analysis problems.
 While previous bulk studies had few observations with known labels, current datasets have many observations with little sample level information, in high dimensions, and with a high degree of sparsity.
 Neither xarray nor pandas meet these needs, anndata offers the sparse data support and efficiency needed.
@@ -53,7 +53,7 @@ AnnData was inspired by similar data structures within the R ecosystem, in parti
 Within the pydata ecosystem the closest package that would be amenable to serve this paradigm is xarray [@Hoyer2017], which enables to deal with highly complex labelled data tensors of arbitrary dimensions - keeping labels on data is useful [@Hoyer2017].
 By contrast, the highly popular package pandas [@McKinney2010] operates only on `DataFrames`, that is, single tables of data.
 anndata is positioned in between by providing the minimal additional structure to enable storing compact annotations and representations of high-dimensional data, making the book keeping during learning from it much simpler.
-Current learning practices in data analysis libraries such as scikit-learn [@Buitinck2013](Sec. 2.2) model input and output for each computation as set of arrays. 
+Current learning practices in data analysis libraries such as scikit-learn [@sklearn_api] model input and output for each computation as set of arrays.
 To organize process, AnnData first defines a particular data semantics for it.
 
 ## Modelling data
@@ -81,14 +81,14 @@ One thing scikit-learn lacks is the ability to include semantics with your data.
 ## AnnData's data semantics is designed for an exploratory data analysis workflow
 
 AnnData models datasets as collections of elements which are functions of it's observations (`obs_names`) and variables (`var_names`).
-This is based on both concepts of tidy data [@Wickham2014] and standard modelling of machine learning tasks [@Buitinck2013].
+This is based on both concepts of tidy data [@Wickham2014] and standard modelling of machine learning tasks [@sklearn_api].
 At the core of the object are the measured values which we would like to understand more (`X`, `layers`).
 Each element here will contains a value (which can be "missing", like `nan`) for the product of the observations and variables.
 We build our understanding of the dataset by adding annotated and derived values onto the observations and variables \autoref{fig:overview}.
 
 Annotations and derived values can then be stored on the dimension specific axes.
 Simple annotations and derived values which can be stored in a single vector are added to the main annotation dataframes for each axis, `obs` and `var`.
-Learned representations are added to `obsm` and low-dimensional manifold structure to `obsp`. 
+Learned representations are added to `obsm` and low-dimensional manifold structure to `obsp`.
 Annotations added here include values like alternative names (e.g. different identifier mappings) or categories for each variable.
 Derived values added here can be descriptive statistics (e.g. mean and variance), cluster assignments, or classifier scores.
 
@@ -116,8 +116,8 @@ As examples, *(b)* the response variable ŷ learned from the data is stored as 
 Let us discuss a few canonical examples of the exploratory data analysis workflow.
 Fitting a classification, regression, or clustering to high dimensional data gives rise to a response variable ŷ learned from the data is stored as an annotation of its observations \autoref{fig:overview}[b].
 Reduced dimensional representations PCA are stored with observation/ variable loadings aligned to the main dimensions \autoref{fig:overview}(c).
-A K nearest neighbor graph of observations in the PCA space is represented as an adjacency matrix, constituting a pairwise relationship of the observations, fitting in `obsp` \autoref{fig:overview}(d). 
-Subsetting the `AnnData` object by observations produces a view subsetting all elements aligned to this dimension. \autoref{fig:overview}(e). 
+A K nearest neighbor graph of observations in the PCA space is represented as an adjacency matrix, constituting a pairwise relationship of the observations, fitting in `obsp` \autoref{fig:overview}(d).
+Subsetting the `AnnData` object by observations produces a view subsetting all elements aligned to this dimension. \autoref{fig:overview}(e).
 
 
 ## Efficient data operations for data analysis workflows
@@ -173,7 +173,7 @@ Compressed sparse matrices (CSR and CSC format) are stored as a collection of th
 # How the ecosystem uses the AnnData object
 
 Transcriptional data is stored in a large variety of formats.
-The distributed nature of research can lead to fractured ecosystems without consortia for organization. 
+The distributed nature of research can lead to fractured ecosystems without consortia for organization.
 
 ## AnnData provides conventions for data handling that are used by many tools
 
