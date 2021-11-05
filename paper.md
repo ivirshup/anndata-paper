@@ -26,38 +26,34 @@ bibliography: paper.bib
 
 # Summary
 
-anndata is a Python software package for handling annotated data matrices in memory and on disk.
+anndata is a Python package for handling annotated data matrices in memory and on disk.
 
 
 # Statement of need
 
 In exploratory data analysis -- say, based on sckit-learn [@scikit-learn] -- generating insight from high-dimensional data is typically achieved through training models to learn patterns that allow (i) to condense data into meaningful low-dimensional representations and (ii) to assign meaning to observations and variables.
-This almost always involves workflows of iteratively training models on pre- and post-learned annotations of data, requiring to book-keep their representations and scalar annotations, such as labels and numerical scores.
-anndata's purpose is to make such workflows as efficient as possible through a data structure that naturally integrates book-keeping with model training and analysis, well-integrated into the pydata ecosystem.
+This almost always involves workflows of iteratively training models on pre- and post-learned annotations of data, requiring to book-keep their representations and scalar annotations (labels and numericals).
+anndata's purpose is to make such workflows as efficient as possible through a data structure that naturally integrates book-keeping with model training and analysis, well-integrated into the pydata ecosystem. Neither pandas nor xarray meets this need.
 
-A particularly relevant use case with high degrees of iterations and many annotations involved concerns computational biology, where
-advances in single-cell high throughput sequencing (scRNA-seq) have given rise to new classes of analysis problems.
-While previous bulk studies had few observations with known labels, current datasets have many observations with little sample level information, in high dimensions, and with a high degree of sparsity.
-Neither xarray nor pandas meet these needs, anndata offers the sparse data support and efficiency needed.
-
-While analysis of bioinformatic data has been dominated by the R ecosystem, the recent explosion in popularity and availability of machine learnings tools in the Python ecosystem is important to take advantage of.
-anndata offers an in-memory representation that seamlessly integrates with the Python ecosystem, while offering a cross-ecosystem on-disk format that allows interfacing with the R ecosystem.
+anndata turned out to be particularly useful for data analysis in computational biology, where advances in single-cell RNA sequencing (scRNA-seq) have given rise to new classes of analysis problems.
+While previous bulk RNA datasets typically have few observations with dense measurements, scRNA-seq datasets typically come with high numbers of observations with very sparse measurements, all with dimensions of 20k and more.
+Generating insight from these new data profits much from the application of scalable machine learning tools, which are more abundant in the Python ecosystem than in the R ecosystem.
+To nontheless enable use of the wealth of computational biology tools in the R ecosystem, anndata offers a cross-ecosystem on-disk format: h5ad.
 
 
-# Defining the AnnData object
+# The AnnData object
 
-AnnData was inspired by similar data structures within the R ecosystem, in particular, ExpressionSet, and single-cell related more recent alternatives, like SingleCellExperiment and the Seurat on-disk format.
+`AnnData` was inspired by similar data structures within the R ecosystem, in particular, `ExpressionSet`, and the more recent `SingleCellExperiment`.
 
-<!-- Needs work -->
+Within the pydata ecosystem, the closest package that would be amenable to store an annotated data matrix is xarray [@Hoyer2017], which enables to deal with highly complex labelled data tensors of arbitrary dimensions.
+By contrast, the highly popular package pandas [@McKinney2010] operates on single data matrices represented as `DataFrame` objects.
+anndata is positioned in between xarray and pandas by providing the minimal additional structure that enables storing annotations of a data matrix.
 
-Within the pydata ecosystem the closest package that would be amenable to serve this paradigm is xarray [@Hoyer2017], which enables to deal with highly complex labelled data tensors of arbitrary dimensions - keeping labels on data is useful [@Hoyer2017].
-By contrast, the highly popular package pandas [@McKinney2010] operates only on `DataFrames`, that is, single tables of data.
-anndata is positioned in between by providing the minimal additional structure to enable storing compact annotations and representations of high-dimensional data, making the book keeping during learning from it much simpler.
-Current learning practices in data analysis libraries such as scikit-learn [@sklearn_api] model input and output for each computation as set of arrays.
-To organize process, AnnData first defines a particular data semantics for it.
 
 ## Modelling data
 
+Data analysis libraries such as scikit-learn [@scikit-learn; @sklearn_api] or PyTorch model input and output for each computation as a set of tensors.
+AnnData first defines a particular data semantics for it.
 Having a consistent model of data facilitates exploratory analysis and distribution of data.
 Instead of spending time translating data between formats, it allows the analyst to focus on analysis.
 This is evident through the success of projects like scikit-learn and the tidyverse, which have consistent conventions for dataset representation.
