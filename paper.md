@@ -1,5 +1,5 @@
 ---
-title: 'anndata: Annotated data'
+title: 'anndata: Annotated data matrices'
 authors:
   - name: Isaac Virshup
     orcid: 0000-0002-1710-8945
@@ -47,7 +47,7 @@ To nontheless enable use of the wealth of computational biology tools in the R e
 
 Within the pydata ecosystem, the closest package that would be amenable to store an annotated data matrix is xarray [@Hoyer2017], which enables to deal with highly complex labelled data tensors of arbitrary dimensions.
 By contrast, the highly popular package pandas [@McKinney2010] operates on single data matrices represented as `DataFrame` objects.
-anndata is positioned in between xarray and pandas by providing the minimal additional structure that enables storing annotations of a data matrix.
+anndata is positioned in between xarray and pandas by providing the minimal additional structure that enables storing annotations of a data matrix, through sharing their conserved dimensions.
 
 
 ## Modelling data
@@ -57,27 +57,27 @@ For instance, the tidyverse project [@Wickham2014] of the R ecosystem defined a 
 
 By making use of conserved dimensions between data matrix and annotations, `AnnData` makes a particular choice for data organization that has been left unaddressed by packages like scikit-learn or PyTorch, which model input and output for each computation as unstructured sets of tensors. Furthermore, `AnnData` offers an on-disk representation that allows sharing data and structured analysis results in form of learned annotations.
 
-At the core of `AnnData` is the measured data matrix from which we wish to generate insight (`X`), with each element belonging to an observation (`obs_names`) and a variable (`var_names`) and containing a value (which can be "missing", like `nan`).
-We build our understanding of the data matrix by adding annotated and derived values onto observations and variables \autoref{fig:overview}, for which `AnnData` foresees canonical locations.
+At the core of `AnnData` is the measured data matrix from which we wish to generate insight (`X`). Each data matrix element belongs to an observation (`obs_names`) and a variable (`var_names`) and contains a value (which can be "missing", like `nan`).
+We build our understanding of the data matrix by adding annotated and derived values onto observations and variables \autoref{fig:overview} using `AnnData`'s canonical locations:
 Simple annotations and derived values that can be stored in a single vector are added to the main annotation `DataFrames` for each axis, `obs` and `var`.
-Multi-dimensional representations are added to `obsm` and graph-like relations among observations to `obsp`.
-Annotations added here include values like alternative names (e.g. different identifier mappings) or categories for each variable.
-Derived values added here can be descriptive statistics (e.g. mean and variance), cluster assignments, or classifier scores.
+Multi-dimensional representations are added to `obsm` and graph-like relations among observations are added to `obsp`.
+Annotations of variables include values like alternative names (e.g. different identifier mappings) or categories for each variable.
+Annotations of observations at dataset creation may list experimental groups, whereas derived annotations could be descriptive statistics (e.g. mean and variance), cluster assignments, low-dimensional representations (`obsm`) or manifolds (`obsp`).
 
 ![**Structure of the AnnData object.**
 *(a)* The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
 Here, color is used to denote elements of the object, with "warm" colors selected for elements aligned to the observations and "cool" colors for elements aligned to variables.
-The object is centered around the main data matrix `X`, whose two dimensions correspond to observations and variables respectivley.
+The object is centered around the main data matrix `X`, whose two dimensions correspond to observations and variables respectively.
 Primary labels for each of these dimensions are stored as `obs_names` and `var_names`.
-`layers` elements of the same shape as `X` to allow for multiple representations (e.g. different normalization strategies).
-Simple annotations (e.g. 1d vectors of labels or statistics) for each dimension are stored in dataframes `obs` and `var`.
-`obsm`, `varm` contain multidimensional arrays whose first dimension are aligned to their respective dimension.
-Pairwise relationships within each dimension can be stored in `obsp` and `varp`.
-Data which doesn’t fit this model, but should stay associated to the dataset can be stored in `uns`.
-As examples, *(b)* the response variable ŷ learned from the data is stored as an annotation of it’s observations.
-*(c)* Reduced dimensional representations PCA are stored with observation/ variable loadings aligned to the main dimensions.
-*(d)* A K nearest neighbor representation of this PCA space is represented as an adjacency matrix, constituting a pairwise relationship of the observations, fitting in `obsp`.
-*(e)* Subsetting the `AnnData` object by observations produces a view subsetting all elements aligned to this dimension.
+If needed, `layers` stores matrices of the exact same shape as `X`.
+One-dimensional annotations for each dimension are stored in dataframes `obs` and `var`.
+Multi-dimensional annotations are stored in `obsm` and `varm`.
+Pairwise relationships are stored in `obsp` and `varp`.
+Unstructured data which doesn’t fit this model, but should stay associated to the dataset are stored in `uns`.
+*(b)* The response variable ŷ learned from X is stored as a one-dimensional annotation of observations.
+*(c)* Principal components and the transformed dimensionality-reduced data matrix obtained through PCA can be stored as multi-dimensional annotations of variables and observations, respectively.
+*(d)* A k-nearest neighbor graph of any desired representation is represented as a sparse adjacency matrix, constituting a pairwise relationship of observations in `obsp`.
+*(e)* Subsetting the `AnnData` object by observations produces a view.
 \label{fig:overview}
 ](figures/overview.pdf)
 
