@@ -116,7 +116,7 @@ This is particularly needed as even pandas `DataFrames` have no canonical persis
 This is problematic since it prohibits reading data by another tool and is highly non-persisent, meaning, it may become inaccessible even after software updates.
 
 If one chooses to use standard formats to represent all elements of a dataset, a set of standards has to be chosen.
-`AnnData` has chosen the self-describing hierarchical data formats HDF5 [@collete14] and zarr [@zarr] for this purpose (\autoref{fig:ecosystem}), which are compatible with many programming environments.
+`AnnData` has chosen the self-describing hierarchical data formats HDF5 [@collette14] and zarr [@zarr] for this purpose (\autoref{fig:ecosystem}), which are compatible with many programming environments.
 
 ![**AnnData provides common conventions for data handling for an ecosystem of tools.**
 `AnnData` objects can be created from a number of formats, including common delimited text files, or domain-specific formats like `loom` files or `CellRanger` outputs.
