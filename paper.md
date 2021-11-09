@@ -103,31 +103,21 @@ A noteworthy design choice means is that we do not follow columnar (or "variable
 Our access patterns to X are typically row based, so we use CSR and C order arrays (or "observation major"), which allows efficiently accessing batches of the dataset, to meet the needs of batched learning algorithms.
 
 
-## An on disk representation for sharing data analysis results
+## The on disk representation
 
-An AnnData object captures a useful unit (the dataset) in the data analysis workflow.
-Providing a stable, and standard on disk format for this unit relieves the pain of working with many competing formats for each individual element.
+An `AnnData` object captures a unit of the data analysis workflow that groups original and derived data together.
+Providing a persistent and standard on disk format for this unit relieves the pain of working with many competing formats for each individual element and aids reproducibility.
+This is particularly needed as even pandas `DataFrames` have no canonical persistent data storage format, yet, which only starts to get addressed by an improved Parquet interface. Also the R ecosystem has not yet arrived at a fully satisfactory solution, and many tools still serialize in-memory objects to disk.
+This is problematic since it prohibits reading data by another tool and is highly non-persisent, meaning, it may become inaccessible even after software updates.
 
-Another big advantage is the on-disk representation, which even for pandas DataFrames is not yet resolved in a canonical way.
-For instance, there is none of the binary persistent formats are able to represent all entry types of AnnData.
-For instance, even such a key data type a categorical data types are not yet represented in the HDF5 format.
-Pickled dataframes are stable, but they are non-persistent. <!-- I don't know what this means -->
-
-In the R ecosystem, in-memory objects are serialized and written to disk.
-This is problematic since that data cannot be read by another tool, and may become inaccessible even after software updates.
 If one chooses to use standard formats to represent all elements of a dataset, a set of standards has to be chosen.
-AnnData has chosen self-describing hierarchical data formats such as HDF5 and `zarr` [https://doi.org/10.5281/zenodo.3773449] for this purpose.
-AnnData objects can be efficiently saved to disk using standardized formats \autoref{fig:ecosystem}.
-This means the data is accessible from other programming environments, as opposed to a serialized format like `pickle` or `Rdata`.
+`AnnData` has chosen the self-describing hierarchical data formats HDF5 and zarr [https://doi.org/10.5281/zenodo.3773449] for this purpose (\autoref{fig:ecosystem}), which are compatible with many programming environments.
 
-By choosing standardized formats, stored data can be accessed from a variety of ecosystems including `python`, `julia`, `R`, `java`, and `javascript`.
-While the project has tried to stick to standardized formats, there are a few cases where no standards existed within our models.
-An especially important example of this is sparse array formats, which are critical for efficient processing of scRNA-seq data.
-To account for this, we define schemas for these types, which specify how these elements can be read from disk to memory.
-These specifications are versioned and stored in an internal registry.
-Versioning allows the specifications to evolve with the project while maintaining the ability to access older data.
+anndata has adopted standardized formats where possible, but could not find a standard for sparse arrays and DataFrames.
+To account for this, we define a schema for these types, which specify how these elements can be read from disk to memory.
+These specifications are versioned and stored in an internal registry, which allows the specifications to evolve with the project while maintaining the ability to access older data.
 
-Like the AnnData object itself, the on-disk representations of these objects closely mirrors their in-memory representation.
+Like the `AnnData` object itself, the on-disk representations of these objects closely mirrors their in-memory representation.
 Compressed sparse matrices (CSR and CSC format) are stored as a collection of three arrays, `data`, `indices`, and `indptr`, while tabular data is stored in a columnar format.
 
 
