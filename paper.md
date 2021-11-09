@@ -31,7 +31,7 @@ anndata is a Python package for handling annotated data matrices in memory and o
 
 # Statement of need
 
-In exploratory data analysis -- say, based on sckit-learn [@scikit-learn] -- generating insight from high-dimensional data is typically achieved through training models to learn patterns that allow (i) to condense data into meaningful low-dimensional representations and (ii) to assign meaning to observations and variables.
+In exploratory data analysis -- say, based on sckit-learn [@Pedregosa2011] -- generating insight from high-dimensional data is typically achieved through training models to learn patterns that allow (i) to condense data into meaningful low-dimensional representations and (ii) to assign meaning to observations and variables.
 This almost always involves workflows of iteratively training models on pre- and post-learned annotations of data, requiring to book-keep their representations and scalar annotations (labels and numericals).
 anndata's purpose is to make such workflows as efficient as possible through a data structure that naturally integrates book-keeping with model training and analysis, well-integrated into the pydata ecosystem. Neither pandas nor xarray meets this need.
 
