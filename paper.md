@@ -63,11 +63,12 @@ Standard data structures facilitate both exploratory data analysis and sharing o
 anndata defines a data structure standard that makes use of conserved dimensions between data matrix and annotations, similar to `ExpressionSet` [@Huber2015]. With that, `AnnData` makes a particular choice for data organization that has been left unaddressed by packages like scikit-learn or PyTorch [@Paszke2019], which model input and output for each computation as unstructured sets of tensors. Furthermore, `AnnData` offers an on-disk representation that allows sharing data and structured analysis results in form of learned annotations.
 
 At the core of `AnnData` is the measured data matrix from which we wish to generate insight (`X`). Each data matrix element belongs to an observation (`obs_names`) and a variable (`var_names`) and contains a value (which can be "missing", like `nan`).
-We build our understanding of the data matrix by adding annotated and derived values onto observations and variables \autoref{fig:overview} using `AnnData`'s canonical locations:
-Simple annotations and derived values that can be stored in a single vector are added to the main annotation `DataFrames` for each axis, `obs` and `var`.
-Multi-dimensional representations are added to `obsm` and graph-like relations among observations are added to `obsp`.
+One builds an understanding of the data matrix by annotating observations and variables using `AnnData`'s fields (\autoref{fig:overview}):
+* Annotations that can be stored in a single vector get added to the main annotation `DataFrames` for each axis, `obs` and `var`.
+* Multi-dimensional representations get added to `obsm` and `varm` and graph-like relations among observations are added to `obsp` and `varp`.
+
 Annotations of variables include values like alternative names (e.g. different identifier mappings) or categories for each variable.
-Annotations of observations at dataset creation may list experimental groups, whereas derived annotations could be descriptive statistics (e.g. mean and variance), cluster assignments, low-dimensional representations (`obsm`) or manifolds (`obsp`).
+At time of creation of a dataset, annotations of observations will often denote experimental groups. Derived annotations of observations are often descriptive statistics (e.g. mean and variance), cluster assignments, low-dimensional representations (`obsm`) or manifolds (`obsp`).
 
 ![**Structure of the AnnData object.**
 **a,** The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
