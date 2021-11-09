@@ -42,6 +42,7 @@ To nontheless enable use of the wealth of computational biology tools in the R e
 
 Since its initial publication as a part of Scanpy [@Wolf2018], anndata matured into an independent software project with significant progress having been made in the past years, and long-term expansion plans for upcoming years. The present paper introduces anndata in this entirety.
 
+
 # The AnnData object
 
 `AnnData` was inspired by similar data structures within the R ecosystem, in particular, `ExpressionSet`, and the more recent `SingleCellExperiment`.
@@ -113,6 +114,13 @@ This is problematic since it prohibits reading data by another tool and is highl
 If one chooses to use standard formats to represent all elements of a dataset, a set of standards has to be chosen.
 `AnnData` has chosen the self-describing hierarchical data formats HDF5 and zarr [https://doi.org/10.5281/zenodo.3773449] for this purpose (\autoref{fig:ecosystem}), which are compatible with many programming environments.
 
+![**AnnData provides common conventions for data handling for an ecosystem of tools.**
+`AnnData` objects can be created from a number of formats, including common delimited text files, or domain-specific formats like `loom` files or `CellRanger` outputs.
+Once in memory, AnnData provides an API for handling annotated matrices, proving a common base object used by the Python APIs of a range of analytic tools.
+The in memory format has a one to one relationship with its hierarchical on disk formats (mapping of elements indicated by color) and uses language-independent technologies, facilitating use by non-Python applications and interchange with other ecosystems.
+\label{fig:ecosystem}
+](figures/ecosystem.pdf)
+
 anndata has adopted standardized formats where possible, but could not find a standard for sparse arrays and DataFrames.
 To account for this, we define a schema for these types, which specify how these elements can be read from disk to memory.
 These specifications are versioned and stored in an internal registry, which allows the specifications to evolve with the project while maintaining the ability to access older data.
@@ -121,25 +129,9 @@ Like the `AnnData` object itself, the on-disk representations of these objects c
 Compressed sparse matrices (CSR and CSC format) are stored as a collection of three arrays, `data`, `indices`, and `indptr`, while tabular data is stored in a columnar format.
 
 
-# How the ecosystem uses the AnnData object
+# The ecosystem
 
-Transcriptional data is stored in a large variety of formats.
-The distributed nature of research can lead to fractured ecosystems without consortia for organization.
-
-## AnnData provides conventions for data handling that are used by many tools
-
-AnnData provides a common format and set of conventions for handling numeric datasets (like those generated in scRNA-seq). This consists of an in memory model, which operates as the core data model for a number of tools \autoref{fig:ecosystem}. The data can be moved back and forth to disk. Since it is stored in standardized formats, the dataset is distributable a wider ecosystem of tools. These include data portals, viewers, and the ecosystem beyond python.
-
-![**AnnData provides common conventions for data handling for a variety of tools.**
-Data flows using the `anndata` model. `AnnData` objects can be created from a number of formats, including common delimited text files, or domain-specific formats like `loom` files or `CellRanger` outputs.
-Once in memory, AnnData provides an API for handling annotated matrices, proving a common base object used by a range of analysis tools.
-The in memory format has a one to one relationship with its on disk formats.
-The on disk formats use language independent technologies, facilitating use by other tools and interchange with other ecosystems.
-The on disk schema maps the schema to a hierarchical model (mapping of elements indicated by color).
-\label{fig:ecosystem}
-](figures/ecosystem.pdf)
-
-## Examples of use for analysis of spatial transcriptomics, RNA velocity, and multiple modalities
+Over the past 5 years, an ecosystem of packages that are built around anndata has grown (as of today: 674k PyPI downloads, 40k downloads/month and 220 GitHub stars). This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Gayoso2021; @Palla2021; Bergen2020; Bredikhin2021] to user-interface-based applications [@Megill2021].
 
 ![
 **AnnData is used to model multiple data types.**
@@ -176,6 +168,11 @@ AnnData has been used to model the data for RNA velocity [@Bergen2020].
 # Conclusions
 
 The AnnData project is under active development and will have more features. These include, but are not limited to, more advanced out of core access, a split-apply-combine framework, integration with more of the python ecosystem, and interchange with more formats like apache Arrow. Beyond further building out infrastructure for modeling multi-modal data, the ecosystem also works towards being able to represent non-homogeneous data to enable learning from Electronic Health Records.
+
+
+# Acknowledgements
+
+We are grateful to Ryan Williams for contributing code related to zarr.
 
 
 # Author contributions
