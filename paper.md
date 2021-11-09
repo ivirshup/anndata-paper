@@ -31,9 +31,9 @@ anndata is a Python package for handling annotated data matrices in memory and o
 
 # Statement of need
 
-In exploratory data analysis -- say, based on sckit-learn [@Pedregosa2011] -- generating insight from high-dimensional data is typically achieved through training models to learn patterns that allow (i) to condense data into meaningful low-dimensional representations and (ii) to assign meaning to observations and variables.
-This almost always involves workflows of iteratively training models on pre- and post-learned annotations of data, requiring to book-keep their representations and scalar annotations (labels and numericals).
-anndata's purpose is to make such workflows as efficient as possible through a data structure that naturally integrates book-keeping with model training and analysis, well-integrated into the pydata ecosystem. Neither pandas nor xarray meets this need.
+In exploratory data analysis -- say, based on sckit-learn [@Pedregosa2011] -- generating insight from high-dimensional data is typically achieved through training models to learn patterns that allow to condense data into meaningful low-dimensional representations and assign meaning to observations and variables.
+This involves workflows of iteratively training models on pre- and post-learned annotations of data, requiring to book-keep their representations and scalar annotations (labels and numericals).
+anndata's purpose is to make such workflows as efficient as possible through a data structure that naturally integrates book-keeping with model training and analysis, well-integrated into the pydata ecosystem. Neither pandas nor xarray meet this need.
 
 anndata turned out to be particularly useful for data analysis in computational biology, where advances in single-cell RNA sequencing (scRNA-seq) have given rise to new classes of analysis problems.
 While previous bulk RNA datasets typically have few observations with dense measurements, scRNA-seq datasets typically come with high numbers of observations with very sparse measurements, all with dimensions of 20k and more.
@@ -41,6 +41,7 @@ Generating insight from these new data profits much from the application of scal
 To nontheless enable use of the wealth of computational biology tools in the R ecosystem, anndata offers a cross-ecosystem on-disk format: h5ad.
 
 Since its initial publication as a part of Scanpy [@Wolf2018], anndata matured into an independent software project with significant progress having been made in the past years, and long-term expansion plans for upcoming years. The present paper introduces anndata in this entirety.
+
 
 # The AnnData object
 
@@ -66,7 +67,7 @@ Annotations of variables include values like alternative names (e.g. different i
 Annotations of observations at dataset creation may list experimental groups, whereas derived annotations could be descriptive statistics (e.g. mean and variance), cluster assignments, low-dimensional representations (`obsm`) or manifolds (`obsp`).
 
 ![**Structure of the AnnData object.**
-*(a)* The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
+**a,** The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
 Here, color is used to denote elements of the object, with "warm" colors selected for elements aligned to the observations and "cool" colors for elements aligned to variables.
 The object is centered around the main data matrix `X`, whose two dimensions correspond to observations and variables respectively.
 Primary labels for each of these dimensions are stored as `obs_names` and `var_names`.
@@ -75,10 +76,10 @@ One-dimensional annotations for each dimension are stored in dataframes `obs` an
 Multi-dimensional annotations are stored in `obsm` and `varm`.
 Pairwise relationships are stored in `obsp` and `varp`.
 Unstructured data which doesn’t fit this model, but should stay associated to the dataset are stored in `uns`.
-*(b)* The response variable ŷ learned from X is stored as a one-dimensional annotation of observations.
-*(c)* Principal components and the transformed dimensionality-reduced data matrix obtained through PCA can be stored as multi-dimensional annotations of variables and observations, respectively.
-*(d)* A k-nearest neighbor graph of any desired representation is represented as a sparse adjacency matrix, constituting a pairwise relationship of observations in `obsp`.
-*(e)* Subsetting the `AnnData` object by observations produces a view of data and annotations.
+*b,** The response variable ŷ learned from X is stored as a one-dimensional annotation of observations.
+**c,** Principal components and the transformed dimensionality-reduced data matrix obtained through PCA can be stored as multi-dimensional annotations of variables and observations, respectively.
+**d,** A k-nearest neighbor graph of any desired representation is represented as a sparse adjacency matrix, constituting a pairwise relationship of observations in `obsp`.
+**e,** Subsetting the `AnnData` object by observations produces a view of data and annotations.
 \label{fig:overview}
 ](figures/overview.pdf)
 
@@ -113,6 +114,13 @@ This is problematic since it prohibits reading data by another tool and is highl
 If one chooses to use standard formats to represent all elements of a dataset, a set of standards has to be chosen.
 `AnnData` has chosen the self-describing hierarchical data formats HDF5 and zarr [https://doi.org/10.5281/zenodo.3773449] for this purpose (\autoref{fig:ecosystem}), which are compatible with many programming environments.
 
+![**AnnData provides common conventions for data handling for an ecosystem of tools.**
+`AnnData` objects can be created from a number of formats, including common delimited text files, or domain-specific formats like `loom` files or `CellRanger` outputs.
+Once in memory, AnnData provides an API for handling annotated matrices, proving a common base object used by the Python APIs of a range of analytic tools.
+The in memory format has a one to one relationship with its hierarchical on disk formats (mapping of elements indicated by color) and uses language-independent technologies, facilitating use by non-Python applications and interchange with other ecosystems.
+\label{fig:ecosystem}
+](figures/ecosystem.pdf)
+
 anndata has adopted standardized formats where possible, but could not find a standard for sparse arrays and DataFrames.
 To account for this, we define a schema for these types, which specify how these elements can be read from disk to memory.
 These specifications are versioned and stored in an internal registry, which allows the specifications to evolve with the project while maintaining the ability to access older data.
@@ -121,61 +129,45 @@ Like the `AnnData` object itself, the on-disk representations of these objects c
 Compressed sparse matrices (CSR and CSC format) are stored as a collection of three arrays, `data`, `indices`, and `indptr`, while tabular data is stored in a columnar format.
 
 
-# How the ecosystem uses the AnnData object
+# The ecosystem
 
-Transcriptional data is stored in a large variety of formats.
-The distributed nature of research can lead to fractured ecosystems without consortia for organization.
-
-## AnnData provides conventions for data handling that are used by many tools
-
-AnnData provides a common format and set of conventions for handling numeric datasets (like those generated in scRNA-seq). This consists of an in memory model, which operates as the core data model for a number of tools \autoref{fig:ecosystem}. The data can be moved back and forth to disk. Since it is stored in standardized formats, the dataset is distributable a wider ecosystem of tools. These include data portals, viewers, and the ecosystem beyond python.
-
-![**AnnData provides common conventions for data handling for a variety of tools.**
-Data flows using the `anndata` model. `AnnData` objects can be created from a number of formats, including common delimited text files, or domain-specific formats like `loom` files or `CellRanger` outputs.
-Once in memory, AnnData provides an API for handling annotated matrices, proving a common base object used by a range of analysis tools.
-The in memory format has a one to one relationship with its on disk formats.
-The on disk formats use language independent technologies, facilitating use by other tools and interchange with other ecosystems.
-The on disk schema maps the schema to a hierarchical model (mapping of elements indicated by color).
-\label{fig:ecosystem}
-](figures/ecosystem.pdf)
-
-## Examples of use for analysis of spatial transcriptomics, RNA velocity, and multiple modalities
+Over the past 5 years, an ecosystem of packages that are built around anndata has grown (as of today: 674k PyPI downloads, 40k downloads/month and 220 GitHub stars). This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Gayoso2021; @Palla2021; Bergen2020; Bredikhin2021] to user-interface-based applications [@Megill2021].
 
 ![
 **AnnData is used to model multiple data types.**
 Examples of how AnnData is used by packages in the eco system.
-*(a)* Squidpy uses AnnData objects for working with spatial data. The coordinates of each sample are stored as an array in `obsm`, an image to overlay the plot on is stored in `uns`, and spatial graph representation in `uns`.
-*(b)* Multiple modalities can be represented in a single anndata objects. The variable axis now corresponds to the union of the features across the modalities, modality specific or joint embeddings are stored as seperate elements in `obsm` or `obsm`, while inter-modality relations can be stored as graphs in `varp`.
-*(c)* The `AnnData` model allows for representing rna velocity analyses by storing counts of different splicing states as separate layers, with velocity based directed graphs in `obsp`.
+**a,** Squidpy uses AnnData objects for working with spatial data. The coordinates of each sample are stored as an array in `obsm`, an image to overlay the plot on is stored in `uns`, and spatial graph representation in `uns`.
+**b,** Multiple modalities can be represented in a single anndata objects. The variable axis now corresponds to the union of the features across the modalities, modality specific or joint embeddings are stored as seperate elements in `obsm` or `obsm`, while inter-modality relations can be stored as graphs in `varp`.
+*c,** The `AnnData` model allows for representing rna velocity analyses by storing counts of different splicing states as separate layers, with velocity based directed graphs in `obsp`.
 \label{fig:examples}
 ](figures/examples.pdf)
 
-AnnData is widely used in single cell analysis across spatial transcriptomics, RNA velocity, and multiple modalities \autoref{fig:examples}.
+Let us illustrate the compatibility for spatial transcriptomics, multiple modalities, and RNA velocity (\autoref{fig:examples}).
+In spatial transcriptomics, each high-dimensional observation is annotated with spatial coordinates.
+Squidpy [@Palla2021] uses `AnnData` to model their data by storing spatial coordinates as an array (`obsm`) and a spatial neighborhood graph (`obsp`), which is used to find features which are spatially coorelated (\autoref{fig:examples}a).
+In addition, values from the high dimensional transcriptomic measurement can be overlayed on an image of the sampled tissue, where the image array is stored in `uns`, or handled externally.
 
-In spatial transcriptomics, each observation has spatial coordinates associated with it.
-Squidpy [@Palla2021] uses AnnData to model their data by storing spatial coordinates as an array in `obsm`.
-These coordinates are used to create a spatial graph, which is used to find features which are spatially coorelated.
-Values from the high dimensional experiment can be overlayed on an image of the sampled tissue (where the image array is stored in `uns`, or externally handled).
-
-AnnData can also be used to model multimodal data, though multiple approaches for this can be used.
-In one approach, analyses specific to each modality are carried out separate `AnnData` objects.
-These can then be combined along the variable axis (using the shared observations) for multimodal analyses.
-Here an indicator array can be used to separate which variables belong to which modality.
+`AnnData` can be used to model multimodal data beyond exploiting `AnnData`'s available fields.
+For instance, analyses specific to each modality are carried out on separate `AnnData` objects (\autoref{fig:examples}b).
 From this, analyses inferring or annotations interactions between modalities can be stored as graphs in `varp`.
 Analyses using information from both modalities, like a joint manifold [@Hao2020], can be stored in `obsp`.
-
-Another approach for modelling multimodal data has been utilized by the `muon` package [@Bredikhin2021].
+A related approach for modelling multimodal data has been utilized by the `muon` package [@Bredikhin2021].
 Here, a new `MuData` object is defined, which is essentially a collection of `AnnData` objects, one for each modality measured.
 Annotations shared across modalities are stored for the observations for the whole object.
 This structure extends to the on-disk format where individual `AnnData` objects are stored as discrete elements inside the `MuData`'s `h5mu` files.
-This approach significantly differs from the previous approach by allowing for disjoint sets of observations measured for each modality.
-This approach is quite similar to the MultiAssayExperiment from the bioconductor ecosystem [@Ramos2017].
+This approach significantly differs from the previous approach by allowing for disjoint sets of observations measured for each modality but is quite similar to `MultiAssayExperiment` within the Bioconductor ecosystem [@Ramos2017].
 
-AnnData has been used to model the data for RNA velocity [@Bergen2020].
+Finally, AnnData has also been used to model data for fitting models of RNA velocity [@Bergen2020] exploiting the `layers` slot for different types of RNA counts (\autoref{fig:examples}c).
 
-# Conclusions
 
-The AnnData project is under active development and will have more features. These include, but are not limited to, more advanced out of core access, a split-apply-combine framework, integration with more of the python ecosystem, and interchange with more formats like apache Arrow. Beyond further building out infrastructure for modeling multi-modal data, the ecosystem also works towards being able to represent non-homogeneous data to enable learning from Electronic Health Records.
+# Outlook
+
+The anndata project is under active development towards a variety of features: more advanced out-of-core access, cloud integration, a split-apply-combine framework, and interchange with more formats, like Apache Arrow. Furthermore, anndata engages with projects that aim at building out infrastructure for modeling multi-modal data and representing non-homogeneous data to enable learning from Electronic Health Records.
+
+
+# Acknowledgements
+
+We are grateful to Ryan Williams and Tom White for contributing code related to zarr.
 
 
 # Author contributions
