@@ -99,15 +99,8 @@ To this end, AnnData offers sparse data support, out of core conversions between
 
 In particular, `AnnData` takes great pains to support efficient operations with sparse data. While there currently is no equivalent API for working with sparse and dense data in the python ecosystem, `AnnData` abstracts over the differing existing APIs making it much easier for novices to handle each.
 This concerns handling data both on-disk and in-memory with operations for out-of-core access.
-
-Subsetting anndata objects is lazy.
-This takes advantage of the fact that a great deal of the exploratory data analysis process is read-only, and that data is often sliced just for access to a subset of one element.
-For typical use cases of tidy-data (and for data frames), data storage is columnar (or "variable major").
+A noteworthy design choice means is that we do not follow columnar (or "variable major") data storage as for tidy-data and `DataFrames`.
 Our access patterns to X are typically row based, so we use CSR and C order arrays (or "observation major"), which allows efficiently accessing batches of the dataset, to meet the needs of batched learning algorithms.
-
-Datasets can be joined along variables or observations.
-That is, from multiple individual dataset can be combined to have a superset of either the observations or variables, depending on the direction of concatenation.
-The other dimensions are merged to contain either the union or intersection of labels.
 
 
 ## An on disk representation for sharing data analysis results
