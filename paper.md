@@ -1,5 +1,5 @@
 ---
-title: 'anndata: Annotated data'
+title: "anndata: Annotated data matrices"
 authors:
   - name: Isaac Virshup
     orcid: 0000-0002-1710-8945
@@ -14,7 +14,7 @@ authors:
 affiliations:
  - name: University of Melbourne.
    index: 1
- - name: "Helmholtz Munich, Institute of Computational Biology.   "
+ - name: "Helmholtz Munich, Institute of Computational Biology."
    index: 2
  - name: Corresponding authors.
    index: †
@@ -40,6 +40,7 @@ While previous bulk RNA datasets typically have few observations with dense meas
 Generating insight from these new data profits much from the application of scalable machine learning tools, which are more abundant in the Python ecosystem than in the R ecosystem.
 To nontheless enable use of the wealth of computational biology tools in the R ecosystem, anndata offers a cross-ecosystem on-disk format: h5ad.
 
+Since its initial publication as a part of Scanpy [@Wolf2018], anndata matured into an independent software project with significant progress having been made in the past years, and long-term expansion plans for upcoming years. The present paper introduces anndata in this entirety.
 
 # The AnnData object
 
@@ -47,94 +48,76 @@ To nontheless enable use of the wealth of computational biology tools in the R e
 
 Within the pydata ecosystem, the closest package that would be amenable to store an annotated data matrix is xarray [@Hoyer2017], which enables to deal with highly complex labelled data tensors of arbitrary dimensions.
 By contrast, the highly popular package pandas [@McKinney2010] operates on single data matrices represented as `DataFrame` objects.
-anndata is positioned in between xarray and pandas by providing the minimal additional structure that enables storing annotations of a data matrix.
+anndata is positioned in between xarray and pandas by providing the minimal additional structure that enables storing annotations of a data matrix, through sharing their conserved dimensions.
 
 
-## Modelling data
+## The data structure
 
-Consistent data models and formats facilitate both exploratory data analysis and sharing of data by saving the time to translate between differing data models and formats.
+Consistent data structures facilitate both exploratory data analysis and sharing of data by saving the time to translate between differing data structures.
 For instance, the tidyverse project [@Wickham2014] of the R ecosystem defined a successful consistent data standard for an entire field.
 
 By making use of conserved dimensions between data matrix and annotations, `AnnData` makes a particular choice for data organization that has been left unaddressed by packages like scikit-learn or PyTorch, which model input and output for each computation as unstructured sets of tensors. Furthermore, `AnnData` offers an on-disk representation that allows sharing data and structured analysis results in form of learned annotations.
 
-At the core of `AnnData` is the measured data matrix from which we wish to generate insight (`X`), with each element belonging to an observation (`obs_names`) and a variable (`var_names`) and containing a value (which can be "missing", like `nan`).
-We build our understanding of the data matrix by adding annotated and derived values onto observations and variables \autoref{fig:overview}, for which `AnnData` foresees canonical locations.
+At the core of `AnnData` is the measured data matrix from which we wish to generate insight (`X`). Each data matrix element belongs to an observation (`obs_names`) and a variable (`var_names`) and contains a value (which can be "missing", like `nan`).
+We build our understanding of the data matrix by adding annotated and derived values onto observations and variables \autoref{fig:overview} using `AnnData`'s canonical locations:
 Simple annotations and derived values that can be stored in a single vector are added to the main annotation `DataFrames` for each axis, `obs` and `var`.
-Multi-dimensional representations are added to `obsm` and graph-like relations among observations to `obsp`.
-Annotations added here include values like alternative names (e.g. different identifier mappings) or categories for each variable.
-Derived values added here can be descriptive statistics (e.g. mean and variance), cluster assignments, or classifier scores.
+Multi-dimensional representations are added to `obsm` and graph-like relations among observations are added to `obsp`.
+Annotations of variables include values like alternative names (e.g. different identifier mappings) or categories for each variable.
+Annotations of observations at dataset creation may list experimental groups, whereas derived annotations could be descriptive statistics (e.g. mean and variance), cluster assignments, low-dimensional representations (`obsm`) or manifolds (`obsp`).
 
 ![**Structure of the AnnData object.**
 *(a)* The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
 Here, color is used to denote elements of the object, with "warm" colors selected for elements aligned to the observations and "cool" colors for elements aligned to variables.
-The object is centered around the main data matrix `X`, whose two dimensions correspond to observations and variables respectivley.
+The object is centered around the main data matrix `X`, whose two dimensions correspond to observations and variables respectively.
 Primary labels for each of these dimensions are stored as `obs_names` and `var_names`.
-`layers` elements of the same shape as `X` to allow for multiple representations (e.g. different normalization strategies).
-Simple annotations (e.g. 1d vectors of labels or statistics) for each dimension are stored in dataframes `obs` and `var`.
-`obsm`, `varm` contain multidimensional arrays whose first dimension are aligned to their respective dimension.
-Pairwise relationships within each dimension can be stored in `obsp` and `varp`.
-Data which doesn’t fit this model, but should stay associated to the dataset can be stored in `uns`.
-As examples, *(b)* the response variable ŷ learned from the data is stored as an annotation of it’s observations.
-*(c)* Reduced dimensional representations PCA are stored with observation/ variable loadings aligned to the main dimensions.
-*(d)* A K nearest neighbor representation of this PCA space is represented as an adjacency matrix, constituting a pairwise relationship of the observations, fitting in `obsp`.
-*(e)* Subsetting the `AnnData` object by observations produces a view subsetting all elements aligned to this dimension.
+If needed, `layers` stores matrices of the exact same shape as `X`.
+One-dimensional annotations for each dimension are stored in dataframes `obs` and `var`.
+Multi-dimensional annotations are stored in `obsm` and `varm`.
+Pairwise relationships are stored in `obsp` and `varp`.
+Unstructured data which doesn’t fit this model, but should stay associated to the dataset are stored in `uns`.
+*(b)* The response variable ŷ learned from X is stored as a one-dimensional annotation of observations.
+*(c)* Principal components and the transformed dimensionality-reduced data matrix obtained through PCA can be stored as multi-dimensional annotations of variables and observations, respectively.
+*(d)* A k-nearest neighbor graph of any desired representation is represented as a sparse adjacency matrix, constituting a pairwise relationship of observations in `obsp`.
+*(e)* Subsetting the `AnnData` object by observations produces a view of data and annotations.
 \label{fig:overview}
 ](figures/overview.pdf)
 
 
-## Data analysis workflow - iteratively learning representations and scalar annotations
+## The data analysis workflow
 
-Let us discuss a few canonical examples of the exploratory data analysis workflow.
-Fitting a classification, regression, or clustering to high dimensional data gives rise to a response variable ŷ learned from the data is stored as an annotation of its observations \autoref{fig:overview}[b].
-Reduced dimensional representations PCA are stored with observation/ variable loadings aligned to the main dimensions \autoref{fig:overview}(c).
-A K nearest neighbor graph of observations in the PCA space is represented as an adjacency matrix, constituting a pairwise relationship of the observations, fitting in `obsp` \autoref{fig:overview}(d).
-Subsetting the `AnnData` object by observations produces a view subsetting all elements aligned to this dimension. \autoref{fig:overview}(e).
+Let us illustrate how `AnnData` supports workflows of iteratively learning representations and scalar annotations in exploratory data analysis.
+For instance, training a clustering, classification or regression model on raw data in `X` produces an estimate of a response variable ŷ. This derived vector is conveniently kept track off by adding it as an annotation of observations (`obs`, \autoref{fig:overview}[b]).
+A reduced dimensional representation obtained through, say Principal Component Analysis or any bottleneck layer of a machine learning model, would be stored as multi-dimensional annotation (`obsm`, \autoref{fig:overview}(c)).
+Storing low-dimensional manifold structure within a desired reduced representation is achieved through a k-nearest neighbor graph in form of a sparse adjacency matrix: a matrix of pairwise relationships of observations (`obsp`, \autoref{fig:overview}(d)).
+Subsetting the `AnnData` object by observations produces a memory-efficient view of data and annotations (\autoref{fig:overview}(e)).
 
 
-## Efficient data operations for data analysis workflows
+## The efficiency of data operations
 
-Due to the ever increasing scale of data AnnData is working with, emphasis has been placed on providing efficient data handling operations with low memory and runtime overhead.
-This is accomplished in a number of ways.
-To this end, AnnData offers sparse data support, out of core conversions between dense and sparse data, lazy subsetting, per element operations for low total memory usage, in place subsetting, combining AnnData objects with various merge strategies, and a backed out-of-memory mode.
+Due to the increasing scale of data, emphasis has been placed on providing efficient data handling operations with low memory and runtime overhead.
+To this end, AnnData offers sparse data support, out of core conversions between dense and sparse data, lazy subsetting ("views"), per-element operations for low total memory usage, in-place subsetting, combining AnnData objects with various merge strategies, lazy concatentation, batching, and a backed out-of-memory mode.
 
-Deep support for sparse data. `AnnData` takes great pains to support efficient operations with sparse data. While there currently is no equivalent API for working with sparse and dense data in the python ecosystem, `AnnData` abstracts over this making it much easier for novices to handle each.
-As mentioned above, on-disk formats for sparse data have also been defined, along with operations for out of core access to this data.
-
-Subsetting anndata objects is lazy.
-This takes advantage of the fact that a great deal of the exploratory data analysis process is read-only, and that data is often sliced just for access to a subset of one element.
-For typical use cases of tidy-data (and for data frames), data storage is columnar (or "variable major").
+In particular, `AnnData` takes great pains to support efficient operations with sparse data. While there currently is no equivalent API for working with sparse and dense data in the python ecosystem, `AnnData` abstracts over the differing existing APIs making it much easier for novices to handle each.
+This concerns handling data both on-disk and in-memory with operations for out-of-core access.
+A noteworthy design choice means is that we do not follow columnar (or "variable major") data storage as for tidy-data and `DataFrames`.
 Our access patterns to X are typically row based, so we use CSR and C order arrays (or "observation major"), which allows efficiently accessing batches of the dataset, to meet the needs of batched learning algorithms.
 
-Datasets can be joined along variables or observations.
-That is, from multiple individual dataset can be combined to have a superset of either the observations or variables, depending on the direction of concatenation.
-The other dimensions are merged to contain either the union or intersection of labels.
 
+## The on disk representation
 
-## An on disk representation for sharing data analysis results
+An `AnnData` object captures a unit of the data analysis workflow that groups original and derived data together.
+Providing a persistent and standard on disk format for this unit relieves the pain of working with many competing formats for each individual element and aids reproducibility.
+This is particularly needed as even pandas `DataFrames` have no canonical persistent data storage format, yet, which only starts to get addressed by an improved Parquet interface. Also the R ecosystem has not yet arrived at a fully satisfactory solution, and many tools still serialize in-memory objects to disk.
+This is problematic since it prohibits reading data by another tool and is highly non-persisent, meaning, it may become inaccessible even after software updates.
 
-An AnnData object captures a useful unit (the dataset) in the data analysis workflow.
-Providing a stable, and standard on disk format for this unit relieves the pain of working with many competing formats for each individual element.
-
-Another big advantage is the on-disk representation, which even for pandas DataFrames is not yet resolved in a canonical way.
-For instance, there is none of the binary persistent formats are able to represent all entry types of AnnData.
-For instance, even such a key data type a categorical data types are not yet represented in the HDF5 format.
-Pickled dataframes are stable, but they are non-persistent. <!-- I don't know what this means -->
-
-In the R ecosystem, in-memory objects are serialized and written to disk.
-This is problematic since that data cannot be read by another tool, and may become inaccessible even after software updates.
 If one chooses to use standard formats to represent all elements of a dataset, a set of standards has to be chosen.
-AnnData has chosen self-describing hierarchical data formats such as HDF5 and `zarr` [https://doi.org/10.5281/zenodo.3773449] for this purpose.
-AnnData objects can be efficiently saved to disk using standardized formats \autoref{fig:ecosystem}.
-This means the data is accessible from other programming environments, as opposed to a serialized format like `pickle` or `Rdata`.
+`AnnData` has chosen the self-describing hierarchical data formats HDF5 and zarr [https://doi.org/10.5281/zenodo.3773449] for this purpose (\autoref{fig:ecosystem}), which are compatible with many programming environments.
 
-By choosing standardized formats, stored data can be accessed from a variety of ecosystems including `python`, `julia`, `R`, `java`, and `javascript`.
-While the project has tried to stick to standardized formats, there are a few cases where no standards existed within our models.
-An especially important example of this is sparse array formats, which are critical for efficient processing of scRNA-seq data.
-To account for this, we define schemas for these types, which specify how these elements can be read from disk to memory.
-These specifications are versioned and stored in an internal registry.
-Versioning allows the specifications to evolve with the project while maintaining the ability to access older data.
+anndata has adopted standardized formats where possible, but could not find a standard for sparse arrays and DataFrames.
+To account for this, we define a schema for these types, which specify how these elements can be read from disk to memory.
+These specifications are versioned and stored in an internal registry, which allows the specifications to evolve with the project while maintaining the ability to access older data.
 
-Like the AnnData object itself, the on-disk representations of these objects closely mirrors their in-memory representation.
+Like the `AnnData` object itself, the on-disk representations of these objects closely mirrors their in-memory representation.
 Compressed sparse matrices (CSR and CSC format) are stored as a collection of three arrays, `data`, `indices`, and `indptr`, while tabular data is stored in a columnar format.
 
 
