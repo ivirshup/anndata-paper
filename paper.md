@@ -67,7 +67,7 @@ Annotations of variables include values like alternative names (e.g. different i
 Annotations of observations at dataset creation may list experimental groups, whereas derived annotations could be descriptive statistics (e.g. mean and variance), cluster assignments, low-dimensional representations (`obsm`) or manifolds (`obsp`).
 
 ![**Structure of the AnnData object.**
-*(a)* The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
+**a,** The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
 Here, color is used to denote elements of the object, with "warm" colors selected for elements aligned to the observations and "cool" colors for elements aligned to variables.
 The object is centered around the main data matrix `X`, whose two dimensions correspond to observations and variables respectively.
 Primary labels for each of these dimensions are stored as `obs_names` and `var_names`.
@@ -76,10 +76,10 @@ One-dimensional annotations for each dimension are stored in dataframes `obs` an
 Multi-dimensional annotations are stored in `obsm` and `varm`.
 Pairwise relationships are stored in `obsp` and `varp`.
 Unstructured data which doesn’t fit this model, but should stay associated to the dataset are stored in `uns`.
-*(b)* The response variable ŷ learned from X is stored as a one-dimensional annotation of observations.
-*(c)* Principal components and the transformed dimensionality-reduced data matrix obtained through PCA can be stored as multi-dimensional annotations of variables and observations, respectively.
-*(d)* A k-nearest neighbor graph of any desired representation is represented as a sparse adjacency matrix, constituting a pairwise relationship of observations in `obsp`.
-*(e)* Subsetting the `AnnData` object by observations produces a view of data and annotations.
+*b,** The response variable ŷ learned from X is stored as a one-dimensional annotation of observations.
+**c,** Principal components and the transformed dimensionality-reduced data matrix obtained through PCA can be stored as multi-dimensional annotations of variables and observations, respectively.
+**d,** A k-nearest neighbor graph of any desired representation is represented as a sparse adjacency matrix, constituting a pairwise relationship of observations in `obsp`.
+**e,** Subsetting the `AnnData` object by observations produces a view of data and annotations.
 \label{fig:overview}
 ](figures/overview.pdf)
 
@@ -136,22 +136,21 @@ Over the past 5 years, an ecosystem of packages that are built around anndata ha
 ![
 **AnnData is used to model multiple data types.**
 Examples of how AnnData is used by packages in the eco system.
-*(a)* Squidpy uses AnnData objects for working with spatial data. The coordinates of each sample are stored as an array in `obsm`, an image to overlay the plot on is stored in `uns`, and spatial graph representation in `uns`.
-*(b)* Multiple modalities can be represented in a single anndata objects. The variable axis now corresponds to the union of the features across the modalities, modality specific or joint embeddings are stored as seperate elements in `obsm` or `obsm`, while inter-modality relations can be stored as graphs in `varp`.
-*(c)* The `AnnData` model allows for representing rna velocity analyses by storing counts of different splicing states as separate layers, with velocity based directed graphs in `obsp`.
+**a,** Squidpy uses AnnData objects for working with spatial data. The coordinates of each sample are stored as an array in `obsm`, an image to overlay the plot on is stored in `uns`, and spatial graph representation in `uns`.
+**b,** Multiple modalities can be represented in a single anndata objects. The variable axis now corresponds to the union of the features across the modalities, modality specific or joint embeddings are stored as seperate elements in `obsm` or `obsm`, while inter-modality relations can be stored as graphs in `varp`.
+*c,** The `AnnData` model allows for representing rna velocity analyses by storing counts of different splicing states as separate layers, with velocity based directed graphs in `obsp`.
 \label{fig:examples}
 ](figures/examples.pdf)
 
-Let us illustrate the compatibility for spatial transcriptomics, RNA velocity, and generally work with multiple modalities \autoref{fig:examples}.
+Let us illustrate the compatibility for spatial transcriptomics, RNA velocity, and work with multiple modalities \autoref{fig:examples}.
 
 In spatial transcriptomics, each observation has spatial coordinates associated with it.
 Squidpy [@Palla2021] uses `AnnData` to model their data by storing spatial coordinates as an array in `obsm`.
 These coordinates are used to create a spatial graph, which is used to find features which are spatially coorelated.
-Values from the high dimensional experiment can be overlayed on an image of the sampled tissue (where the image array is stored in `uns`, or externally handled). AnnData has been used to model the data for RNA velocity [@Bergen2020].
+Values from the high dimensional experiment can be overlayed on an image of the sampled tissue, where the image array is stored in `uns`, or handled externally. AnnData has also been used to model data for fitting models of RNA velocity [@Bergen2020] exploiting the `layers` slot for different types of RNA counts.
 
-
-`AnnData` can also be used to model multimodal data, though multiple approaches for this can be used.
-In one approach, analyses specific to each modality are carried out separate `AnnData` objects.
+`AnnData` can also be used to model multimodal data via multiple approaches.
+In one approach, analyses specific to each modality are carried out on separate `AnnData` objects.
 These can then be combined along the variable axis (using the shared observations) for multimodal analyses.
 Here an indicator array can be used to separate which variables belong to which modality.
 From this, analyses inferring or annotations interactions between modalities can be stored as graphs in `varp`.
@@ -171,7 +170,7 @@ The AnnData project is under active development and will have more features. The
 
 # Acknowledgements
 
-We are grateful to Ryan Williams for contributing code related to zarr.
+We are grateful to Ryan Williams and Tom White for contributing code related to zarr.
 
 
 # Author contributions
