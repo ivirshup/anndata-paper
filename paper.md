@@ -31,9 +31,9 @@ anndata is a Python package for handling annotated data matrices in memory and o
 
 # Statement of need
 
-In exploratory data analysis -- say, based on sckit-learn [@Pedregosa2011] -- generating insight from high-dimensional data is typically achieved through training models to learn patterns that allow (i) to condense data into meaningful low-dimensional representations and (ii) to assign meaning to observations and variables.
-This almost always involves workflows of iteratively training models on pre- and post-learned annotations of data, requiring to book-keep their representations and scalar annotations (labels and numericals).
-anndata's purpose is to make such workflows as efficient as possible through a data structure that naturally integrates book-keeping with model training and analysis, well-integrated into the pydata ecosystem. Neither pandas nor xarray meets this need.
+In exploratory data analysis -- say, based on sckit-learn [@Pedregosa2011] -- generating insight from high-dimensional data is typically achieved through training models to learn patterns that allow to condense data into meaningful low-dimensional representations and assign meaning to observations and variables.
+This involves workflows of iteratively training models on pre- and post-learned annotations of data, requiring to book-keep their representations and scalar annotations (labels and numericals).
+anndata's purpose is to make such workflows as efficient as possible through a data structure that naturally integrates book-keeping with model training and analysis, well-integrated into the pydata ecosystem. Neither pandas nor xarray meet this need.
 
 anndata turned out to be particularly useful for data analysis in computational biology, where advances in single-cell RNA sequencing (scRNA-seq) have given rise to new classes of analysis problems.
 While previous bulk RNA datasets typically have few observations with dense measurements, scRNA-seq datasets typically come with high numbers of observations with very sparse measurements, all with dimensions of 20k and more.
@@ -142,14 +142,15 @@ Examples of how AnnData is used by packages in the eco system.
 \label{fig:examples}
 ](figures/examples.pdf)
 
-AnnData is widely used in single cell analysis across spatial transcriptomics, RNA velocity, and multiple modalities \autoref{fig:examples}.
+Let us illustrate the compatibility for spatial transcriptomics, RNA velocity, and generally work with multiple modalities \autoref{fig:examples}.
 
 In spatial transcriptomics, each observation has spatial coordinates associated with it.
-Squidpy [@Palla2021] uses AnnData to model their data by storing spatial coordinates as an array in `obsm`.
+Squidpy [@Palla2021] uses `AnnData` to model their data by storing spatial coordinates as an array in `obsm`.
 These coordinates are used to create a spatial graph, which is used to find features which are spatially coorelated.
-Values from the high dimensional experiment can be overlayed on an image of the sampled tissue (where the image array is stored in `uns`, or externally handled).
+Values from the high dimensional experiment can be overlayed on an image of the sampled tissue (where the image array is stored in `uns`, or externally handled). AnnData has been used to model the data for RNA velocity [@Bergen2020].
 
-AnnData can also be used to model multimodal data, though multiple approaches for this can be used.
+
+`AnnData` can also be used to model multimodal data, though multiple approaches for this can be used.
 In one approach, analyses specific to each modality are carried out separate `AnnData` objects.
 These can then be combined along the variable axis (using the shared observations) for multimodal analyses.
 Here an indicator array can be used to separate which variables belong to which modality.
@@ -162,8 +163,6 @@ Annotations shared across modalities are stored for the observations for the who
 This structure extends to the on-disk format where individual `AnnData` objects are stored as discrete elements inside the `MuData`'s `h5mu` files.
 This approach significantly differs from the previous approach by allowing for disjoint sets of observations measured for each modality.
 This approach is quite similar to the MultiAssayExperiment from the bioconductor ecosystem [@Ramos2017].
-
-AnnData has been used to model the data for RNA velocity [@Bergen2020].
 
 # Conclusions
 
