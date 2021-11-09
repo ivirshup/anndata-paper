@@ -40,6 +40,7 @@ While previous bulk RNA datasets typically have few observations with dense meas
 Generating insight from these new data profits much from the application of scalable machine learning tools, which are more abundant in the Python ecosystem than in the R ecosystem.
 To nontheless enable use of the wealth of computational biology tools in the R ecosystem, anndata offers a cross-ecosystem on-disk format: h5ad.
 
+Since its initial publication as a part of Scanpy [@Wolf2018], anndata matured into an independent software project with significant progress having been made in the past years, and long-term expansion plans for upcoming years. The present paper introduces anndata in this entirety.
 
 # The AnnData object
 
@@ -77,7 +78,7 @@ Unstructured data which doesn’t fit this model, but should stay associated to 
 *(b)* The response variable ŷ learned from X is stored as a one-dimensional annotation of observations.
 *(c)* Principal components and the transformed dimensionality-reduced data matrix obtained through PCA can be stored as multi-dimensional annotations of variables and observations, respectively.
 *(d)* A k-nearest neighbor graph of any desired representation is represented as a sparse adjacency matrix, constituting a pairwise relationship of observations in `obsp`.
-*(e)* Subsetting the `AnnData` object by observations produces a view.
+*(e)* Subsetting the `AnnData` object by observations produces a view of data and annotations.
 \label{fig:overview}
 ](figures/overview.pdf)
 
@@ -88,17 +89,16 @@ Let us illustrate how `AnnData` supports workflows of iteratively learning repre
 For instance, training a clustering, classification or regression model on raw data in `X` produces an estimate of a response variable ŷ. This derived vector is conveniently kept track off by adding it as an annotation of observations (`obs`, \autoref{fig:overview}[b]).
 A reduced dimensional representation obtained through, say Principal Component Analysis or any bottleneck layer of a machine learning model, would be stored as multi-dimensional annotation (`obsm`, \autoref{fig:overview}(c)).
 Storing low-dimensional manifold structure within a desired reduced representation is achieved through a k-nearest neighbor graph in form of a sparse adjacency matrix: a matrix of pairwise relationships of observations (`obsp`, \autoref{fig:overview}(d)).
-Subsetting the `AnnData` object by observations produces a memory-efficient view of the data (\autoref{fig:overview}(e)).
+Subsetting the `AnnData` object by observations produces a memory-efficient view of data and annotations (\autoref{fig:overview}(e)).
 
 
-## Efficient data operations for data analysis workflows
+## The efficiency of data operations
 
-Due to the ever increasing scale of data AnnData is working with, emphasis has been placed on providing efficient data handling operations with low memory and runtime overhead.
-This is accomplished in a number of ways.
-To this end, AnnData offers sparse data support, out of core conversions between dense and sparse data, lazy subsetting, per element operations for low total memory usage, in place subsetting, combining AnnData objects with various merge strategies, and a backed out-of-memory mode.
+Due to the increasing scale of data, emphasis has been placed on providing efficient data handling operations with low memory and runtime overhead.
+To this end, AnnData offers sparse data support, out of core conversions between dense and sparse data, lazy subsetting ("views"), per-element operations for low total memory usage, in-place subsetting, combining AnnData objects with various merge strategies, lazy concatentation, batching, and a backed out-of-memory mode.
 
-Deep support for sparse data. `AnnData` takes great pains to support efficient operations with sparse data. While there currently is no equivalent API for working with sparse and dense data in the python ecosystem, `AnnData` abstracts over this making it much easier for novices to handle each.
-As mentioned above, on-disk formats for sparse data have also been defined, along with operations for out of core access to this data.
+In particular, `AnnData` takes great pains to support efficient operations with sparse data. While there currently is no equivalent API for working with sparse and dense data in the python ecosystem, `AnnData` abstracts over the differing existing APIs making it much easier for novices to handle each.
+This concerns handling data both on-disk and in-memory with operations for out-of-core access.
 
 Subsetting anndata objects is lazy.
 This takes advantage of the fact that a great deal of the exploratory data analysis process is read-only, and that data is often sliced just for access to a subset of one element.
