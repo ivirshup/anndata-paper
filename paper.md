@@ -1,5 +1,5 @@
 ---
-title: 'anndata: Annotated data matrices'
+title: "anndata: Annotated data matrices"
 authors:
   - name: Isaac Virshup
     orcid: 0000-0002-1710-8945
@@ -14,7 +14,7 @@ authors:
 affiliations:
  - name: University of Melbourne.
    index: 1
- - name: "Helmholtz Munich, Institute of Computational Biology.   "
+ - name: "Helmholtz Munich, Institute of Computational Biology."
    index: 2
  - name: Corresponding authors.
    index: †
@@ -50,9 +50,9 @@ By contrast, the highly popular package pandas [@McKinney2010] operates on singl
 anndata is positioned in between xarray and pandas by providing the minimal additional structure that enables storing annotations of a data matrix, through sharing their conserved dimensions.
 
 
-## Modelling data
+## The data structure
 
-Consistent data models and formats facilitate both exploratory data analysis and sharing of data by saving the time to translate between differing data models and formats.
+Consistent data structures facilitate both exploratory data analysis and sharing of data by saving the time to translate between differing data structures.
 For instance, the tidyverse project [@Wickham2014] of the R ecosystem defined a successful consistent data standard for an entire field.
 
 By making use of conserved dimensions between data matrix and annotations, `AnnData` makes a particular choice for data organization that has been left unaddressed by packages like scikit-learn or PyTorch, which model input and output for each computation as unstructured sets of tensors. Furthermore, `AnnData` offers an on-disk representation that allows sharing data and structured analysis results in form of learned annotations.
@@ -82,10 +82,10 @@ Unstructured data which doesn’t fit this model, but should stay associated to 
 ](figures/overview.pdf)
 
 
-## Data analysis workflow - iteratively learning representations and scalar annotations
+## The data analysis workflow
 
-Let us discuss a few canonical examples of the exploratory data analysis workflow.
-Fitting a classification, regression, or clustering to high dimensional data gives rise to a response variable ŷ learned from the data is stored as an annotation of its observations \autoref{fig:overview}[b].
+How does the `AnnData` structure support iteratively learning representations and scalar annotations in exploratory data analysis?
+For instance, training a clustering, classification or regression model on raw data in `X` predicts a response variable ŷ. It can be conveniently kept track off and visualized with other elements of `AnnData` by adding it as an annotation of observations \autoref{fig:overview}[b].
 Reduced dimensional representations PCA are stored with observation/ variable loadings aligned to the main dimensions \autoref{fig:overview}(c).
 A K nearest neighbor graph of observations in the PCA space is represented as an adjacency matrix, constituting a pairwise relationship of the observations, fitting in `obsp` \autoref{fig:overview}(d).
 Subsetting the `AnnData` object by observations produces a view subsetting all elements aligned to this dimension. \autoref{fig:overview}(e).
