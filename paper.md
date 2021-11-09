@@ -142,30 +142,27 @@ Examples of how AnnData is used by packages in the eco system.
 \label{fig:examples}
 ](figures/examples.pdf)
 
-Let us illustrate the compatibility for spatial transcriptomics, RNA velocity, and work with multiple modalities \autoref{fig:examples}.
+Let us illustrate the compatibility for spatial transcriptomics, multiple modalities, and RNA velocity (\autoref{fig:examples}).
+In spatial transcriptomics, each high-dimensional observation is annotated with spatial coordinates.
+Squidpy [@Palla2021] uses `AnnData` to model their data by storing spatial coordinates as an array (`obsm`) and a spatial neighborhood graph (`obsp`), which is used to find features which are spatially coorelated (\autoref{fig:examples}a).
+In addition, values from the high dimensional transcriptomic measurement can be overlayed on an image of the sampled tissue, where the image array is stored in `uns`, or handled externally.
 
-In spatial transcriptomics, each observation has spatial coordinates associated with it.
-Squidpy [@Palla2021] uses `AnnData` to model their data by storing spatial coordinates as an array in `obsm`.
-These coordinates are used to create a spatial graph, which is used to find features which are spatially coorelated.
-Values from the high dimensional experiment can be overlayed on an image of the sampled tissue, where the image array is stored in `uns`, or handled externally. AnnData has also been used to model data for fitting models of RNA velocity [@Bergen2020] exploiting the `layers` slot for different types of RNA counts.
-
-`AnnData` can also be used to model multimodal data via multiple approaches.
-In one approach, analyses specific to each modality are carried out on separate `AnnData` objects.
-These can then be combined along the variable axis (using the shared observations) for multimodal analyses.
-Here an indicator array can be used to separate which variables belong to which modality.
+`AnnData` can be used to model multimodal data beyond exploiting `AnnData`'s available fields.
+For instance, analyses specific to each modality are carried out on separate `AnnData` objects (\autoref{fig:examples}b).
 From this, analyses inferring or annotations interactions between modalities can be stored as graphs in `varp`.
 Analyses using information from both modalities, like a joint manifold [@Hao2020], can be stored in `obsp`.
-
-Another approach for modelling multimodal data has been utilized by the `muon` package [@Bredikhin2021].
+A related approach for modelling multimodal data has been utilized by the `muon` package [@Bredikhin2021].
 Here, a new `MuData` object is defined, which is essentially a collection of `AnnData` objects, one for each modality measured.
 Annotations shared across modalities are stored for the observations for the whole object.
 This structure extends to the on-disk format where individual `AnnData` objects are stored as discrete elements inside the `MuData`'s `h5mu` files.
-This approach significantly differs from the previous approach by allowing for disjoint sets of observations measured for each modality.
-This approach is quite similar to the MultiAssayExperiment from the bioconductor ecosystem [@Ramos2017].
+This approach significantly differs from the previous approach by allowing for disjoint sets of observations measured for each modality but is quite similar to `MultiAssayExperiment` within the Bioconductor ecosystem [@Ramos2017].
 
-# Conclusions
+Finally, AnnData has also been used to model data for fitting models of RNA velocity [@Bergen2020] exploiting the `layers` slot for different types of RNA counts (\autoref{fig:examples}c).
 
-The AnnData project is under active development and will have more features. These include, but are not limited to, more advanced out of core access, a split-apply-combine framework, integration with more of the python ecosystem, and interchange with more formats like apache Arrow. Beyond further building out infrastructure for modeling multi-modal data, the ecosystem also works towards being able to represent non-homogeneous data to enable learning from Electronic Health Records.
+
+# Outlook
+
+The anndata project is under active development towards a variety of features: more advanced out-of-core access, cloud integration, a split-apply-combine framework, and interchange with more formats, like Apache Arrow. Furthermore, anndata engages with projects that aim at building out infrastructure for modeling multi-modal data and representing non-homogeneous data to enable learning from Electronic Health Records.
 
 
 # Acknowledgements
