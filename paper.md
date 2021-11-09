@@ -3,7 +3,7 @@ title: "anndata: Annotated data matrices"
 authors:
   - name: Isaac Virshup
     orcid: 0000-0002-1710-8945
-    affiliation: "1,†"
+    affiliation: "1,2,†"
   - name: Sergei Rybakov
     affiliation: "2"
   - name: Philipp Angerer
@@ -28,20 +28,21 @@ bibliography: paper.bib
 
 anndata is a Python package for handling annotated data matrices in memory and on disk.
 It is positioned between xarray and pandas by providing the minimal additional structure that enables storing data matrix annotations.
-anndata offers a broad range of computationally efficient features including among others sparse data support, lazy operations, and a PyTorch interface.
+anndata offers a broad range of computationally efficient features including, among others, sparse data support, lazy operations, and a PyTorch interface.
 
 
 # Statement of need
 
 Generating insight from high-dimensional data typically works through training models that annotate observations and variables through condensing data into low-dimensional representations.
 In particular in exploratory workflows, this involves iteratively training models on pre- and post-learned annotations of a data matrix requiring to book-keep both its annotations and learned representations.
-anndata offers a canonical data structure for this, which is addressed neither by pandas [@mckinney10], nor xarray [@Hoyer2017] nor commonly-used modeling packages like sckit-learn [@Pedregosa2011].
+anndata offers a canonical data structure for this, which is neither addressed by pandas [@McKinney2010], nor xarray [@Hoyer2017], nor commonly-used modeling packages like sckit-learn [@Pedregosa2011].
 
 
 # Introduction
 
-Since its initial publication as part of Scanpy [@Wolf2018], anndata matured into an independent software project and became widely adopted (674k PyPI downloads in total, 40k downloads/month, 220 GitHub stars).
-anndata was particularly useful for data analysis in computational biology where advances in single-cell RNA sequencing (scRNA-seq) have given rise to new classes of analysis problems which stimulated a stronger adoption of Python over the traditional R ecosystem.
+Since its initial publication as part of Scanpy [@Wolf2018], anndata matured into an independent software project and became widely adopted (674k total PyPI downloads & 40k downloads/month, 220 GitHub stars).
+
+So far, anndata has been particularly useful for data analysis in computational biology where advances in single-cell RNA sequencing (scRNA-seq) have given rise to new classes of analysis problems with a stronger adoption of Python over the traditional R ecosystem.
 Previous bulk RNA datasets had few observations with dense measurements while more recent scRNA-seq datasets come with high numbers of observations and sparse measurements, both in dimensions of 20k and more.
 These new data profit much from the application of scalable machine learning tools, which are more abundant in Python than in R.
 
@@ -115,11 +116,11 @@ This is particularly needed as even pandas `DataFrames` have no canonical persis
 This is problematic since it prohibits reading data by another tool and is highly non-persisent, meaning, it may become inaccessible even after software updates.
 
 If one chooses to use standard formats to represent all elements of a dataset, a set of standards has to be chosen.
-`AnnData` has chosen the self-describing hierarchical data formats HDF5 and zarr [https://doi.org/10.5281/zenodo.3773449] for this purpose (\autoref{fig:ecosystem}), which are compatible with many programming environments.
+`AnnData` has chosen the self-describing hierarchical data formats HDF5 [@collete14] and zarr [@zarr] for this purpose (\autoref{fig:ecosystem}), which are compatible with many programming environments.
 
 ![**AnnData provides common conventions for data handling for an ecosystem of tools.**
 `AnnData` objects can be created from a number of formats, including common delimited text files, or domain-specific formats like `loom` files or `CellRanger` outputs.
-Once in memory, AnnData provides an API for handling annotated matrices, proving a common base object used by the Python APIs of a range of analytic tools.
+Once in memory, AnnData provides an API for handling annotated matrices, proving a common base object used by the Python APIs of a range of analytic computational biology tools and integrating well with the APIs of the established Python machine learning ecosystem.
 The in memory format has a one to one relationship with its hierarchical on disk formats (mapping of elements indicated by color) and uses language-independent technologies, facilitating use by non-Python applications and interchange with other ecosystems.
 \label{fig:ecosystem}
 ](figures/ecosystem.pdf)
@@ -134,14 +135,14 @@ Compressed sparse matrices (CSR and CSC format) are stored as a collection of th
 
 # The ecosystem
 
-Over the past 5 years, an ecosystem of packages that are built around anndata has grown (as of today: 674k PyPI downloads, 40k downloads/month and 220 GitHub stars). This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Gayoso2021; @Palla2021; Bergen2020; Bredikhin2021] to user-interface-based applications [@Megill2021].
+Over the past 5 years, an ecosystem of packages that are built around anndata has grown. This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Gayoso2021; @Palla2021; @Bergen2020; @Bredikhin2021] to user-interface-based applications [@Megill2021]. We are not aware of Python APIs outside of computational biology that are based on anndata, but note that tools like scikit-learn and UMAP [@mcinnes2020] nonethless integrate seemlessly in anndata-based workflows. Since releasing the PyTorch data loader interface `AnnLoader` and the lazy concatenation structure `AnnCollection`, `anndata` also offers canonical ways of integrating into workflows anchored in the Pytorch ecosystem.
 
 ![
 **AnnData is used to model multiple data types.**
 Examples of how AnnData is used by packages in the eco system.
 **a,** Squidpy uses AnnData objects for working with spatial data. The coordinates of each sample are stored as an array in `obsm`, an image to overlay the plot on is stored in `uns`, and spatial graph representation in `uns`.
 **b,** Multiple modalities can be represented in a single anndata objects. The variable axis now corresponds to the union of the features across the modalities, modality specific or joint embeddings are stored as seperate elements in `obsm` or `obsm`, while inter-modality relations can be stored as graphs in `varp`.
-*c,** The `AnnData` model allows for representing rna velocity analyses by storing counts of different splicing states as separate layers, with velocity based directed graphs in `obsp`.
+**c,** The `AnnData` model allows for representing rna velocity analyses by storing counts of different splicing states as separate layers, with velocity based directed graphs in `obsp`.
 \label{fig:examples}
 ](figures/examples.pdf)
 
@@ -170,7 +171,7 @@ The anndata project is under active development towards a variety of features: m
 
 # Acknowledgements
 
-I.V. thanks Christine Wells for consistent support and freedom to pursue work on anndata and Scanpy.
+I.V. is grateful to Christine Wells for consistent support and freedom to pursue work on anndata and Scanpy.
 We are grateful to Ryan Williams and Tom White for contributing code related to zarr.
 We thank Jon Bloom for contributing a comprehensive PR on group-by functionality.
 
