@@ -160,7 +160,7 @@ This approach significantly differs from the previous approach by allowing for d
 
 # Outlook
 
-The anndata project is under active development towards a variety of features: more advanced out-of-core access, cloud integration, a split-apply-combine framework, and interchange with more formats, like Apache Arrow. Furthermore, anndata engages with projects that aim at building out infrastructure for modeling multi-modal data and representing non-homogeneous data to enable learning from Electronic Health Records.
+The anndata project is under active development towards a variety of features: more advanced out-of-core access, cloud integration, a split-apply-combine framework, and interchange with more formats, like Apache Arrow. Furthermore, anndata engages with projects that aim at building out infrastructure for modeling multi-modal data and representing non-homogeneous data to enable learning from Electronic Health Records (@Heumos2021).
 
 
 # Acknowledgements
