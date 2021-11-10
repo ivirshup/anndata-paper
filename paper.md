@@ -1,5 +1,5 @@
 ---
-title: "anndata: Annotated data matrices"
+title: "anndata: Annotated data matrices in Python"
 authors:
   - name: Isaac Virshup
     orcid: 0000-0002-1710-8945
@@ -64,11 +64,11 @@ anndata defines a data structure standard that makes use of conserved dimensions
 
 At the core of `AnnData` is the measured data matrix from which we wish to generate insight (`X`). Each data matrix element belongs to an observation (`obs_names`) and a variable (`var_names`) and contains a value (which can be "missing", like `nan`).
 One builds an understanding of the data matrix by annotating observations and variables using `AnnData`'s fields (\autoref{fig:overview}):
+
 * Annotations that can be stored in a single vector get added to the main annotation `DataFrames` for each axis, `obs` and `var`.
 * Multi-dimensional representations get added to `obsm` and `varm` and graph-like relations among observations are added to `obsp` and `varp`.
 
-Annotations of variables include values like alternative names (e.g. different identifier mappings) or categories for each variable.
-At time of creation of a dataset, annotations of observations will often denote experimental groups. Derived annotations of observations are often descriptive statistics (e.g. mean and variance), cluster assignments, low-dimensional representations (`obsm`) or manifolds (`obsp`).
+Prior annotations of observations will often denote experimental groups, while derived annotations of observations might be summary statistics, cluster assignments, low-dimensional representations or manifolds. Annotations of variables will often denote alternative names or feature importance measures.
 
 ![**Structure of the AnnData object.**
 **a,** The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
@@ -110,13 +110,9 @@ Our access patterns to X are typically row based, so we use CSR and C order arra
 
 ## The on disk representation
 
-An `AnnData` object captures a unit of the data analysis workflow that groups original and derived data together.
+An `AnnData` object captures a unit of the data analysis workflow that groups prior and derived data together.
 Providing a persistent and standard on disk format for this unit relieves the pain of working with many competing formats for each individual element and aids reproducibility.
-This is particularly needed as even pandas `DataFrames` have no canonical persistent data storage format, yet, which only starts to get addressed by an improved Parquet interface. Also the R ecosystem has not yet arrived at a fully satisfactory solution, and many tools still serialize in-memory objects to disk.
-This is problematic since it prohibits reading data by another tool and is highly non-persisent, meaning, it may become inaccessible even after software updates.
-
-If one chooses to use standard formats to represent all elements of a dataset, a set of standards has to be chosen.
-`AnnData` has chosen the self-describing hierarchical data formats HDF5 [@collette14] and zarr [@zarr] for this purpose (\autoref{fig:ecosystem}), which are compatible with many programming environments.
+This is particularly needed as even pandas `DataFrames` have no canonical persistent data storage format. `AnnData` has chosen the self-describing hierarchical data formats HDF5 [@collette14] and zarr [@zarr] for this purpose (\autoref{fig:ecosystem}), which are compatible with many programming environments.
 
 ![**AnnData provides common conventions for data handling for an ecosystem of tools.**
 `AnnData` objects can be created from a number of formats, including common delimited text files, or domain-specific formats like `loom` files or `CellRanger` outputs.
@@ -125,11 +121,9 @@ The in memory format has a one to one relationship with its hierarchical on disk
 \label{fig:ecosystem}
 ](figures/ecosystem.pdf)
 
-anndata has adopted standardized formats where possible, but could not find a standard for sparse arrays and DataFrames.
+With HDF5 and zarr, we could not find a standard for sparse arrays and DataFrames.
 To account for this, we define a schema for these types, which specify how these elements can be read from disk to memory.
-These specifications are versioned and stored in an internal registry, which allows the specifications to evolve with the project while maintaining the ability to access older data.
-
-Like the `AnnData` object itself, the on-disk representations of these objects closely mirrors their in-memory representation.
+These specifications are versioned and stored in an internal registry, which allows the specifications to evolve with the project while maintaining the ability to access older data. Like the `AnnData` object itself, the on-disk representations of these types closely mirror their in-memory representation.
 Compressed sparse matrices (CSR and CSC format) are stored as a collection of three arrays, `data`, `indices`, and `indptr`, while tabular data is stored in a columnar format.
 
 
