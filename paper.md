@@ -55,21 +55,6 @@ Within the pydata ecosystem, the closest package that would be amenable to store
 By contrast, the highly popular package pandas [@McKinney2010] operates on single data matrices represented as `DataFrame` objects.
 anndata is positioned in between xarray and pandas by providing the minimal additional structure that enables storing annotations of a data matrix.
 
-
-## The data structure
-
-Standard data structures facilitate both exploratory data analysis and sharing of data as demonstrated by, for instance, the tidyverse project [@Wickham2014] in the R ecosystem.
-
-anndata defines a data structure standard that makes use of conserved dimensions between data matrix and annotations, similar to `ExpressionSet` [@Huber2015]. With that, `AnnData` makes a particular choice for data organization that has been left unaddressed by packages like scikit-learn or PyTorch [@Paszke2019], which model input and output for each computation as unstructured sets of tensors. Furthermore, `AnnData` offers an on-disk representation that allows sharing data and structured analysis results in form of learned annotations.
-
-At the core of `AnnData` is the measured data matrix from which we wish to generate insight (`X`). Each data matrix element belongs to an observation (`obs_names`) and a variable (`var_names`) and contains a value (which can be "missing", like `nan`).
-One builds an understanding of the data matrix by annotating observations and variables using `AnnData`'s fields (\autoref{fig:overview}):
-
-* Annotations that can be stored in a single vector get added to the main annotation `DataFrames` for each axis, `obs` and `var`.
-* Multi-dimensional representations get added to `obsm` and `varm` and graph-like relations among observations are added to `obsp` and `varp`.
-
-Prior annotations of observations will often denote experimental groups, while derived annotations of observations might be summary statistics, cluster assignments, low-dimensional representations or manifolds. Annotations of variables will often denote alternative names or feature importance measures.
-
 ![**Structure of the AnnData object.**
 **a,** The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
 Here, color is used to denote elements of the object, with "warm" colors selected for elements aligned to the observations and "cool" colors for elements aligned to variables.
@@ -86,6 +71,21 @@ Unstructured data which doesn’t fit this model, but should stay associated to 
 **e,** Subsetting the `AnnData` object by observations produces a view of data and annotations.
 \label{fig:overview}
 ](figures/overview.pdf)
+
+
+## The data structure
+
+Standard data structures facilitate both exploratory data analysis and sharing of data as demonstrated by, for instance, the tidyverse project [@Wickham2014] in the R ecosystem.
+
+anndata defines a data structure standard that makes use of conserved dimensions between data matrix and annotations, similar to `ExpressionSet` [@Huber2015]. With that, `AnnData` makes a particular choice for data organization that has been left unaddressed by packages like scikit-learn or PyTorch [@Paszke2019], which model input and output for each computation as unstructured sets of tensors. Furthermore, `AnnData` offers an on-disk representation that allows sharing data and structured analysis results in form of learned annotations.
+
+At the core of `AnnData` is the measured data matrix from which we wish to generate insight (`X`). Each data matrix element belongs to an observation (`obs_names`) and a variable (`var_names`) and contains a value (which can be "missing", like `nan`).
+One builds an understanding of the data matrix by annotating observations and variables using `AnnData`'s fields (\autoref{fig:overview}):
+
+* Annotations that can be stored in a single vector get added to the main annotation `DataFrames` for each axis, `obs` and `var`.
+* Multi-dimensional representations get added to `obsm` and `varm` and graph-like relations among observations are added to `obsp` and `varp`.
+
+Prior annotations of observations will often denote experimental groups, while derived annotations of observations might be summary statistics, cluster assignments, low-dimensional representations or manifolds. Annotations of variables will often denote alternative names or feature importance measures.
 
 
 ## The data analysis workflow
