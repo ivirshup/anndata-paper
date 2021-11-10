@@ -21,7 +21,7 @@ affiliations:
  - name: "Present address: Cellarity, Cambridge, MA."
    index: ‡   
 date: November 10, 2021
-bibliography: paper.bib
+bibliography: [./paper.bib]
 ---
 
 # Abstract
@@ -129,20 +129,20 @@ Compressed sparse matrices (CSR and CSC format) are stored as a collection of th
 
 # The ecosystem
 
-Over the past 5 years, an ecosystem of packages that are built around anndata has grown. This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Gayoso2021; @Palla2021; @Bergen2020; @Bredikhin2021] to user-interface-based applications [@Megill2021]. We are not aware of Python APIs outside of computational biology that are based on anndata, but note that tools like scikit-learn and UMAP [@mcinnes2020] nonethless integrate seemlessly in anndata-based workflows. Since releasing the PyTorch data loader interface `AnnLoader` and the lazy concatenation structure `AnnCollection`, `anndata` also offers canonical ways of integrating into workflows anchored in the Pytorch ecosystem.
+Over the past 5 years, an ecosystem of packages that are built around anndata has grown. This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Gayoso2021; @Palla2021; @Bergen2020; @Bredikhin2021] to user-interface-based applications [@Megill2021]. We are not aware of Python APIs outside of computational biology that are based on anndata, but note that tools like scikit-learn and UMAP [@mcinnes2020] nonetheless integrate seamlessly in anndata-based workflows. Since releasing the PyTorch data loader interface `AnnLoader` and the lazy concatenation structure `AnnCollection`, `anndata` also offers canonical ways of integrating into workflows anchored in the Pytorch ecosystem.
 
 ![
 **AnnData is used to model multiple data types.**
 Examples of how AnnData is used by packages in the eco system.
-**a,** Squidpy uses AnnData objects for working with spatial data. The coordinates of each sample are stored as an array in `obsm`, an image to overlay the plot on is stored in `uns`, and spatial graph representation in `uns`.
-**b,** Multiple modalities can be represented in a single anndata objects. The variable axis now corresponds to the union of the features across the modalities, modality specific or joint embeddings are stored as seperate elements in `obsm` or `obsm`, while inter-modality relations can be stored as graphs in `varp`.
-**c,** The `AnnData` model allows for representing rna velocity analyses by storing counts of different splicing states as separate layers, with velocity based directed graphs in `obsp`.
+**a,** Squidpy uses AnnData objects for working with spatial data. The coordinates of each sample are stored as an array in `obsm`, an image to overlay the plot on is stored in `uns`, and spatial graph representation in `obsp`.
+**b,** Multiple modalities can be represented in a single anndata objects. The variable axis now corresponds to the union of the features across the modalities, modality specific or joint embeddings are stored as separate elements in `obsm` or `obsm`, while inter-modality relations can be stored as graphs in `varp`.
+**c,** The `AnnData` model allows for representing RNA velocity analyses by storing counts of different splicing states as separate layers, with velocity based directed graphs in `obsp`.
 \label{fig:examples}
 ](figures/examples.pdf)
 
 Let us illustrate the compatibility for spatial transcriptomics, multiple modalities, and RNA velocity (\autoref{fig:examples}).
 In spatial transcriptomics, each high-dimensional observation is annotated with spatial coordinates.
-Squidpy [@Palla2021] uses `AnnData` to model their data by storing spatial coordinates as an array (`obsm`) and a spatial neighborhood graph (`obsp`), which is used to find features which are spatially coorelated (\autoref{fig:examples}a).
+Squidpy [@Palla2021] uses `AnnData` to model their data by storing spatial coordinates as an array (`obsm`) and a spatial neighborhood graph (`obsp`), which is used to find features which are spatially correlated (\autoref{fig:examples}a).
 In addition, values from the high dimensional transcriptomic measurement can be overlayed on an image of the sampled tissue, where the image array is stored in `uns`, or handled externally.
 
 `AnnData` can be used to model multimodal data beyond exploiting `AnnData`'s available fields.
