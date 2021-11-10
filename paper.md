@@ -33,7 +33,7 @@ anndata offers a broad range of computationally efficient features including, am
 
 # Statement of need
 
-Generating insight from high-dimensional data typically works through training models that annotate observations and variables through condensing data into low-dimensional representations.
+Generating insight from high-dimensional data typically works through training models that annotate observations and variables via low-dimensional representations.
 In particular in exploratory workflows, this involves iteratively training models on pre- and post-learned annotations of a data matrix requiring to book-keep both its annotations and learned representations.
 anndata offers a canonical data structure for this, which is neither addressed by pandas [@McKinney2010], nor xarray [@Hoyer2017], nor commonly-used modeling packages like sckit-learn [@Pedregosa2011].
 
