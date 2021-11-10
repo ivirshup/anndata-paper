@@ -51,7 +51,7 @@ These new data profit much from the application of scalable machine learning too
 
 `AnnData` was inspired by similar data structures within the R ecosystem, in particular, `ExpressionSet` [@Huber2015], and the more recent `SingleCellExperiment` [@amezquita2020].
 
-Within the pydata ecosystem, the closest package that would be amenable to store an annotated data matrix is xarray [@Hoyer2017], which enables to deal with highly complex labelled data tensors of arbitrary dimensions.
+Within the pydata ecosystem, the closest package that would be amenable to store an annotated data matrix is xarray [@Hoyer2017], which enables to deal with labelled data tensors of arbitrary dimensions.
 By contrast, the highly popular package pandas [@McKinney2010] operates on single data matrices represented as `DataFrame` objects.
 anndata is positioned in between xarray and pandas by providing the minimal additional structure that enables storing annotations of a data matrix.
 
