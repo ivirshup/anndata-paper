@@ -121,7 +121,7 @@ The in memory format has a one to one relationship with its hierarchical on disk
 \label{fig:ecosystem}
 ](figures/ecosystem.pdf)
 
-With HDF5 and zarr, we could not find a standard for sparse arrays and DataFrames.
+Within HDF5 and zarr, we could not find a standard for sparse arrays and DataFrames.
 To account for this, we define a schema for these types, which specify how these elements can be read from disk to memory.
 These specifications are versioned and stored in an internal registry, which allows the specifications to evolve with the project while maintaining the ability to access older data. Like the `AnnData` object itself, the on-disk representations of these types closely mirror their in-memory representation.
 Compressed sparse matrices (CSR and CSC format) are stored as a collection of three arrays, `data`, `indices`, and `indptr`, while tabular data is stored in a columnar format.
