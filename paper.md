@@ -112,24 +112,24 @@ Our access patterns to X are typically row based, so we use CSR and C order arra
 
 An `AnnData` object captures a unit of the data analysis workflow that groups prior and derived data together.
 Providing a persistent and standard on disk format for this unit relieves the pain of working with many competing formats for each individual element and aids reproducibility.
-This is particularly needed as even pandas `DataFrames` have no canonical persistent data storage format. `AnnData` has chosen the self-describing hierarchical data formats HDF5 [@collette14] and zarr [@zarr] for this purpose (\autoref{fig:ecosystem}), which are compatible with many programming environments.
+This is particularly needed as even pandas `DataFrames` have no canonical persistent data storage format. `AnnData` has chosen the self-describing hierarchical data formats HDF5 [@collette14] and zarr [@zarr] for this purpose (\autoref{fig:ecosystem}), which are compatible with non-Python programming environments. The broad compatibility and high stability of the format led to wide adoption, and initiatives like the Human Cell Atlas and HubMAP distribute their single-cell omics datasets through `.h5ad`.
 
 ![**AnnData provides common conventions for data handling for an ecosystem of tools.**
 `AnnData` objects can be created from a number of formats, including common delimited text files, or domain-specific formats like `loom` files or `CellRanger` outputs.
 Once in memory, AnnData provides an API for handling annotated matrices, proving a common base object used by the Python APIs of a range of analytic computational biology tools and integrating well with the APIs of the established Python machine learning ecosystem.
-The in memory format has a one to one relationship with its hierarchical on disk formats (mapping of elements indicated by color) and uses language-independent technologies, facilitating use by non-Python applications and interchange with other ecosystems.
+The in memory format has a one-to-one relationship with its hierarchical on disk formats (mapping of elements indicated by color) and uses language-independent technologies, enabling the use by non-Python applications and interchange with other ecosystems.
 \label{fig:ecosystem}
 ](figures/ecosystem.pdf)
 
 Within HDF5 and zarr, we could not find a standard for sparse arrays and DataFrames.
 To account for this, we define a schema for these types, which specify how these elements can be read from disk to memory.
-These specifications are versioned and stored in an internal registry, which allows the specifications to evolve with the project while maintaining the ability to access older data. Like the `AnnData` object itself, the on-disk representations of these types closely mirror their in-memory representation.
+These specifications are versioned and stored in an internal registry, which evolves with the project while maintaining the ability to access older data. Like the `AnnData` object itself, the on-disk representations of these types closely mirror their in-memory representation.
 Compressed sparse matrices (CSR and CSC format) are stored as a collection of three arrays, `data`, `indices`, and `indptr`, while tabular data is stored in a columnar format.
 
 
 # The ecosystem
 
-Over the past 5 years, an ecosystem of packages that are built around anndata has grown. This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Gayoso2021; @Palla2021; @Bergen2020; @Bredikhin2021] to user-interface-based applications [@Megill2021]. We are not aware of Python APIs outside of computational biology that are based on anndata, but note that tools like scikit-learn and UMAP [@mcinnes2020] nonetheless integrate seamlessly in anndata-based workflows. Since releasing the PyTorch data loader interface `AnnLoader` and the lazy concatenation structure `AnnCollection`, `anndata` also offers canonical ways of integrating into workflows anchored in the Pytorch ecosystem.
+Over the past 5 years, an ecosystem of packages that are built around anndata has grown. This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Gayoso2021; @Palla2021; @Bergen2020; @Bredikhin2021] to user-interface-based applications [@Megill2021]. We are not aware of Python APIs outside of computational biology that are based on anndata, but note that tools like scikit-learn and UMAP [@mcinnes2020] nonetheless integrate seamlessly in anndata-based workflows. Since releasing the PyTorch data loader interface `AnnLoader` and the lazy concatenation structure `AnnCollection`, `anndata` also offers canonical ways of integrating into the Pytorch ecosystem.
 
 ![
 **AnnData is used to model multiple data types.**
