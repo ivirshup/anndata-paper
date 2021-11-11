@@ -65,7 +65,7 @@ One-dimensional annotations for each dimension are stored in dataframes `obs` an
 Multi-dimensional annotations are stored in `obsm` and `varm`.
 Pairwise relationships are stored in `obsp` and `varp`.
 Unstructured data which doesn’t fit this model, but should stay associated to the dataset are stored in `uns`.
-**b,** The response variable ŷ learned from X is stored as a one-dimensional annotation of observations.
+**b,** Let us discuss a few examples. The response variable ŷ learned from X is stored as a one-dimensional annotation of observations.
 **c,** Principal components and the transformed dimensionality-reduced data matrix obtained through PCA can be stored as multi-dimensional annotations of variables and observations, respectively.
 **d,** A k-nearest neighbor graph of any desired representation is represented as a sparse adjacency matrix, constituting a pairwise relationship of observations in `obsp`.
 **e,** Subsetting the `AnnData` object by observations produces a view of data and annotations.
