@@ -5,6 +5,7 @@ authors:
     orcid: 0000-0002-1710-8945
     affiliation: "1,2,†"
   - name: Sergei Rybakov
+    orcid: 0000-0002-4944-6586
     affiliation: "2"
   - name: Philipp Angerer
     affiliation: "2,†,‡"
