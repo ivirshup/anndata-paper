@@ -132,7 +132,7 @@ Compressed sparse matrices (CSR and CSC format) are stored as a collection of th
 
 # The ecosystem
 
-Over the past 5 years, an ecosystem of packages that are built around anndata has grown. This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Gayoso2021; @Palla2021; @Bergen2020; @Bredikhin2021] to user-interface-based applications [@Megill2021]. Also tools that are not designed around anndata, like scikit-learn and UMAP [@mcinnes2020], nonetheless integrate seamlessly with anndata-based workflows. Since releasing the PyTorch data loader interface `AnnLoader` and the lazy concatenation structure `AnnCollection`, `anndata` also offers canonical ways of integrating into the Pytorch ecosystem.
+Over the past 5 years, an ecosystem of packages that are built around anndata has grown. This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Zappia2021] to user-interface-based applications [@Megill2021]. Also tools that are not designed around anndata, like scikit-learn and UMAP [@mcinnes2020], nonetheless integrate seamlessly with anndata-based workflows. Since releasing the PyTorch data loader interface `AnnLoader` and the lazy concatenation structure `AnnCollection`, `anndata` offers native ways of integrating into the Pytorch ecosystem in addition to the integration that scvi-tools [@Gayoso2021] offers.
 
 Through the language-independent on-disk format `h5ad`, interchange of data with non-Python ecosytems is easily possible. For analysis of scRNA-seq data in R, this has been particularly simplified by anndata2ri, which allows conversion to `SingleCellExperiment` [@amezquita2020] and Seurat's format [@Hao2020].
 
