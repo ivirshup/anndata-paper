@@ -46,7 +46,7 @@ Since its initial publication as part of Scanpy [@Wolf2018], anndata matured int
 
 So far, anndata has been particularly useful for data analysis in computational biology where advances in single-cell RNA sequencing (scRNA-seq) have given rise to new classes of analysis problems with a stronger adoption of Python over the traditional R ecosystem.
 Previous bulk RNA datasets had few observations with dense measurements while more recent scRNA-seq datasets come with high numbers of observations and sparse measurements, both in dimensions of 20k and more.
-These new data profit much from the application of scalable machine learning tools, which are more abundant in Python than in R.
+These new data profit much from the application of scalable machine learning tools of the Python ecosystem.
 
 
 # The AnnData object
@@ -55,7 +55,7 @@ These new data profit much from the application of scalable machine learning too
 
 Within the pydata ecosystem, the closest package that would be amenable to store an annotated data matrix is xarray [@Hoyer2017], which enables to deal with labelled data tensors of arbitrary dimensions.
 By contrast, the highly popular package pandas [@McKinney2010] operates on single data matrices represented as `DataFrame` objects.
-anndata is positioned in between xarray and pandas by providing the minimal additional structure that enables storing annotations of a data matrix.
+anndata is positioned in between anndata and xarray by providing structure that organizes data matrix annotations.
 
 ![**Structure of the AnnData object.**
 **a,** The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
@@ -77,11 +77,9 @@ Unstructured data which doesn’t fit this model, but should stay associated to 
 
 ## The data structure
 
-Standard data structures facilitate both exploratory data analysis and sharing of data as demonstrated by, for instance, the tidyverse project [@Wickham2014] in the R ecosystem.
+Standard data structures facilitate data science, with one of the most adopted standards being tidydata [@Wickham2014]. anndata defines a standard data structure that makes use of conserved dimensions between data matrix and annotations, similar to `ExpressionSet` [@Huber2015]. With that, `AnnData` makes a particular choice for data organization that has been left unaddressed by packages like scikit-learn or PyTorch [@Paszke2019], which model input and output for each computation as unstructured sets of tensors. Furthermore, `AnnData` offers an on-disk representation that allows sharing data and structured analysis results in form of learned annotations.
 
-anndata defines a data structure standard that makes use of conserved dimensions between data matrix and annotations, similar to `ExpressionSet` [@Huber2015]. With that, `AnnData` makes a particular choice for data organization that has been left unaddressed by packages like scikit-learn or PyTorch [@Paszke2019], which model input and output for each computation as unstructured sets of tensors. Furthermore, `AnnData` offers an on-disk representation that allows sharing data and structured analysis results in form of learned annotations.
-
-At the core of `AnnData` is the measured data matrix from which we wish to generate insight (`X`). Each data matrix element belongs to an observation (`obs_names`) and a variable (`var_names`) and contains a value (which can be "missing", like `nan`).
+At the core of `AnnData` is the measured data matrix from which we wish to generate insight (`X`). Each data matrix element stores a value and belongs to an observation in a row (`obs_names`) and a variable in a column (`var_names`), following the tidy data standard [@Wickham2014].
 One builds an understanding of the data matrix by annotating observations and variables using `AnnData`'s fields (\autoref{fig:overview}):
 
 * Annotations that can be stored in a single vector get added to the main annotation `DataFrames` for each axis, `obs` and `var`.
