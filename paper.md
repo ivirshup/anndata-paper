@@ -130,7 +130,7 @@ Compressed sparse matrices (CSR and CSC format) are stored as a collection of th
 
 # The ecosystem
 
-Over the past 5 years, an ecosystem of packages that are built around anndata has grown. This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Gayoso2021; @Palla2021; @Bergen2020; @Bredikhin2021] to user-interface-based applications [@Megill2021]. We are not aware of Python APIs outside of computational biology that are based on anndata, but note that tools like scikit-learn and UMAP [@mcinnes2020] nonetheless integrate seamlessly in anndata-based workflows. Since releasing the PyTorch data loader interface `AnnLoader` and the lazy concatenation structure `AnnCollection`, `anndata` also offers canonical ways of integrating into the Pytorch ecosystem.
+Over the past 5 years, an ecosystem of packages that are built around anndata has grown. This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Gayoso2021; @Palla2021; @Bergen2020; @Bredikhin2021] to user-interface-based applications [@Megill2021]. Also tools that are not designed around anndata, like scikit-learn and UMAP [@mcinnes2020], nonetheless integrate seamlessly with anndata-based workflows. Since releasing the PyTorch data loader interface `AnnLoader` and the lazy concatenation structure `AnnCollection`, `anndata` also offers canonical ways of integrating into the Pytorch ecosystem.
 
 ![
 **AnnData is used to model multiple data types.**
@@ -177,6 +177,6 @@ F.A.W. and P.A. are grateful to Cellarity for supporting continued engagement wi
 Isaac has led the anndata project since v0.7, and contributed as a developer before. He rewrote wide parts of the code introducing high efficiency, robustness, concatenation, ...
 Sergei made diverse contributions to the code base, in particular, the first version of `layers`, benchmarking and improvement of the earlier versions of the IO code, the PyTorch dataloader `AnnLoader` and the lazy concatenation data structure `AnnCollection`.
 Phil suggested to replace Scanpy's initial unstructured annotated data object to one mimicking R's ExpressionSet, and wrote AnnData's [first implementation](https://github.com/theislab/scanpy/commit/315859c5586116434ea3b7ce97512a5e2a1030e2) with indexing, slicing, ... and ascertained good software practices in the project. ...
-Alex led the project until 0.7, introduced centering data science workflows around an [initially unstructured annotated data object](https://github.com/theislab/scanpy/tree/c22e48abe45a6ccca5918bbf689637caa4b31250), designed the API, wrote tutorials and documentation until 0.7, and implemented most of the early functionality, among others, reading & writing, on-disk format, sparse data support, backed mode, views.
+Alex led the project until 0.7, introduced centering data science workflows around an [initially unstructured annotated data object](https://github.com/theislab/scanpy/tree/c22e48abe45a6ccca5918bbf689637caa4b31250), designed the API, wrote tutorials and documentation until 0.7, and implemented most of the early functionality, among others, reading & writing, the on-disk format `h5ad`, sparse data support, backed mode, views.
 
 # References
