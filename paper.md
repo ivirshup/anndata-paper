@@ -132,11 +132,12 @@ Compressed sparse matrices (CSR and CSC format) are stored as a collection of th
 
 # The ecosystem
 
-Over the past 5 years, an ecosystem of packages that are built around anndata has grown. This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Gayoso2021; @Palla2021; @Bergen2020; @Bredikhin2021] to user-interface-based applications [@Megill2021]. Also tools that are not designed around anndata, like scikit-learn and UMAP [@mcinnes2020], nonetheless integrate seamlessly with anndata-based workflows. Since releasing the PyTorch data loader interface `AnnLoader` and the lazy concatenation structure `AnnCollection`, `anndata` also offers canonical ways of integrating into the Pytorch ecosystem. In addition, through the language-independent on-disk format `h5ad`, interchange of data with non-Python ecosytems is easily possible.
+Over the past 5 years, an ecosystem of packages that are built around anndata has grown. This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Gayoso2021; @Palla2021; @Bergen2020; @Bredikhin2021] to user-interface-based applications [@Megill2021]. Also tools that are not designed around anndata, like scikit-learn and UMAP [@mcinnes2020], nonetheless integrate seamlessly with anndata-based workflows. Since releasing the PyTorch data loader interface `AnnLoader` and the lazy concatenation structure `AnnCollection`, `anndata` also offers canonical ways of integrating into the Pytorch ecosystem.
+
+Through the language-independent on-disk format `h5ad`, interchange of data with non-Python ecosytems is easily possible. For analysis of scRNA-seq data in R, this has been particularly simplified by anndata2ri, which allows conversion to `SingleCellExperiment` [@amezquita2020] and Seurat's format [@Hao2020].
 
 ![
-**AnnData is used to model multiple data types.**
-Examples of how AnnData is used by packages in the eco system.
+**Examples of how AnnData is used by packages in the eco system.**
 **a,** Squidpy uses AnnData objects for working with spatial data. The coordinates of each sample are stored as an array in `obsm`, an image to overlay the plot on is stored in `uns`, and spatial graph representation in `obsp`.
 **b,** Multiple modalities can be represented in a single anndata objects. The variable axis now corresponds to the union of the features across the modalities, modality specific or joint embeddings are stored as separate elements in `obsm` or `obsm`, while inter-modality relations can be stored as graphs in `varp`.
 **c,** The `AnnData` model allows for representing RNA velocity analyses by storing counts of different splicing states as separate layers, with velocity based directed graphs in `obsp`.
