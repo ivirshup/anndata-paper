@@ -1,5 +1,5 @@
 ---
-title: "anndata: Annotated data matrices in Python"
+title: "anndata: Annotated data matrices"
 authors:
   - name: Isaac Virshup
     orcid: 0000-0002-1710-8945
@@ -26,7 +26,7 @@ date: November 10, 2021
 bibliography: [./paper.bib]
 ---
 
-# Abstract
+# Summary
 
 anndata is a Python package for handling annotated data matrices in memory and on disk.
 It is positioned between pandas and xarray by providing structure that organizes data matrix annotations.
