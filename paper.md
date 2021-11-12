@@ -161,7 +161,7 @@ This approach significantly differs from the previous approach by allowing for d
 
 # Outlook
 
-The anndata project is under active development towards a variety of features: more advanced out-of-core access, cloud integration, a split-apply-combine framework, and interchange with more formats, like Apache Arrow. Furthermore, anndata engages with projects that aim at building out infrastructure for modeling multi-modal data and representing non-homogeneous data to enable learning from Electronic Health Records (@Heumos2021).
+The anndata project is under active development towards a variety of features: more advanced out-of-core access, cloud integration, a split-apply-combine framework, and interchange with more formats, like Apache Arrow. Furthermore, anndata engages with projects that aim at building out infrastructure for modeling multi-modal data and representing non-homogeneous data to enable learning from Electronic Health Records [@Heumos2021].
 
 
 # Acknowledgements
@@ -170,7 +170,7 @@ I.V. is grateful to Christine Wells for consistent support and freedom to pursue
 We are grateful to Ryan Williams and Tom White for contributing code related to zarr.
 We thank Jonathan Bloom for contributing a comprehensive PR on group-by functionality.
 We are grateful to Fabian Theis & lab for continuing dissemination along with Scanpy over the past years.
-A.W.~and P.A. are grateful to Cellarity for supporting continued engagement with open source work.
+F.A.W. and P.A. are grateful to Cellarity for supporting continued engagement with open source work.
 
 # Author contributions
 
