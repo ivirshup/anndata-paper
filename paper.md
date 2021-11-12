@@ -170,9 +170,8 @@ The anndata project is under active development towards a variety of features: m
 # Acknowledgements
 
 I.V. is grateful to Christine Wells for consistent support and freedom to pursue work on anndata and Scanpy.
-We are grateful to Ryan Williams and Tom White for contributing code related to zarr.
-We thank Jonathan Bloom for contributing a comprehensive PR on group-by functionality.
 We are grateful to Fabian Theis & lab for continuing dissemination along with Scanpy over the past years.
+We thank Ryan Williams and Tom White for contributing code related to zarr and Jonathan Bloom for contributing a comprehensive PR on group-by functionality.
 F.A.W. and P.A. are grateful to Cellarity for supporting continued engagement with open source work.
 
 # Author contributions
