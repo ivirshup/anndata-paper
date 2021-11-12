@@ -88,7 +88,7 @@ One builds an understanding of the data matrix by annotating observations and va
 
 Prior annotations of observations will often denote experimental groups, while derived annotations of observations might be summary statistics, cluster assignments, low-dimensional representations or manifolds. Annotations of variables will often denote alternative names or feature importance measures.
 
-In the context *tidy data*'s requirement 3 - "Each type of observational unit forms a table" [@Wickham2014; @Codd1990] - one can think of `X` as grouping the data of a central *observational unit* of interest in an analysis. This unit of interest is typically the high-dimensional *measured* data in an experiment. Other slots of `AnnData` are then available to store *fixed* metadata of the experiment or derived data. We also note that the structure of `AnnData` violates *tidy data* in that the central `obs` table incentivizes analysts to mix data from different observational units.
+In the context of *tidy data* [@Wickham2014; @Codd1990], one can think of `X` as grouping the data of a specific set of measured variables of interest in an analysis, typically high-dimensional *measured* data in an experiment. Other tables aligned to the observations axis in `AnnData` are then available to store *fixed* data of the experiment, often called metadata, or derived data.
 
 
 ## The data analysis workflow
