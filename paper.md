@@ -138,9 +138,9 @@ Through the language-independent on-disk format `h5ad`, interchange of data with
 
 ![
 **Examples of how AnnData is used by packages in the ecosystem.**
-**a,** Squidpy uses AnnData objects for working with spatial data. The coordinates of each sample are stored as an array in `obsm`, an image to overlay the plot on is stored in `uns`, and spatial graph representation in `obsp`.
-**b,** Multiple modalities can be represented in multiple AnnData objects. The variable axis now corresponds to the union of the features across the modalities, modality specific or joint embeddings are stored as separate elements in `obsm` or `obsm`, while inter-modality relations can be stored as graphs in `varp`.
-**c,** The `AnnData` model allows for representing RNA velocity analyses by storing counts of different splicing states as separate layers, with velocity based directed graphs in `obsp`.
+**a,** Squidpy uses `AnnData` for working with spatial data: the coordinates of each observation are stored in `obsm`, a spatial neighborhood graph in `obsp`, and a complementary image is stored in `uns`.
+**b,** Multiple modalities can be represented in multiple `AnnData` objects. The variables axis now corresponds to the union of variables across modalities. Modality-specific and joint representations and manifolds are stored as separate elements in `obsm` or `obsp`, while inter-modality relations can be stored as graphs in `varp`.
+**c,** `AnnData` allows for RNA velocity analyses by storing counts of different splicing states as separate `layers` with velocity-based directed graphs in `obsp`.
 \label{fig:examples}
 ](figures/examples.pdf)
 
