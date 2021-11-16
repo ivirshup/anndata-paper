@@ -137,10 +137,10 @@ Over the past 5 years, an ecosystem of packages that are built around anndata ha
 Through the language-independent on-disk format `h5ad`, interchange of data with non-Python ecosytems is easily possible. For analysis of scRNA-seq data in R, this has been particularly simplified by anndata2ri, which allows conversion to `SingleCellExperiment` [@amezquita2020] and Seurat's format [@Hao2020].
 
 ![
-**Examples of how AnnData is used by packages in the eco system.**
-**a,** Squidpy uses AnnData objects for working with spatial data. The coordinates of each sample are stored as an array in `obsm`, an image to overlay the plot on is stored in `uns`, and spatial graph representation in `obsp`.
-**b,** Multiple modalities can be represented in a single anndata objects. The variable axis now corresponds to the union of the features across the modalities, modality specific or joint embeddings are stored as separate elements in `obsm` or `obsm`, while inter-modality relations can be stored as graphs in `varp`.
-**c,** The `AnnData` model allows for representing RNA velocity analyses by storing counts of different splicing states as separate layers, with velocity based directed graphs in `obsp`.
+**Examples of how AnnData is used by packages in the ecosystem.**
+**a,** Squidpy uses `AnnData` for working with spatial data: the coordinates of each observation are stored in `obsm`, a spatial neighborhood graph in `obsp`, and a complementary image is stored in `uns`.
+**b,** Multiple modalities can be represented in multiple `AnnData` objects. The variables axis now corresponds to the union of variables across modalities. Modality-specific and joint representations and manifolds are stored as separate elements in `obsm` or `obsp`, while inter-modality relations can be stored as graphs in `varp`.
+**c,** `AnnData` allows for RNA velocity analyses by storing counts of different splicing states as separate `layers` with velocity-based directed graphs in `obsp`.
 \label{fig:examples}
 ](figures/examples.pdf)
 
@@ -152,7 +152,7 @@ In addition, values from the high dimensional transcriptomic measurement can be 
 `AnnData` can be used to model multimodal data beyond exploiting `AnnData`'s available fields.
 For instance, analyses specific to each modality are carried out on separate `AnnData` objects (\autoref{fig:examples}b).
 From this, analyses inferring or annotations interactions between modalities can be stored as graphs in `varp`.
-Analyses using information from both modalities, like a joint manifold [@Hao2020], can be stored in `obsp`.
+Analyses using information from both modalities, like a joint manifold, can be stored in `obsp`.
 A related approach for modelling multimodal data has been utilized by the `muon` package [@Bredikhin2021].
 Here, a new `MuData` object is defined, which is essentially a collection of `AnnData` objects, one for each modality measured.
 Annotations shared across modalities are stored for the observations for the whole object.
