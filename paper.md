@@ -152,7 +152,7 @@ In addition, values from the high dimensional transcriptomic measurement can be 
 `AnnData` can be used to model multimodal data beyond exploiting `AnnData`'s available fields.
 For instance, analyses specific to each modality are carried out on separate `AnnData` objects (\autoref{fig:examples}b).
 From this, analyses inferring or annotations interactions between modalities can be stored as graphs in `varp`.
-Analyses using information from both modalities, like a joint manifold [@Hao2020], can be stored in `obsp`.
+Analyses using information from both modalities, like a joint manifold, can be stored in `obsp`.
 A related approach for modelling multimodal data has been utilized by the `muon` package [@Bredikhin2021].
 Here, a new `MuData` object is defined, which is essentially a collection of `AnnData` objects, one for each modality measured.
 Annotations shared across modalities are stored for the observations for the whole object.
