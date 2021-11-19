@@ -38,7 +38,6 @@ anndata offers a broad range of computationally efficient features including, am
 Generating insight from high-dimensional data typically works through training models that annotate observations and variables via low-dimensional representations.
 In particular in exploratory workflows, this involves iteratively training models on pre- and post-learned annotations of a data matrix requiring to book-keep both its annotations and learned representations.
 anndata offers a canonical data structure for this, which is neither addressed by pandas [@McKinney2010], nor xarray [@Hoyer2017], nor commonly-used modeling packages like sckit-learn [@Pedregosa2011].
-anndata builds on the *tidy data* standard [@Wickham2014].
 
 
 # Introduction
@@ -79,6 +78,8 @@ Unstructured data which doesn’t fit this model, but should stay associated to 
 ## The data structure
 
 Standard data structures facilitate data science, with one of the most adopted standards being *tidy data* [@Wickham2014]. anndata defines a standard data structure that makes use of conserved dimensions between data matrix and annotations, similar to `ExpressionSet` [@Huber2015]. With that, `AnnData` makes a particular choice for data organization that has been left unaddressed by packages like scikit-learn or PyTorch [@Paszke2019], which model input and output for each computation as unstructured sets of tensors. Furthermore, `AnnData` offers an on-disk representation that allows sharing data and structured analysis results in form of learned annotations.
+
+Being inspired by `ExpressionSet`, `SingleCellExperiment`, and machine-learning-ready provisioning of data, we note that `AnnData` also complies with *tidy data* standard [@Wickham2014]. However, ...
 
 At the core of `AnnData` is the measured data matrix from which we wish to generate insight (`X`). Each data matrix element stores a value and belongs to an observation in a row (`obs_names`) and a variable in a column (`var_names`), following the *tidy data* standard.
 One builds an understanding of the data matrix by annotating observations and variables using `AnnData`'s fields (\autoref{fig:overview}):
