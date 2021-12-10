@@ -1,5 +1,5 @@
 ---
-title: "anndata: Annotated data matrices"
+title: "anndata: Annotated data"
 authors:
   - name: Isaac Virshup
     orcid: 0000-0002-1710-8945
@@ -16,7 +16,7 @@ authors:
 affiliations:
  - name: University of Melbourne.
    index: 1
- - name: "Helmholtz Munich, Institute of Computational Biology."
+ - name: "Helmholtz Munich."
    index: 2
  - name: Corresponding authors.
    index: †
@@ -38,7 +38,6 @@ anndata offers a broad range of computationally efficient features including, am
 Generating insight from high-dimensional data typically works through training models that annotate observations and variables via low-dimensional representations.
 In particular in exploratory workflows, this involves iteratively training models on pre- and post-learned annotations of a data matrix requiring to book-keep both its annotations and learned representations.
 anndata offers a canonical data structure for this, which is neither addressed by pandas [@McKinney2010], nor xarray [@Hoyer2017], nor commonly-used modeling packages like sckit-learn [@Pedregosa2011].
-anndata builds on the *tidy data* standard [@Wickham2014].
 
 
 # Introduction
@@ -52,11 +51,10 @@ These new data profit much from the application of scalable machine learning too
 
 # The AnnData object
 
-`AnnData` was inspired by similar data structures within the R ecosystem, in particular, `ExpressionSet` [@Huber2015], and the more recent `SingleCellExperiment` [@amezquita2020].
+`AnnData` was inspired by similar data structures within the R ecosystem, in particular, `ExpressionSet` [@Huber2015], and the more recent `SingleCellExperiment` [@amezquita2020], and designed to provision data in analysis-ready form.
 
-Within the pydata ecosystem, the closest package that would be amenable to store an annotated data matrix is xarray [@Hoyer2017], which enables to deal with labelled data tensors of arbitrary dimensions.
-By contrast, the highly popular package pandas [@McKinney2010] operates on single data matrices represented as `DataFrame` objects.
-anndata is positioned in between anndata and xarray by providing structure that organizes data matrix annotations.
+Within the pydata ecosystem, xarray [@Hoyer2017] enables to deal with labelled data tensors of arbitrary dimensions, while pandas [@McKinney2010] operates on single data matrices (tables) represented as `DataFrame` objects.
+anndata is positioned in between anndata and xarray by providing structure that organizes data matrix annotations. In contrast to pandas and xarray, `AnnData` offers a native on-disk representation that allows sharing data and structured analysis results in form of learned annotations.
 
 ![**Structure of the AnnData object.**
 **a,** The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
@@ -78,7 +76,7 @@ Unstructured data which doesn’t fit this model, but should stay associated to 
 
 ## The data structure
 
-Standard data structures facilitate data science, with one of the most adopted standards being *tidy data* [@Wickham2014]. anndata defines a standard data structure that makes use of conserved dimensions between data matrix and annotations, similar to `ExpressionSet` [@Huber2015]. With that, `AnnData` makes a particular choice for data organization that has been left unaddressed by packages like scikit-learn or PyTorch [@Paszke2019], which model input and output for each computation as unstructured sets of tensors. Furthermore, `AnnData` offers an on-disk representation that allows sharing data and structured analysis results in form of learned annotations.
+Standardized data structures facilitate data science, with one of the most adopted standards being *tidy data* [@Wickham2014]. anndata complies with *tidy data*, but introduces additional conventions by defining a data structure that makes use of conserved dimensions between data matrix and annotations. With that, `AnnData` makes a particular choice for data organization that has been left unaddressed by packages like scikit-learn or PyTorch [@Paszke2019], which model input and output of model transformations as unstructured sets of tensors.
 
 At the core of `AnnData` is the measured data matrix from which we wish to generate insight (`X`). Each data matrix element stores a value and belongs to an observation in a row (`obs_names`) and a variable in a column (`var_names`), following the *tidy data* standard.
 One builds an understanding of the data matrix by annotating observations and variables using `AnnData`'s fields (\autoref{fig:overview}):
@@ -88,8 +86,9 @@ One builds an understanding of the data matrix by annotating observations and va
 
 Prior annotations of observations will often denote experimental groups, while derived annotations of observations might be summary statistics, cluster assignments, low-dimensional representations or manifolds. Annotations of variables will often denote alternative names or feature importance measures.
 
-In the context *tidy data*'s requirement 3 - "Each type of observational unit forms a table" [@Wickham2014; @Codd1990] - one can think of `X` as grouping the data of a central *observational unit* of interest in an analysis. This unit of interest is typically the high-dimensional *measured* data in an experiment. Other slots of `AnnData` are then available to store *fixed* metadata of the experiment or derived data. We also note that the structure of `AnnData` violates *tidy data* in that the central `obs` table incentivizes analysts to mix data from different observational units.
+In the context of how *tidy data* [@Wickham2014] recommends to order variables by semantics beyond the concepts of *observations* and *variables*, one can think of `X` as contiguously grouping the data of a specific set of *measured* variables of interest, typically high-dimensional readout data in an experiment. Other tables aligned to the observations axis in `AnnData` are then available to store both *fixed* (meta-)data of the experiment and derived data.
 
+We note that adoption of *tidy data* leaves some room for ambiguity. For instance, the R package `tidySummarizedExperiment` [@Mangiola2021] provisions tables for scRNA-seq data that take a long form that spreads variables belonging to the same observational unit (a cell) across multiple rows. Generally, when there is no canonical observational unit that is defined through a *joint measurement*, for instance, by measuring variables in the same system at the same time, the *tidy data* layout is ambiguous and can result in longer or wider table layouts depending on what users consider the observational unit.
 
 ## The data analysis workflow
 
@@ -111,7 +110,7 @@ A noteworthy design choice means is that we do not follow columnar (or "variable
 Our access patterns to X are typically row based, so we use CSR and C order arrays (or "observation major"), which allows efficiently accessing batches of the dataset, to meet the needs of batched learning algorithms.
 
 
-## The on disk representation
+## The on-disk representation
 
 An `AnnData` object captures a unit of the data analysis workflow that groups prior and derived data together.
 Providing a persistent and standard on disk format for this unit relieves the pain of working with many competing formats for each individual element and aids reproducibility.
@@ -164,7 +163,7 @@ This approach significantly differs from the previous approach by allowing for d
 
 # Outlook
 
-The anndata project is under active development towards a variety of features: more advanced out-of-core access, better cloud & relational database integration, a split-apply-combine framework, and interchange with more formats, like Apache Arrow. Furthermore, anndata engages with projects that aim at building out infrastructure for modeling multi-modal data and representing non-homogeneous data to enable learning from Electronic Health Records [@Heumos2021]. Finally, we aim at further improving anndata's data semantics converging further to *tidy data* and exploiting scientific domain knowledge.
+The anndata project is under active development towards a variety of features: more advanced out-of-core access, better cloud & relational database integration, a split-apply-combine framework, and interchange with more formats, like Apache Arrow. Furthermore, anndata engages with projects that aim at building out infrastructure for modeling multi-modal data and representing non-homogeneous data to enable learning from Electronic Health Records [@Heumos2021]. Finally, we aim at further extending anndata's data model by interfacing with scientific domain knowledge and data provenance tracking.
 
 
 # Acknowledgements
@@ -172,8 +171,9 @@ The anndata project is under active development towards a variety of features: m
 I.V. is grateful to Christine Wells for consistent support and freedom to pursue work on anndata and Scanpy.
 We are grateful to Fabian Theis & lab for continuing dissemination along with Scanpy over the past years.
 We thank Ryan Williams and Tom White for contributing code related to zarr and Jonathan Bloom for contributing a comprehensive PR on group-by functionality.
-F.A.W. and P.A. are grateful to Cellarity for supporting continued engagement with open source work.
+F.A.W. and P.A. thank Cellarity for supporting continued engagement with open source work.
 This project receives funding through CZI's Essential Open Source Software for Science grant.
+
 
 # Author contributions
 
