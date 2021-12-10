@@ -1,5 +1,5 @@
 ---
-title: "anndata: Annotated data matrices"
+title: "anndata: Annotated data"
 authors:
   - name: Isaac Virshup
     orcid: 0000-0002-1710-8945
@@ -16,7 +16,7 @@ authors:
 affiliations:
  - name: University of Melbourne.
    index: 1
- - name: "Helmholtz Munich, Institute of Computational Biology."
+ - name: "Helmholtz Munich."
    index: 2
  - name: Corresponding authors.
    index: †
@@ -53,7 +53,7 @@ These new data profit much from the application of scalable machine learning too
 
 `AnnData` was inspired by similar data structures within the R ecosystem, in particular, `ExpressionSet` [@Huber2015], and the more recent `SingleCellExperiment` [@amezquita2020].
 
-Within the pydata ecosystem, the closest package that would be amenable to store an annotated data matrix is xarray [@Hoyer2017], which enables to deal with labelled data tensors of arbitrary dimensions.
+Within the pydata ecosystem, the closest package amenable to store an annotated data matrix is xarray [@Hoyer2017], which enables to deal with labelled data tensors of arbitrary dimensions.
 By contrast, the highly popular package pandas [@McKinney2010] operates on single data matrices represented as `DataFrame` objects.
 anndata is positioned in between anndata and xarray by providing structure that organizes data matrix annotations.
 
@@ -165,7 +165,7 @@ This approach significantly differs from the previous approach by allowing for d
 
 # Outlook
 
-The anndata project is under active development towards a variety of features: more advanced out-of-core access, better cloud & relational database integration, a split-apply-combine framework, and interchange with more formats, like Apache Arrow. Furthermore, anndata engages with projects that aim at building out infrastructure for modeling multi-modal data and representing non-homogeneous data to enable learning from Electronic Health Records [@Heumos2021]. Finally, we aim at further improving anndata's data semantics converging further to *tidy data* and exploiting scientific domain knowledge.
+The anndata project is under active development towards a variety of features: more advanced out-of-core access, better cloud & relational database integration, a split-apply-combine framework, and interchange with more formats, like Apache Arrow. Furthermore, anndata engages with projects that aim at building out infrastructure for modeling multi-modal data and representing non-homogeneous data to enable learning from Electronic Health Records [@Heumos2021]. Finally, we aim at further extending anndata's data model by interfacing with scientific domain knowledge and data provenance tracking.
 
 
 # Acknowledgements
@@ -174,7 +174,7 @@ I.V. is grateful to Christine Wells for consistent support and freedom to pursue
 We are grateful to Ryan Williams and Tom White for contributing code related to zarr.
 We thank Jonathan Bloom for contributing a comprehensive PR on group-by functionality.
 We are grateful to Fabian Theis & lab for continuing dissemination along with Scanpy over the past years.
-F.A.W. and P.A. are grateful to Cellarity for supporting continued engagement with open source work.
+F.A.W. and P.A. thank Cellarity for supporting continued engagement with open source work.
 
 # Author contributions
 
