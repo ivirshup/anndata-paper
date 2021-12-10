@@ -51,11 +51,10 @@ These new data profit much from the application of scalable machine learning too
 
 # The AnnData object
 
-`AnnData` was inspired by similar data structures within the R ecosystem, in particular, `ExpressionSet` [@Huber2015], and the more recent `SingleCellExperiment` [@amezquita2020].
+`AnnData` was inspired by similar data structures within the R ecosystem, in particular, `ExpressionSet` [@Huber2015], and the more recent `SingleCellExperiment` [@amezquita2020], and designed to provision data in analysis-ready form.
 
-Within the pydata ecosystem, the closest package amenable to store an annotated data matrix is xarray [@Hoyer2017], which enables to deal with labelled data tensors of arbitrary dimensions.
-By contrast, the highly popular package pandas [@McKinney2010] operates on single data matrices represented as `DataFrame` objects.
-anndata is positioned in between anndata and xarray by providing structure that organizes data matrix annotations.
+Within the pydata ecosystem, xarray [@Hoyer2017] enables to deal with labelled data tensors of arbitrary dimensions, while pandas [@McKinney2010] operates on single data matrices (tables) represented as `DataFrame` objects.
+anndata is positioned in between anndata and xarray by providing structure that organizes data matrix annotations. In contrast to pandas and xarray, `AnnData` offers a native on-disk representation that allows sharing data and structured analysis results in form of learned annotations.
 
 ![**Structure of the AnnData object.**
 **a,** The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
@@ -77,9 +76,7 @@ Unstructured data which doesn’t fit this model, but should stay associated to 
 
 ## The data structure
 
-Standard data structures facilitate data science, with one of the most adopted standards being *tidy data* [@Wickham2014]. anndata defines a standard data structure that makes use of conserved dimensions between data matrix and annotations, similar to `ExpressionSet` [@Huber2015]. With that, `AnnData` makes a particular choice for data organization that has been left unaddressed by packages like scikit-learn or PyTorch [@Paszke2019], which model input and output for each computation as unstructured sets of tensors. Furthermore, `AnnData` offers an on-disk representation that allows sharing data and structured analysis results in form of learned annotations.
-
-Being inspired by `ExpressionSet`, `SingleCellExperiment`, and machine-learning-ready provisioning of data, we note that `AnnData` also complies with *tidy data* standard [@Wickham2014]. However, ...
+Standardized data structures facilitate data science, with one of the most adopted standards being *tidy data* [@Wickham2014]. anndata complies with *tidy data*, but introduces additional conventions by defining a data structure that makes use of conserved dimensions between data matrix and annotations. With that, `AnnData` makes a particular choice for data organization that has been left unaddressed by packages like scikit-learn or PyTorch [@Paszke2019], which model input and output of model transformations as unstructured sets of tensors.
 
 At the core of `AnnData` is the measured data matrix from which we wish to generate insight (`X`). Each data matrix element stores a value and belongs to an observation in a row (`obs_names`) and a variable in a column (`var_names`), following the *tidy data* standard.
 One builds an understanding of the data matrix by annotating observations and variables using `AnnData`'s fields (\autoref{fig:overview}):
@@ -89,8 +86,9 @@ One builds an understanding of the data matrix by annotating observations and va
 
 Prior annotations of observations will often denote experimental groups, while derived annotations of observations might be summary statistics, cluster assignments, low-dimensional representations or manifolds. Annotations of variables will often denote alternative names or feature importance measures.
 
-In the context of *tidy data* [@Wickham2014; @Codd1990], one can think of `X` as grouping the data of a specific set of measured variables of interest in an analysis, typically high-dimensional *measured* data in an experiment. Other tables aligned to the observations axis in `AnnData` are then available to store *fixed* data of the experiment, often called metadata, or derived data.
+In the context of how *tidy data* [@Wickham2014] recommends to order variables by semantics beyond the concepts of *observations* and *variables*, one can think of `X` as contiguously grouping the data of a specific set of *measured* variables of interest, typically high-dimensional readout data in an experiment. Other tables aligned to the observations axis in `AnnData` are then available to store both *fixed* (meta-)data of the experiment and derived data.
 
+It should be noted that adoption of *tidy data* still leaves small room for ambiguity. For instance, the R package `tidySummarizedExperiment` [@Mangiola2021] provisions long-form tables for scRNA-seq data that are so long that they spread variables belonging to the same observational unit - a cell - across multiple  rows. This easily happens when there is no canonical observational unit that is defined through a *joint measurement*, for instance, by measuring variables in the same system at the same time. In such cases, the *tidy data* layout is ambiguous and can result in longer or wider table layouts depending on what users define as the observational unit.
 
 ## The data analysis workflow
 
@@ -112,7 +110,7 @@ A noteworthy design choice means is that we do not follow columnar (or "variable
 Our access patterns to X are typically row based, so we use CSR and C order arrays (or "observation major"), which allows efficiently accessing batches of the dataset, to meet the needs of batched learning algorithms.
 
 
-## The on disk representation
+## The on-disk representation
 
 An `AnnData` object captures a unit of the data analysis workflow that groups prior and derived data together.
 Providing a persistent and standard on disk format for this unit relieves the pain of working with many competing formats for each individual element and aids reproducibility.
