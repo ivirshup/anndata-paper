@@ -107,9 +107,8 @@ To this end, AnnData offers sparse data support, out of core conversions between
 In particular, `AnnData` takes great pains to support efficient operations with sparse data.
 While there is no production ready API for working with sparse and dense data in the python ecosystem, `AnnData` abstracts over the differing existing APIs making it much easier for novices to handle each.
 This concerns handling data both on-disk and in-memory with operations for out-of-core access.
-A noteworthy design choice means is that we do not follow columnar (or "variable major") data storage as for tidy-data and `DataFrames`.
-Our access patterns to X are typically row based, so we use CSR and C order arrays (or "observation major"), which allows efficiently accessing batches of the dataset, to meet the needs of batched learning algorithms.
-
+When access patterns are expected to be observation (or row) based as in batched learning algorithms, the user can store data matrices as CSR sparse matrices or C-order dense matrices.
+For access along variables – to visualize gene expression across a dataset – CSC sparse and fortran order dense matrices allow fast access along columns.
 
 ## The on-disk representation
 
