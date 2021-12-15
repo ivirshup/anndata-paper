@@ -22,7 +22,7 @@ affiliations:
    index: †
  - name: "Present address: Cellarity, Cambridge, MA."
    index: ‡   
-date: November 10, 2021
+date: December 16, 2021
 bibliography: [./paper.bib]
 ---
 
@@ -71,7 +71,7 @@ Unstructured data which doesn’t fit this model, but should stay associated to 
 **d,** A k-nearest neighbor graph of any desired representation is stored as a sparse adjacency matrix of pairwise relationships among observations in `obsp`. This is useful to have easy access to the connectivities of points on a low-dimensional manifold.
 **e,** Subsetting the `AnnData` object by observations produces a view of data and annotations.
 \label{fig:overview}
-](figures/overview.pdf)
+](figures/fig1_overview.pdf)
 
 
 ## The data structure
@@ -121,7 +121,7 @@ This is particularly needed as even pandas `DataFrames` have no canonical persis
 Once in memory, AnnData provides an API for handling annotated matrices, proving a common base object used by a range of analytic computational biology tools and integrating well with the APIs of the established Python machine learning ecosystem.
 The in memory format has a one-to-one relationship with its hierarchical on disk formats (mapping of elements indicated by color) and uses language-independent technologies, enabling the use by non-Python applications and interchange with other ecosystems.
 \label{fig:ecosystem}
-](figures/ecosystem.pdf)
+](figures/fig2_ecosystem.pdf)
 
 Within HDF5 and zarr, we could not find a standard for sparse arrays and DataFrames.
 To account for this, we define a schema for these types, which specify how these elements can be read from disk to memory.
@@ -141,7 +141,7 @@ Through the language-independent on-disk format `h5ad`, interchange of data with
 **b,** Multiple modalities can be represented in multiple `AnnData` objects. The variables axis now corresponds to the union of variables across modalities. Modality-specific and joint representations and manifolds are stored as separate elements in `obsm` or `obsp`, while inter-modality relations can be stored as graphs in `varp`.
 **c,** `AnnData` allows for RNA velocity analyses by storing counts of different splicing states as separate `layers` with velocity-based directed graphs in `obsp`.
 \label{fig:examples}
-](figures/examples.pdf)
+](figures/fig3_examples.pdf)
 
 Let us discuss examples of anndata's ecosystem for spatial transcriptomics, multiple modalities, and RNA velocity (\autoref{fig:examples}).
 In spatial transcriptomics, each high-dimensional observation is annotated with spatial coordinates.
