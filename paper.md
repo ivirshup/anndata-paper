@@ -186,6 +186,6 @@ Alex co-created the package. He introduced centering data science workflows arou
 
 # Competing interests
 
-Fabian reports receiving consulting fees from Roche Diagnostics and Cellarity, and ownership interest in Cellarity and Dermagnostix. Phil and Alex are full-time employees of Cellarity, and have ownership interest in Cellarity.
+Fabian consults for Immunai Inc., Singularity Bio B.V., CytoReason Ltd, and Omniscope Ltd, and has ownership interest in Cellarity Inc. and Dermagnostix GmbH. Phil and Alex are full-time employees of Cellarity Inc., and have ownership interest in Cellarity Inc..
 
 # References
