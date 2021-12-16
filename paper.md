@@ -149,14 +149,11 @@ Squidpy [@Palla2021] uses `AnnData` to model their data by storing spatial coord
 In addition, values from the high dimensional transcriptomic measurement can be overlayed on an image of the sampled tissue, where the image array is stored in `uns`, or handled externally.
 
 `AnnData` can be used to model multimodal data beyond exploiting `AnnData`'s available fields.
-For instance, analyses specific to each modality are carried out on separate `AnnData` objects (\autoref{fig:examples}b).
-From this, analyses inferring or annotations interactions between modalities can be stored as graphs in `varp`.
-Analyses using information from both modalities, like a joint manifold, can be stored in `obsp`.
-A related approach for modelling multimodal data has been utilized by the `muon` package [@Bredikhin2021].
-Here, a new `MuData` object is defined, which is essentially a collection of `AnnData` objects, one for each modality measured.
-Annotations shared across modalities are stored for the observations for the whole object.
+One approach is to join separate `AnnData` objects (\autoref{fig:examples}b) for each modality on the observations index through `anndata.concat`.
+Relations between the variables of the modalities can then be stored as graphs in `varp`, and analyses using information from both modalities, like a joint manifold, in `obsp`.
+Formalizing this, since more recently, the `muon` package [@Bredikhin2021] offers a container-like object `MuData` for a collection of `AnnData` objects, one for each modality.
 This structure extends to the on-disk format where individual `AnnData` objects are stored as discrete elements inside the `MuData`'s `h5mu` files.
-This approach significantly differs from the previous approach by allowing for disjoint sets of observations measured for each modality but is quite similar to `MultiAssayExperiment` within the Bioconductor ecosystem [@Ramos2017].
+This approach has similarity with `MultiAssayExperiment` within the Bioconductor ecosystem [@Ramos2017].
 
 `AnnData` has been used to model data for fitting models of RNA velocity [@Bergen2020] exploiting the `layers` slot to store a set of matrices for different types of RNA counts (\autoref{fig:examples}c).
 
