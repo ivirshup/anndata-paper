@@ -120,7 +120,7 @@ For access along variables, for instance, to visualize gene expression across a 
 
 An `AnnData` object captures a unit of the data analysis workflow that groups original and derived data together.
 Providing a persistent and standard on-disk format for this unit relieves the pain of working with many competing formats for each individual element and thereby aids reproducibility.
-This is particularly needed as even pandas `DataFrames` have no canonical persistent data storage format. `AnnData` has chosen the self-describing hierarchical data formats HDF5 [@collette14] and zarr [@zarr] for this purpose (\autoref{fig:ecosystem}), which are compatible with non-Python programming environments. The broad compatibility and high stability of the format led to wide adoption, and initiatives like the Human Cell Atlas [@HCA] and HuBMAP [@HuBMAP] distribute their single-cell omics datasets through `.h5ad`.
+This is particularly needed as even pandas `DataFrame` has no canonical persistent data storage format. `AnnData` has chosen the self-describing hierarchical data formats HDF5 [@collette14] and zarr [@zarr] for this purpose (\autoref{fig:ecosystem}), which are compatible with non-Python programming environments. The broad compatibility and high stability of the format led to wide adoption, and initiatives like the Human Cell Atlas [@HCA] and HuBMAP [@HuBMAP] distribute their single-cell omics datasets through `.h5ad`.
 
 ![**AnnData provides broad interoperability with tools and platforms.**
 `AnnData` objects can be created from a number of formats, including common delimited text files, or domain-specific formats like `loom` files or `CellRanger` outputs.
@@ -129,10 +129,10 @@ The in memory format has a one-to-one relationship with its hierarchical on disk
 \label{fig:ecosystem}
 ](figures/fig2_ecosystem.pdf)
 
-Within HDF5 and zarr, we could not find a standard for sparse arrays and DataFrames.
-To account for this, we define a schema for these types, which specify how these elements can be read from disk to memory.
-These specifications are versioned and stored in an internal registry, which evolves with the project while maintaining the ability to access older data. Like the `AnnData` object itself, the on-disk representations of these types closely mirror their in-memory representation.
-Compressed sparse matrices (CSR and CSC format) are stored as a collection of three arrays, `data`, `indices`, and `indptr`, while tabular data is stored in a columnar format.
+Within HDF5 and zarr, we could not find a standard for sparse matrices and `DataFrame` objects.
+To account for this, we defined a schema for these types, which specifies how these elements can be read from disk to memory.
+This schema is versioned and stored in an internal registry, which evolves with anndata while maintaining the ability to access older versions.
+On-disk formats within this schema closely mirror their in-memory representations: Compressed sparse matrices (CSR, CSC) are stored as a collection of three arrays, `data`, `indices`, and `indptr`, while tabular data is stored in a columnar format.
 
 
 # The ecosystem
