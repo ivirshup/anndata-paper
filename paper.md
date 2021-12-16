@@ -116,10 +116,10 @@ This concerns handling data both on-disk and in-memory with operations for out-o
 When access patterns are expected to be observation/row-based as in batched learning algorithms, the user can store data matrices as CSR sparse matrices or C-order dense matrices.
 For access along variables, for instance, to visualize gene expression across a dataset, CSC sparse and Fortran order dense matrices allow fast access along columns.
 
-## The on-disk representation
+## The on-disk format
 
-An `AnnData` object captures a unit of the data analysis workflow that groups prior and derived data together.
-Providing a persistent and standard on disk format for this unit relieves the pain of working with many competing formats for each individual element and aids reproducibility.
+An `AnnData` object captures a unit of the data analysis workflow that groups original and derived data together.
+Providing a persistent and standard on-disk format for this unit relieves the pain of working with many competing formats for each individual element and thereby aids reproducibility.
 This is particularly needed as even pandas `DataFrames` have no canonical persistent data storage format. `AnnData` has chosen the self-describing hierarchical data formats HDF5 [@collette14] and zarr [@zarr] for this purpose (\autoref{fig:ecosystem}), which are compatible with non-Python programming environments. The broad compatibility and high stability of the format led to wide adoption, and initiatives like the Human Cell Atlas [@HCA] and HuBMAP [@HuBMAP] distribute their single-cell omics datasets through `.h5ad`.
 
 ![**AnnData provides broad interoperability with tools and platforms.**
