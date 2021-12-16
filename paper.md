@@ -165,7 +165,7 @@ This approach has similarity with `MultiAssayExperiment` within the Bioconductor
 
 # Outlook
 
-The anndata project is under active development towards a variety of features: more advanced out-of-core access, better cloud & relational database integration, a split-apply-combine framework, and interchange with more formats, like Apache Arrow or TileDB [@papadopoulos2016]. Furthermore, anndata engages with projects that aim at building out infrastructure for modeling multi-modal [@Bredikhin2021] and non-homogeneous data, for instance, to enable learning from Electronic Health Records [@Heumos2021]. Finally, we aim at further extending anndata's data model by interfacing with scientific domain knowledge and data provenance tracking.
+The anndata project is under active development towards more advanced out-of-core access, better cloud & relational database integration, a split-apply-combine framework, and interchange with more formats, like Apache Arrow or TileDB [@papadopoulos2016]. Furthermore, anndata engages with projects that aim at building out infrastructure for modeling multi-modal [@Bredikhin2021] and non-homogeneous data, for instance, to enable learning from Electronic Health Records [@Heumos2021]. Finally, we aim at further complementing anndata by interfacing with scientific domain knowledge and data provenance tracking.
 
 
 # Acknowledgements
