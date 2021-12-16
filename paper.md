@@ -77,7 +77,6 @@ Unstructured data which doesn’t fit this model, but should stay associated to 
 \label{fig:overview}
 ](figures/fig1_overview.pdf)
 
-
 ## The data structure
 
 Standardized data structures facilitate data science, with one of the most adopted standards being *tidy data* [@Wickham2014]. anndata complies with *tidy data* but introduces additional conventions by defining a data structure that makes use of conserved dimensions between data matrix and annotations. With that, `AnnData` makes a particular choice for data organization that has been left unaddressed by packages like scikit-learn or PyTorch [@Paszke2019], which model input and output of model transformations as unstructured sets of tensors.
@@ -100,23 +99,22 @@ We note that adoption of *tidy data* [@Wickham2014] leaves some room for ambigui
 
 ## The data analysis workflow
 
-Let us illustrate how `AnnData` supports workflows of iteratively learning representations and scalar annotations in exploratory data analysis.
-For instance, training a clustering, classification or regression model on raw data in `X` produces an estimate of a response variable ŷ. This derived vector is conveniently kept track off by adding it as an annotation of observations (`obs`, \autoref{fig:overview}b).
+Let us illustrate how `AnnData` supports analysis workflows of iteratively learning representations and scalar annotations.
+For instance, training a clustering, classification or regression model on raw data in `X` produces an estimate of a response variable _ŷ_. This derived vector is conveniently kept track off by adding it as an annotation of observations (`obs`, \autoref{fig:overview}b).
 A reduced dimensional representation obtained through, say Principal Component Analysis or any bottleneck layer of a machine learning model, would be stored as multi-dimensional annotation (`obsm`, \autoref{fig:overview}c).
 Storing low-dimensional manifold structure within a desired reduced representation is achieved through a k-nearest neighbor graph in form of a sparse adjacency matrix: a matrix of pairwise relationships of observations (`obsp`, \autoref{fig:overview}d).
-Subsetting the `AnnData` object by observations produces a memory-efficient view of data and annotations (\autoref{fig:overview}e).
-
+Subsetting the data by observations produces a memory-efficient view of `AnnData` (\autoref{fig:overview}e).
 
 ## The efficiency of data operations
 
-Due to the increasing scale of data, emphasis has been placed on providing efficient data handling operations with low memory and runtime overhead.
-To this end, AnnData offers sparse data support, out of core conversions between dense and sparse data, lazy subsetting ("views"), per-element operations for low total memory usage, in-place subsetting, combining AnnData objects with various merge strategies, lazy concatentation, batching, and a backed out-of-memory mode.
+Due to the increasing scale of data, we emphasized efficient operations with low memory and runtime overhead.
+To this end, anndata offers sparse data support, out of core conversions between dense and sparse data, lazy subsetting ("views"), per-element operations for low total memory usage, in-place subsetting, combining `AnnData` objects with various merge strategies, lazy concatentation, batching, and a backed out-of-memory mode.
 
 In particular, `AnnData` takes great pains to support efficient operations with sparse data.
-While there is no production ready API for working with sparse and dense data in the python ecosystem, `AnnData` abstracts over the differing existing APIs making it much easier for novices to handle each.
+While there is no production-ready API for working with sparse and dense data in the python ecosystem, `AnnData` abstracts over the existing APIs making it much easier for novices to handle each.
 This concerns handling data both on-disk and in-memory with operations for out-of-core access.
-When access patterns are expected to be observation (or row) based as in batched learning algorithms, the user can store data matrices as CSR sparse matrices or C-order dense matrices.
-For access along variables – to visualize gene expression across a dataset – CSC sparse and fortran order dense matrices allow fast access along columns.
+When access patterns are expected to be observation/row-based as in batched learning algorithms, the user can store data matrices as CSR sparse matrices or C-order dense matrices.
+For access along variables, for instance, to visualize gene expression across a dataset, CSC sparse and Fortran order dense matrices allow fast access along columns.
 
 ## The on-disk representation
 
