@@ -114,7 +114,7 @@ For access along variables – to visualize gene expression across a dataset –
 
 An `AnnData` object captures a unit of the data analysis workflow that groups prior and derived data together.
 Providing a persistent and standard on disk format for this unit relieves the pain of working with many competing formats for each individual element and aids reproducibility.
-This is particularly needed as even pandas `DataFrames` have no canonical persistent data storage format. `AnnData` has chosen the self-describing hierarchical data formats HDF5 [@collette14] and zarr [@zarr] for this purpose (\autoref{fig:ecosystem}), which are compatible with non-Python programming environments. The broad compatibility and high stability of the format led to wide adoption, and initiatives like the Human Cell Atlas and HubMAP distribute their single-cell omics datasets through `.h5ad`.
+This is particularly needed as even pandas `DataFrames` have no canonical persistent data storage format. `AnnData` has chosen the self-describing hierarchical data formats HDF5 [@collette14] and zarr [@zarr] for this purpose (\autoref{fig:ecosystem}), which are compatible with non-Python programming environments. The broad compatibility and high stability of the format led to wide adoption, and initiatives like the Human Cell Atlas [@HCA] and HuBMAP [@HuBMAP] distribute their single-cell omics datasets through `.h5ad`.
 
 ![**AnnData provides broad interoperability with tools and platforms.**
 `AnnData` objects can be created from a number of formats, including common delimited text files, or domain-specific formats like `loom` files or `CellRanger` outputs.
@@ -149,21 +149,18 @@ Squidpy [@Palla2021] uses `AnnData` to model their data by storing spatial coord
 In addition, values from the high dimensional transcriptomic measurement can be overlayed on an image of the sampled tissue, where the image array is stored in `uns`, or handled externally.
 
 `AnnData` can be used to model multimodal data beyond exploiting `AnnData`'s available fields.
-For instance, analyses specific to each modality are carried out on separate `AnnData` objects (\autoref{fig:examples}b).
-From this, analyses inferring or annotations interactions between modalities can be stored as graphs in `varp`.
-Analyses using information from both modalities, like a joint manifold, can be stored in `obsp`.
-A related approach for modelling multimodal data has been utilized by the `muon` package [@Bredikhin2021].
-Here, a new `MuData` object is defined, which is essentially a collection of `AnnData` objects, one for each modality measured.
-Annotations shared across modalities are stored for the observations for the whole object.
+One approach is to join separate `AnnData` objects (\autoref{fig:examples}b) for each modality on the observations index through `anndata.concat`.
+Relations between the variables of the modalities can then be stored as graphs in `varp`, and analyses using information from both modalities, like a joint manifold, in `obsp`.
+Formalizing this, since more recently, the `muon` package [@Bredikhin2021] offers a container-like object `MuData` for a collection of `AnnData` objects, one for each modality.
 This structure extends to the on-disk format where individual `AnnData` objects are stored as discrete elements inside the `MuData`'s `h5mu` files.
-This approach significantly differs from the previous approach by allowing for disjoint sets of observations measured for each modality but is quite similar to `MultiAssayExperiment` within the Bioconductor ecosystem [@Ramos2017].
+This approach has similarity with `MultiAssayExperiment` within the Bioconductor ecosystem [@Ramos2017].
 
 `AnnData` has been used to model data for fitting models of RNA velocity [@Bergen2020] exploiting the `layers` slot to store a set of matrices for different types of RNA counts (\autoref{fig:examples}c).
 
 
 # Outlook
 
-The anndata project is under active development towards a variety of features: more advanced out-of-core access, better cloud & relational database integration, a split-apply-combine framework, and interchange with more formats, like Apache Arrow. Furthermore, anndata engages with projects that aim at building out infrastructure for modeling multi-modal data and representing non-homogeneous data to enable learning from Electronic Health Records [@Heumos2021]. Finally, we aim at further extending anndata's data model by interfacing with scientific domain knowledge and data provenance tracking.
+The anndata project is under active development towards a variety of features: more advanced out-of-core access, better cloud & relational database integration, a split-apply-combine framework, and interchange with more formats, like Apache Arrow or TileDB [@papadopoulos2016]. Furthermore, anndata engages with projects that aim at building out infrastructure for modeling multi-modal [@Bredikhin2021] and non-homogeneous data, for instance, to enable learning from Electronic Health Records [@Heumos2021]. Finally, we aim at further extending anndata's data model by interfacing with scientific domain knowledge and data provenance tracking.
 
 
 # Acknowledgements
