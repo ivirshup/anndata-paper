@@ -3,10 +3,13 @@ title: "anndata: Annotated data"
 authors:
   - name: Isaac Virshup
     orcid: 0000-0002-1710-8945
-    affiliation: "1,2,†"
+    affiliation: "1,2"
   - name: Sergei Rybakov
     orcid: 0000-0002-4944-6586
     affiliation: "2"
+  - name: Fabian J. Theis
+    orcid: 0000-0002-2419-1943
+    affiliation: "2,3"
   - name: Philipp Angerer
     orcid: 0000-0002-0369-2888
     affiliation: "2,†,‡"
@@ -14,11 +17,13 @@ authors:
     orcid: 0000-0002-8760-7838
     affiliation: "2,†,‡"
 affiliations:
- - name: University of Melbourne.
+ - name: "University of Melbourne."
    index: 1
  - name: "Helmholtz Munich."
    index: 2
- - name: Corresponding authors.
+ - name: "TU Munich."
+   index: 3
+ - name: "Co-creator."
    index: †
  - name: "Present address: Cellarity, Cambridge, MA."
    index: ‡   
@@ -179,6 +184,7 @@ This project receives funding through CZI's Essential Open Source Software for S
 
 Isaac has led the anndata project since v0.7, and contributed as a developer before. His contributions include generalized storage for sparse matrices, IO efficiency, dedicated graph storage, concatenation, and general maintenance.
 Sergei made diverse contributions to the code base, in particular, the first version of `layers`, benchmarking and improvement of the earlier versions of the IO code, the PyTorch dataloader `AnnLoader` and the lazy concatenation data structure `AnnCollection`.
+Fabian contributed to supervision of the project.
 Phil co-created the package. He suggested to replace Scanpy's initial unstructured annotated data object to one mimicking R's ExpressionSet, and wrote AnnData's [first implementation](https://github.com/theislab/scanpy/commit/315859c5586116434ea3b7ce97512a5e2a1030e2) with indexing and slicing affecting one-dimensional metadata and the central matrix.
 He further ascertained good software practices in the project, authored the documentation tool extensions for scanpy and anndata and anndata2ri, a library for in-memory conversion between anndata and SingleCellExperiment.
 Alex co-created the package. He introduced centering data science workflows around an [initially unstructured annotated data object](https://github.com/theislab/scanpy/tree/c22e48abe45a6ccca5918bbf689637caa4b31250), designed the API, wrote tutorials and documentation until v0.7, and implemented most of the early functionality, among others, reading & writing, the on-disk format `h5ad`, views, sparse data support, concatenation, backed mode.
