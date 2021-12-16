@@ -33,33 +33,32 @@ bibliography: [./paper.bib]
 
 # Summary
 
-anndata is a Python package for handling annotated data matrices in memory and on disk.
-It is positioned between pandas and xarray by providing structure that organizes data matrix annotations.
+anndata is a Python package for handling annotated data matrices in memory and on disk, positioned between pandas and xarray.
 anndata offers a broad range of computationally efficient features including, among others, sparse data support, lazy operations, and a PyTorch interface.
 
 
 # Statement of need
 
 Generating insight from high-dimensional data typically works through training models that annotate observations and variables via low-dimensional representations.
-In particular in exploratory workflows, this involves iteratively training models on pre- and post-learned annotations of a data matrix requiring to book-keep both its annotations and learned representations.
-anndata offers a canonical data structure for this, which is neither addressed by pandas [@McKinney2010], nor xarray [@Hoyer2017], nor commonly-used modeling packages like sckit-learn [@Pedregosa2011].
+In exploratory data analysis, this involves iteratively training models on pre- and post-learned annotations of a data matrix requiring to book-keep both its annotations and learned representations.
+anndata offers a canonical data structure for this, which is neither addressed by pandas [@McKinney2010], nor xarray [@Hoyer2017], nor commonly-used modeling packages like scikit-learn [@Pedregosa2011].
 
 
 # Introduction
 
-Since its initial publication as part of Scanpy [@Wolf2018], anndata matured into an independent software project and became widely adopted (674k total PyPI downloads & 40k downloads/month, 220 GitHub stars & 551 dependent repositories).
+Since its initial publication as part of Scanpy [@Wolf2018], anndata matured into an independent software project and became widely adopted (694k total PyPI downloads & 48k downloads/month, 225 GitHub stars & 581 dependent repositories).
 
-So far, anndata has been particularly useful for data analysis in computational biology where advances in single-cell RNA sequencing (scRNA-seq) have given rise to new classes of analysis problems with a stronger adoption of Python over the traditional R ecosystem.
-Previous bulk RNA datasets had few observations with dense measurements while more recent scRNA-seq datasets come with high numbers of observations and sparse measurements, both in dimensions of 20k and more.
-These new data profit much from the application of scalable machine learning tools of the Python ecosystem.
+anndata has been particularly useful for data analysis in computational biology where advances in single-cell RNA sequencing (scRNA-seq) gave rise to new classes of analysis problems with a stronger adoption of Python over the traditional R ecosystem.
+Previous bulk RNA datasets had few observations with dense measurements while more recent scRNA-seq datasets come with high numbers of observations and sparse measurements, both in 20k dimensions and more.
+These new data profit much from the application of the scalable machine learning tools of the Python ecosystem.
 
 
 # The AnnData object
 
-`AnnData` was inspired by similar data structures within the R ecosystem, in particular, `ExpressionSet` [@Huber2015], and the more recent `SingleCellExperiment` [@amezquita2020], and designed to provision data in analysis-ready form.
+`AnnData` is designed for data scientists and was inspired by a similar data structure in the R ecosystem, `ExpressionSet` [@Huber2015].
 
-Within the pydata ecosystem, xarray [@Hoyer2017] enables to deal with labelled data tensors of arbitrary dimensions, while pandas [@McKinney2010] operates on single data matrices (tables) represented as `DataFrame` objects.
-anndata is positioned in between pandas and xarray by providing structure that organizes data matrix annotations. In contrast to pandas and xarray, `AnnData` offers a native on-disk representation that allows sharing data and structured analysis results in form of learned annotations.
+Within the pydata ecosystem, xarray [@Hoyer2017] enables to deal with labeled data tensors of arbitrary dimensions, while pandas [@McKinney2010] operates on single data matrices (tables) represented as `DataFrame` objects.
+anndata is positioned in between pandas and xarray by providing structure that organizes data matrix annotations. In contrast to pandas and xarray, `AnnData` offers a native on-disk format that allows sharing data with analysis results in form of learned annotations.
 
 ![**Structure of the AnnData object.**
 **a,** The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
@@ -67,7 +66,7 @@ Here, color is used to denote elements of the object, with "warm" colors selecte
 The object is centered around the main data matrix `X`, whose two dimensions correspond to observations and variables respectively.
 Primary labels for each of these dimensions are stored as `obs_names` and `var_names`.
 If needed, `layers` stores matrices of the exact same shape as `X`.
-One-dimensional annotations for each dimension are stored in dataframes `obs` and `var`.
+One-dimensional annotations for each dimension are stored in pandas `DataFrame`s `obs` and `var`.
 Multi-dimensional annotations are stored in `obsm` and `varm`.
 Pairwise relationships are stored in `obsp` and `varp`.
 Unstructured data which doesn’t fit this model, but should stay associated to the dataset are stored in `uns`.
@@ -78,48 +77,50 @@ Unstructured data which doesn’t fit this model, but should stay associated to 
 \label{fig:overview}
 ](figures/fig1_overview.pdf)
 
-
 ## The data structure
 
-Standardized data structures facilitate data science, with one of the most adopted standards being *tidy data* [@Wickham2014]. anndata complies with *tidy data*, but introduces additional conventions by defining a data structure that makes use of conserved dimensions between data matrix and annotations. With that, `AnnData` makes a particular choice for data organization that has been left unaddressed by packages like scikit-learn or PyTorch [@Paszke2019], which model input and output of model transformations as unstructured sets of tensors.
+Standardized data structures facilitate data science, with one of the most adopted standards being *tidy data* [@Wickham2014]. anndata complies with *tidy data* but introduces additional conventions by defining a data structure that makes use of conserved dimensions between data matrix and annotations. With that, `AnnData` makes a particular choice for data organization that has been left unaddressed by packages like scikit-learn or PyTorch [@Paszke2019], which model input and output of model transformations as unstructured sets of tensors.
 
-At the core of `AnnData` is the measured data matrix from which we wish to generate insight (`X`). Each data matrix element stores a value and belongs to an observation in a row (`obs_names`) and a variable in a column (`var_names`), following the *tidy data* standard.
-One builds an understanding of the data matrix by annotating observations and variables using `AnnData`'s fields (\autoref{fig:overview}):
+At the core of `AnnData` is the measured data matrix from which we wish to generate insight (`X`).
+Each data matrix element stores a value and belongs to an observation in a row (`obs_names`) and a variable in a column (`var_names`), following the *tidy data* standard.
+Performing exploratory data analysis with `AnnData`, one builds an understanding of the data matrix by annotating observations and variables using `AnnData`'s fields (\autoref{fig:overview}) as follows:
 
-* Annotations that can be stored in a single vector get added to the main annotation `DataFrames` for each axis, `obs` and `var`.
-* Multi-dimensional representations get added to `obsm` and `varm` and graph-like relations among observations are added to `obsp` and `varp`.
+* One-dimensional annotations get added to the main annotation `DataFrame` for each axis, `obs` and `var`.
+* Multi-dimensional representations get added to `obsm` and `varm`.
+* Pair-wise relations among observations and variables get added to `obsp` and `varp` in form of sparse graph adjacency matrices.
 
-Prior annotations of observations will often denote experimental groups, while derived annotations of observations might be summary statistics, cluster assignments, low-dimensional representations or manifolds. Annotations of variables will often denote alternative names or feature importance measures.
+Prior annotations of observations will often denote the experimental groups and conditions that come along with measured data.
+Derived annotations of observations might be summary statistics, cluster assignments, low-dimensional representations or manifolds.
+Annotations of variables will often denote alternative names or measures quantifying feature importance.
 
-In the context of how *tidy data* [@Wickham2014] recommends to order variables by semantics beyond the concepts of *observations* and *variables*, one can think of `X` as contiguously grouping the data of a specific set of *measured* variables of interest, typically high-dimensional readout data in an experiment. Other tables aligned to the observations axis in `AnnData` are then available to store both *fixed* (meta-)data of the experiment and derived data.
+In the context of how [@Wickham2014] recommends to order variables, one can think of `X` as contiguously grouping the data of a specific set of *measured* variables of interest, typically high-dimensional readout data in an experiment. Other tables aligned to the observations axis in `AnnData` are then available to store both *fixed* (meta-)data of the experiment and derived data.
 
-We note that adoption of *tidy data* leaves some room for ambiguity. For instance, the R package `tidySummarizedExperiment` [@Mangiola2021] provisions tables for scRNA-seq data that take a long form that spreads variables belonging to the same observational unit (a cell) across multiple rows. Generally, when there is no canonical observational unit that is defined through a *joint measurement*, for instance, by measuring variables in the same system at the same time, the *tidy data* layout is ambiguous and can result in longer or wider table layouts depending on what users consider the observational unit.
+We note that adoption of *tidy data* [@Wickham2014] leaves some room for ambiguity. For instance, the R package `tidySummarizedExperiment` [@Mangiola2021] provisions tables for scRNA-seq data that take a long form that spreads variables belonging to the same observational unit (a cell) across multiple rows. Generally, it may occur that there is no unique observational unit that is defined through a *joint measurement*, for instance, by measuring variables in the same system at the same time. It such cases, the *tidy data* layout is ambiguous and results in longer or wider table layouts depending on what an analyst considers the observational unit.
 
 ## The data analysis workflow
 
-Let us illustrate how `AnnData` supports workflows of iteratively learning representations and scalar annotations in exploratory data analysis.
-For instance, training a clustering, classification or regression model on raw data in `X` produces an estimate of a response variable ŷ. This derived vector is conveniently kept track off by adding it as an annotation of observations (`obs`, \autoref{fig:overview}b).
+Let us illustrate how `AnnData` supports analysis workflows of iteratively learning representations and scalar annotations.
+For instance, training a clustering, classification or regression model on raw data in `X` produces an estimate of a response variable _ŷ_. This derived vector is conveniently kept track off by adding it as an annotation of observations (`obs`, \autoref{fig:overview}b).
 A reduced dimensional representation obtained through, say Principal Component Analysis or any bottleneck layer of a machine learning model, would be stored as multi-dimensional annotation (`obsm`, \autoref{fig:overview}c).
 Storing low-dimensional manifold structure within a desired reduced representation is achieved through a k-nearest neighbor graph in form of a sparse adjacency matrix: a matrix of pairwise relationships of observations (`obsp`, \autoref{fig:overview}d).
-Subsetting the `AnnData` object by observations produces a memory-efficient view of data and annotations (\autoref{fig:overview}e).
-
+Subsetting the data by observations produces a memory-efficient view of `AnnData` (\autoref{fig:overview}e).
 
 ## The efficiency of data operations
 
-Due to the increasing scale of data, emphasis has been placed on providing efficient data handling operations with low memory and runtime overhead.
-To this end, AnnData offers sparse data support, out of core conversions between dense and sparse data, lazy subsetting ("views"), per-element operations for low total memory usage, in-place subsetting, combining AnnData objects with various merge strategies, lazy concatentation, batching, and a backed out-of-memory mode.
+Due to the increasing scale of data, we emphasized efficient operations with low memory and runtime overhead.
+To this end, anndata offers sparse data support, out of core conversions between dense and sparse data, lazy subsetting ("views"), per-element operations for low total memory usage, in-place subsetting, combining `AnnData` objects with various merge strategies, lazy concatenation, batching, and a backed out-of-memory mode.
 
 In particular, `AnnData` takes great pains to support efficient operations with sparse data.
-While there is no production ready API for working with sparse and dense data in the python ecosystem, `AnnData` abstracts over the differing existing APIs making it much easier for novices to handle each.
+While there is no production-ready API for working with sparse and dense data in the python ecosystem, `AnnData` abstracts over the existing APIs making it much easier for novices to handle each.
 This concerns handling data both on-disk and in-memory with operations for out-of-core access.
-When access patterns are expected to be observation (or row) based as in batched learning algorithms, the user can store data matrices as CSR sparse matrices or C-order dense matrices.
-For access along variables – to visualize gene expression across a dataset – CSC sparse and fortran order dense matrices allow fast access along columns.
+When access patterns are expected to be observation/row-based as in batched learning algorithms, the user can store data matrices as CSR sparse matrices or C-order dense matrices.
+For access along variables, for instance, to visualize gene expression across a dataset, CSC sparse and Fortran order dense matrices allow fast access along columns.
 
-## The on-disk representation
+## The on-disk format
 
-An `AnnData` object captures a unit of the data analysis workflow that groups prior and derived data together.
-Providing a persistent and standard on disk format for this unit relieves the pain of working with many competing formats for each individual element and aids reproducibility.
-This is particularly needed as even pandas `DataFrames` have no canonical persistent data storage format. `AnnData` has chosen the self-describing hierarchical data formats HDF5 [@collette14] and zarr [@zarr] for this purpose (\autoref{fig:ecosystem}), which are compatible with non-Python programming environments. The broad compatibility and high stability of the format led to wide adoption, and initiatives like the Human Cell Atlas [@HCA] and HuBMAP [@HuBMAP] distribute their single-cell omics datasets through `.h5ad`.
+An `AnnData` object captures a unit of the data analysis workflow that groups original and derived data together.
+Providing a persistent and standard on-disk format for this unit relieves the pain of working with many competing formats for each individual element and thereby aids reproducibility.
+This is particularly needed as even pandas `DataFrame` has no canonical persistent data storage format. `AnnData` has chosen the self-describing hierarchical data formats HDF5 [@collette14] and zarr [@zarr] for this purpose (\autoref{fig:ecosystem}), which are compatible with non-Python programming environments. The broad compatibility and high stability of the format led to wide adoption, and initiatives like the Human Cell Atlas [@HCA] and HuBMAP [@HuBMAP] distribute their single-cell omics datasets through `.h5ad`.
 
 ![**AnnData provides broad interoperability with tools and platforms.**
 `AnnData` objects can be created from a number of formats, including common delimited text files, or domain-specific formats like `loom` files or `CellRanger` outputs.
@@ -128,17 +129,17 @@ The in memory format has a one-to-one relationship with its hierarchical on disk
 \label{fig:ecosystem}
 ](figures/fig2_ecosystem.pdf)
 
-Within HDF5 and zarr, we could not find a standard for sparse arrays and DataFrames.
-To account for this, we define a schema for these types, which specify how these elements can be read from disk to memory.
-These specifications are versioned and stored in an internal registry, which evolves with the project while maintaining the ability to access older data. Like the `AnnData` object itself, the on-disk representations of these types closely mirror their in-memory representation.
-Compressed sparse matrices (CSR and CSC format) are stored as a collection of three arrays, `data`, `indices`, and `indptr`, while tabular data is stored in a columnar format.
+Within HDF5 and zarr, we could not find a standard for sparse matrices and `DataFrame` objects.
+To account for this, we defined a schema for these types, which specifies how these elements can be read from disk to memory.
+This schema is versioned and stored in an internal registry, which evolves with anndata while maintaining the ability to access older versions.
+On-disk formats within this schema closely mirror their in-memory representations: Compressed sparse matrices (CSR, CSC) are stored as a collection of three arrays, `data`, `indices`, and `indptr`, while tabular data is stored in a columnar format.
 
 
 # The ecosystem
 
-Over the past 5 years, an ecosystem of packages that are built around anndata has grown. This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Zappia2021] to user-interface-based applications [@Megill2021]. Also tools that are not designed around anndata, like scikit-learn and UMAP [@mcinnes2020], nonetheless integrate seamlessly with anndata-based workflows. Since releasing the PyTorch data loader interface `AnnLoader` and the lazy concatenation structure `AnnCollection`, `anndata` offers native ways of integrating into the Pytorch ecosystem in addition to the integration that scvi-tools [@Gayoso2021] offers.
+Over the past 5 years, an ecosystem of packages that are built around anndata has grown. This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Zappia2021] to user-interface-based applications [@Megill2021]. Tools like scikit-learn and UMAP [@mcinnes2020], which are designed around numpy and not anndata, are still centered around data matrices and hence integrate seamlessly with anndata-based workflows. Since releasing the PyTorch `DataLoader` interface `AnnLoader` and the lazy concatenation structure `AnnCollection`, `anndata` also offers native ways of integrating into the Pytorch ecosystem. scvi-tools [@Gayoso2021]  offers a widely used alternative for this.
 
-Through the language-independent on-disk format `h5ad`, interchange of data with non-Python ecosytems is easily possible. For analysis of scRNA-seq data in R, this has been particularly simplified by anndata2ri, which allows conversion to `SingleCellExperiment` [@amezquita2020] and Seurat's format [@Hao2020].
+Through the language-independent on-disk format `h5ad`, interchange of data with non-Python ecosystems is easily possible. For analysis of scRNA-seq data in R this has been further simplified by anndata2ri, which allows conversion to `SingleCellExperiment` [@amezquita2020] and Seurat's data format [@Hao2020].
 
 ![
 **Examples of how AnnData is used by packages in the ecosystem.**
@@ -148,32 +149,31 @@ Through the language-independent on-disk format `h5ad`, interchange of data with
 \label{fig:examples}
 ](figures/fig3_examples.pdf)
 
-Let us discuss examples of anndata's ecosystem for spatial transcriptomics, multiple modalities, and RNA velocity (\autoref{fig:examples}).
+Let us give three examples of `AnnData`'s applications: spatial transcriptomics, multiple modalities, and RNA velocity (\autoref{fig:examples}).
 In spatial transcriptomics, each high-dimensional observation is annotated with spatial coordinates.
 Squidpy [@Palla2021] uses `AnnData` to model their data by storing spatial coordinates as an array (`obsm`) and a spatial neighborhood graph (`obsp`), which is used to find features which are spatially correlated (\autoref{fig:examples}a).
-In addition, values from the high dimensional transcriptomic measurement can be overlayed on an image of the sampled tissue, where the image array is stored in `uns`, or handled externally.
+In addition, values from the high-dimensional transcriptomic measurement can be overlaid on an image of the sampled tissue, where an image array (reference) is stored in `uns`.
 
-`AnnData` can be used to model multimodal data beyond exploiting `AnnData`'s available fields.
-One approach is to join separate `AnnData` objects (\autoref{fig:examples}b) for each modality on the observations index through `anndata.concat`.
-Relations between the variables of the modalities can then be stored as graphs in `varp`, and analyses using information from both modalities, like a joint manifold, in `obsp`.
-Formalizing this, since more recently, the `muon` package [@Bredikhin2021] offers a container-like object `MuData` for a collection of `AnnData` objects, one for each modality.
-This structure extends to the on-disk format where individual `AnnData` objects are stored as discrete elements inside the `MuData`'s `h5mu` files.
+To model multimodal data, one approach is to join separate `AnnData` objects (\autoref{fig:examples}b) for each modality on the observations index through `anndata.concat`.
+Relations between the variables of different modalities can then be stored as graphs in `varp`, and analyses using information from both modalities, like a joint manifold, in `obsp`.
+Formalizing this further, the `muon` package [@Bredikhin2021] offers a container-like object `MuData` for a collection of `AnnData` objects, one for each modality.
+This structure extends to an on-disk format where individual `AnnData` objects are stored as discrete elements inside `h5mu` files.
 This approach has similarity with `MultiAssayExperiment` within the Bioconductor ecosystem [@Ramos2017].
 
-`AnnData` has been used to model data for fitting models of RNA velocity [@Bergen2020] exploiting the `layers` slot to store a set of matrices for different types of RNA counts (\autoref{fig:examples}c).
+`AnnData` has been used to model data for fitting models of RNA velocity [@Bergen2020] exploiting the `layers` field to store a set of matrices for different types of RNA counts (\autoref{fig:examples}c).
 
 
 # Outlook
 
-The anndata project is under active development towards a variety of features: more advanced out-of-core access, better cloud & relational database integration, a split-apply-combine framework, and interchange with more formats, like Apache Arrow or TileDB [@papadopoulos2016]. Furthermore, anndata engages with projects that aim at building out infrastructure for modeling multi-modal [@Bredikhin2021] and non-homogeneous data, for instance, to enable learning from Electronic Health Records [@Heumos2021]. Finally, we aim at further extending anndata's data model by interfacing with scientific domain knowledge and data provenance tracking.
+The anndata project is under active development towards more advanced out-of-core access, better cloud & relational database integration, a split-apply-combine framework, and interchange with more formats, like Apache Arrow or TileDB [@papadopoulos2016]. Furthermore, anndata engages with projects that aim at building out infrastructure for modeling multi-modal [@Bredikhin2021] and non-homogeneous data, for instance, to enable learning from Electronic Health Records [@Heumos2021]. Finally, we aim at further complementing anndata by interfacing with scientific domain knowledge and data provenance tracking.
 
 
 # Acknowledgements
 
-I.V. is grateful to Christine Wells for consistent support and freedom to pursue work on anndata and Scanpy.
-We are grateful to the Fabian Theis lab for continuing dissemination along with Scanpy over the past years.
+Isaac is grateful to Christine Wells for consistent support and freedom to pursue work on anndata and Scanpy.
 We thank Ryan Williams and Tom White for contributing code related to zarr and Jonathan Bloom for contributing a comprehensive PR on group-by functionality.
-F.A.W. and P.A. thank Cellarity for supporting continued engagement with open source work.
+Alex and Phil thank Cellarity for supporting continued engagement with open source software.
+We are grateful to Fabian's lab for continuing dissemination along with Scanpy over the past years.
 This project receives funding through CZI's Essential Open Source Software for Science grant.
 
 
@@ -185,7 +185,7 @@ Fabian contributed to supervision of the project.
 Phil co-created the package. He suggested to replace Scanpy's initial unstructured annotated data object to one mimicking R's ExpressionSet, and wrote AnnData's [first implementation](https://github.com/theislab/scanpy/commit/315859c5586116434ea3b7ce97512a5e2a1030e2) with indexing and slicing affecting one-dimensional metadata and the central matrix.
 He further ascertained good software practices in the project, authored the documentation tool extensions for scanpy and anndata and anndata2ri, a library for in-memory conversion between anndata and SingleCellExperiment.
 Alex co-created the package. He introduced centering data science workflows around an [initially unstructured annotated data object](https://github.com/theislab/scanpy/tree/c22e48abe45a6ccca5918bbf689637caa4b31250), designed the API, wrote tutorials and documentation until v0.7, and implemented most of the early functionality, among others, reading & writing, the on-disk format `h5ad`, views, sparse data support, concatenation, backed mode.
-
+Isaac and Alex wrote the paper with help from all co-authors.
 
 # Competing interests
 
