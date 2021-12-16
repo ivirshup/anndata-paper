@@ -48,7 +48,7 @@ anndata offers a canonical data structure for this, which is neither addressed b
 
 Since its initial publication as part of Scanpy [@Wolf2018], anndata matured into an independent software project and became widely adopted (694k total PyPI downloads & 48k downloads/month, 225 GitHub stars & 581 dependent repositories).
 
-So far, anndata has been particularly useful for data analysis in computational biology where advances in single-cell RNA sequencing (scRNA-seq) have given rise to new classes of analysis problems with a stronger adoption of Python over the traditional R ecosystem.
+So far, anndata has been particularly useful for data analysis in computational biology where advances in single-cell RNA sequencing (scRNA-seq) gave rise to new classes of analysis problems with a stronger adoption of Python over the traditional R ecosystem.
 Previous bulk RNA datasets had few observations with dense measurements while more recent scRNA-seq datasets come with high numbers of observations and sparse measurements, both in dimensions of 20k and more.
 These new data profit much from the application of scalable machine learning tools of the Python ecosystem.
 
