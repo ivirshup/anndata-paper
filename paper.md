@@ -183,4 +183,9 @@ Phil co-created the package. He suggested to replace Scanpy's initial unstructur
 He further ascertained good software practices in the project, authored the documentation tool extensions for scanpy and anndata and anndata2ri, a library for in-memory conversion between anndata and SingleCellExperiment.
 Alex co-created the package. He introduced centering data science workflows around an [initially unstructured annotated data object](https://github.com/theislab/scanpy/tree/c22e48abe45a6ccca5918bbf689637caa4b31250), designed the API, wrote tutorials and documentation until v0.7, and implemented most of the early functionality, among others, reading & writing, the on-disk format `h5ad`, views, sparse data support, concatenation, backed mode.
 
+
+# Competing interests
+
+Fabian reports receiving consulting fees from Roche Diagnostics and Cellarity, and ownership interest in Cellarity and Dermagnostix. Phil and Alex are full-time employees of Cellarity, and have ownership interest in Cellarity.
+
 # References
