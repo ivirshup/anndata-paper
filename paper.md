@@ -27,7 +27,6 @@ affiliations:
    index: †
  - name: "Present address: Cellarity, Cambridge, MA."
    index: ‡
- - 
 date: December 16, 2021
 bibliography: [./paper.bib]
 ---
