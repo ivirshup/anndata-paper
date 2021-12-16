@@ -40,7 +40,7 @@ anndata offers a broad range of computationally efficient features including, am
 # Statement of need
 
 Generating insight from high-dimensional data matrices typically works through training models that annotate observations and variables via low-dimensional representations.
-In exploratory data analysis, this involves iteratively training models on original and learned annotations and associated representations.
+In exploratory data analysis, this involves _iterative_ training and analysis using original and learned annotations and task-associated representations.
 anndata offers a canonical data structure for book-keeping these, which is neither addressed by pandas [@McKinney2010], nor xarray [@Hoyer2017], nor commonly-used modeling packages like scikit-learn [@Pedregosa2011].
 
 
