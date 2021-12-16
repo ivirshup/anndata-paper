@@ -40,7 +40,7 @@ anndata offers a broad range of computationally efficient features including, am
 # Statement of need
 
 Generating insight from high-dimensional data typically works through training models that annotate observations and variables via low-dimensional representations.
-In particular in exploratory workflows, this involves iteratively training models on pre- and post-learned annotations of a data matrix requiring to book-keep both its annotations and learned representations.
+In exploratory data analysis, this involves iteratively training models on pre- and post-learned annotations of a data matrix requiring to book-keep both its annotations and learned representations.
 anndata offers a canonical data structure for this, which is neither addressed by pandas [@McKinney2010], nor xarray [@Hoyer2017], nor commonly-used modeling packages like sckit-learn [@Pedregosa2011].
 
 
@@ -55,7 +55,7 @@ These new data profit much from the application of the scalable machine learning
 
 # The AnnData object
 
-`AnnData` was inspired by a similar data structure in the R ecosystem, `ExpressionSet` [@Huber2015], and designed to provision data in _analysis_-ready form.
+`AnnData` is designed for data scientists and was inspired by a similar data structure in the R ecosystem, `ExpressionSet` [@Huber2015].
 
 Within the pydata ecosystem, xarray [@Hoyer2017] enables to deal with labelled data tensors of arbitrary dimensions, while pandas [@McKinney2010] operates on single data matrices (tables) represented as `DataFrame` objects.
 anndata is positioned in between pandas and xarray by providing structure that organizes data matrix annotations. In contrast to pandas and xarray, `AnnData` offers a native on-disk format that allows sharing data with analysis results in form of learned annotations.
@@ -83,9 +83,9 @@ Standardized data structures facilitate data science, with one of the most adopt
 
 At the core of `AnnData` is the measured data matrix from which we wish to generate insight (`X`).
 Each data matrix element stores a value and belongs to an observation in a row (`obs_names`) and a variable in a column (`var_names`), following the *tidy data* standard.
-In an _analysis_, one builds an understanding of the data matrix by annotating observations and variables using `AnnData`'s fields (\autoref{fig:overview}):
+Performing exploratory data analysis with `AnnData`, one builds an understanding of the data matrix by annotating observations and variables using `AnnData`'s fields (\autoref{fig:overview}) as follows:
 
-* Annotations that can be stored in a single vector get added to the main annotation `DataFrame` for each axis, `obs` and `var`.
+* One-dimensional annotations get added to the main annotation `DataFrame` for each axis, `obs` and `var`.
 * Multi-dimensional representations get added to `obsm` and `varm`.
 * Pair-wise relations among observations and variables get added to `obsp` and `varp` in form of sparse graph adjacency matrices.
 
