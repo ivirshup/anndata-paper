@@ -41,7 +41,7 @@ anndata offers a broad range of computationally efficient features including, am
 
 Generating insight from high-dimensional data typically works through training models that annotate observations and variables via low-dimensional representations.
 In exploratory data analysis, this involves iteratively training models on pre- and post-learned annotations of a data matrix requiring to book-keep both its annotations and learned representations.
-anndata offers a canonical data structure for this, which is neither addressed by pandas [@McKinney2010], nor xarray [@Hoyer2017], nor commonly-used modeling packages like sckit-learn [@Pedregosa2011].
+anndata offers a canonical data structure for this, which is neither addressed by pandas [@McKinney2010], nor xarray [@Hoyer2017], nor commonly-used modeling packages like scikit-learn [@Pedregosa2011].
 
 
 # Introduction
@@ -57,7 +57,7 @@ These new data profit much from the application of the scalable machine learning
 
 `AnnData` is designed for data scientists and was inspired by a similar data structure in the R ecosystem, `ExpressionSet` [@Huber2015].
 
-Within the pydata ecosystem, xarray [@Hoyer2017] enables to deal with labelled data tensors of arbitrary dimensions, while pandas [@McKinney2010] operates on single data matrices (tables) represented as `DataFrame` objects.
+Within the pydata ecosystem, xarray [@Hoyer2017] enables to deal with labeled data tensors of arbitrary dimensions, while pandas [@McKinney2010] operates on single data matrices (tables) represented as `DataFrame` objects.
 anndata is positioned in between pandas and xarray by providing structure that organizes data matrix annotations. In contrast to pandas and xarray, `AnnData` offers a native on-disk format that allows sharing data with analysis results in form of learned annotations.
 
 ![**Structure of the AnnData object.**
@@ -66,7 +66,7 @@ Here, color is used to denote elements of the object, with "warm" colors selecte
 The object is centered around the main data matrix `X`, whose two dimensions correspond to observations and variables respectively.
 Primary labels for each of these dimensions are stored as `obs_names` and `var_names`.
 If needed, `layers` stores matrices of the exact same shape as `X`.
-One-dimensional annotations for each dimension are stored in dataframes `obs` and `var`.
+One-dimensional annotations for each dimension are stored in pandas `DataFrame`s `obs` and `var`.
 Multi-dimensional annotations are stored in `obsm` and `varm`.
 Pairwise relationships are stored in `obsp` and `varp`.
 Unstructured data which doesn’t fit this model, but should stay associated to the dataset are stored in `uns`.
@@ -108,7 +108,7 @@ Subsetting the data by observations produces a memory-efficient view of `AnnData
 ## The efficiency of data operations
 
 Due to the increasing scale of data, we emphasized efficient operations with low memory and runtime overhead.
-To this end, anndata offers sparse data support, out of core conversions between dense and sparse data, lazy subsetting ("views"), per-element operations for low total memory usage, in-place subsetting, combining `AnnData` objects with various merge strategies, lazy concatentation, batching, and a backed out-of-memory mode.
+To this end, anndata offers sparse data support, out of core conversions between dense and sparse data, lazy subsetting ("views"), per-element operations for low total memory usage, in-place subsetting, combining `AnnData` objects with various merge strategies, lazy concatenation, batching, and a backed out-of-memory mode.
 
 In particular, `AnnData` takes great pains to support efficient operations with sparse data.
 While there is no production-ready API for working with sparse and dense data in the python ecosystem, `AnnData` abstracts over the existing APIs making it much easier for novices to handle each.
@@ -139,7 +139,7 @@ On-disk formats within this schema closely mirror their in-memory representation
 
 Over the past 5 years, an ecosystem of packages that are built around anndata has grown. This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Zappia2021] to user-interface-based applications [@Megill2021]. Tools like scikit-learn and UMAP [@mcinnes2020], which are designed around numpy and not anndata, are still centered around data matrices and hence integrate seamlessly with anndata-based workflows. Since releasing the PyTorch `DataLoader` interface `AnnLoader` and the lazy concatenation structure `AnnCollection`, `anndata` also offers native ways of integrating into the Pytorch ecosystem. scvi-tools [@Gayoso2021]  offers a widely used alternative for this.
 
-Through the language-independent on-disk format `h5ad`, interchange of data with non-Python ecosytems is easily possible. For analysis of scRNA-seq data in R this has been further simplified by anndata2ri, which allows conversion to `SingleCellExperiment` [@amezquita2020] and Seurat's data format [@Hao2020].
+Through the language-independent on-disk format `h5ad`, interchange of data with non-Python ecosystems is easily possible. For analysis of scRNA-seq data in R this has been further simplified by anndata2ri, which allows conversion to `SingleCellExperiment` [@amezquita2020] and Seurat's data format [@Hao2020].
 
 ![
 **Examples of how AnnData is used by packages in the ecosystem.**
@@ -152,7 +152,7 @@ Through the language-independent on-disk format `h5ad`, interchange of data with
 Let us give three examples of `AnnData`'s applications: spatial transcriptomics, multiple modalities, and RNA velocity (\autoref{fig:examples}).
 In spatial transcriptomics, each high-dimensional observation is annotated with spatial coordinates.
 Squidpy [@Palla2021] uses `AnnData` to model their data by storing spatial coordinates as an array (`obsm`) and a spatial neighborhood graph (`obsp`), which is used to find features which are spatially correlated (\autoref{fig:examples}a).
-In addition, values from the high-dimensional transcriptomic measurement can be overlayed on an image of the sampled tissue, where an image array (reference) is stored in `uns`.
+In addition, values from the high-dimensional transcriptomic measurement can be overlaid on an image of the sampled tissue, where an image array (reference) is stored in `uns`.
 
 To model multimodal data, one approach is to join separate `AnnData` objects (\autoref{fig:examples}b) for each modality on the observations index through `anndata.concat`.
 Relations between the variables of different modalities can then be stored as graphs in `varp`, and analyses using information from both modalities, like a joint manifold, in `obsp`.
