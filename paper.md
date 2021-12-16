@@ -137,9 +137,9 @@ On-disk formats within this schema closely mirror their in-memory representation
 
 # The ecosystem
 
-Over the past 5 years, an ecosystem of packages that are built around anndata has grown. This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Zappia2021] to user-interface-based applications [@Megill2021]. Also tools that are not designed around anndata, like scikit-learn and UMAP [@mcinnes2020], nonetheless integrate seamlessly with anndata-based workflows. Since releasing the PyTorch data loader interface `AnnLoader` and the lazy concatenation structure `AnnCollection`, `anndata` offers native ways of integrating into the Pytorch ecosystem in addition to the integration that scvi-tools [@Gayoso2021] offers.
+Over the past 5 years, an ecosystem of packages that are built around anndata has grown. This ecosystem is highly focused on scRNA-seq (\autoref{fig:ecosystem}), and ranges from Python APIs [@Zappia2021] to user-interface-based applications [@Megill2021]. Tools like scikit-learn and UMAP [@mcinnes2020], which are designed around numpy and not anndata, are still centered around data matrices and hence integrate seamlessly with anndata-based workflows. Since releasing the PyTorch `DataLoader` interface `AnnLoader` and the lazy concatenation structure `AnnCollection`, `anndata` also offers native ways of integrating into the Pytorch ecosystem. scvi-tools [@Gayoso2021]  offers a widely used alternative for this.
 
-Through the language-independent on-disk format `h5ad`, interchange of data with non-Python ecosytems is easily possible. For analysis of scRNA-seq data in R, this has been particularly simplified by anndata2ri, which allows conversion to `SingleCellExperiment` [@amezquita2020] and Seurat's format [@Hao2020].
+Through the language-independent on-disk format `h5ad`, interchange of data with non-Python ecosytems is easily possible. For analysis of scRNA-seq data in R this has been further simplified by anndata2ri, which allows conversion to `SingleCellExperiment` [@amezquita2020] and Seurat's data format [@Hao2020].
 
 ![
 **Examples of how AnnData is used by packages in the ecosystem.**
@@ -149,19 +149,18 @@ Through the language-independent on-disk format `h5ad`, interchange of data with
 \label{fig:examples}
 ](figures/fig3_examples.pdf)
 
-Let us discuss examples of anndata's ecosystem for spatial transcriptomics, multiple modalities, and RNA velocity (\autoref{fig:examples}).
+Let us give three examples of `AnnData`'s applications: spatial transcriptomics, multiple modalities, and RNA velocity (\autoref{fig:examples}).
 In spatial transcriptomics, each high-dimensional observation is annotated with spatial coordinates.
 Squidpy [@Palla2021] uses `AnnData` to model their data by storing spatial coordinates as an array (`obsm`) and a spatial neighborhood graph (`obsp`), which is used to find features which are spatially correlated (\autoref{fig:examples}a).
-In addition, values from the high dimensional transcriptomic measurement can be overlayed on an image of the sampled tissue, where the image array is stored in `uns`, or handled externally.
+In addition, values from the high-dimensional transcriptomic measurement can be overlayed on an image of the sampled tissue, where an image array (reference) is stored in `uns`.
 
-`AnnData` can be used to model multimodal data beyond exploiting `AnnData`'s available fields.
-One approach is to join separate `AnnData` objects (\autoref{fig:examples}b) for each modality on the observations index through `anndata.concat`.
-Relations between the variables of the modalities can then be stored as graphs in `varp`, and analyses using information from both modalities, like a joint manifold, in `obsp`.
-Formalizing this, since more recently, the `muon` package [@Bredikhin2021] offers a container-like object `MuData` for a collection of `AnnData` objects, one for each modality.
-This structure extends to the on-disk format where individual `AnnData` objects are stored as discrete elements inside the `MuData`'s `h5mu` files.
+To model multimodal data, one approach is to join separate `AnnData` objects (\autoref{fig:examples}b) for each modality on the observations index through `anndata.concat`.
+Relations between the variables of different modalities can then be stored as graphs in `varp`, and analyses using information from both modalities, like a joint manifold, in `obsp`.
+Formalizing this further, the `muon` package [@Bredikhin2021] offers a container-like object `MuData` for a collection of `AnnData` objects, one for each modality.
+This structure extends to an on-disk format where individual `AnnData` objects are stored as discrete elements inside `h5mu` files.
 This approach has similarity with `MultiAssayExperiment` within the Bioconductor ecosystem [@Ramos2017].
 
-`AnnData` has been used to model data for fitting models of RNA velocity [@Bergen2020] exploiting the `layers` slot to store a set of matrices for different types of RNA counts (\autoref{fig:examples}c).
+`AnnData` has been used to model data for fitting models of RNA velocity [@Bergen2020] exploiting the `layers` field to store a set of matrices for different types of RNA counts (\autoref{fig:examples}c).
 
 
 # Outlook
