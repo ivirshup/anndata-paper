@@ -49,16 +49,16 @@ anndata offers a canonical data structure for this, which is neither addressed b
 Since its initial publication as part of Scanpy [@Wolf2018], anndata matured into an independent software project and became widely adopted (694k total PyPI downloads & 48k downloads/month, 225 GitHub stars & 581 dependent repositories).
 
 So far, anndata has been particularly useful for data analysis in computational biology where advances in single-cell RNA sequencing (scRNA-seq) gave rise to new classes of analysis problems with a stronger adoption of Python over the traditional R ecosystem.
-Previous bulk RNA datasets had few observations with dense measurements while more recent scRNA-seq datasets come with high numbers of observations and sparse measurements, both in dimensions of 20k and more.
-These new data profit much from the application of scalable machine learning tools of the Python ecosystem.
+Previous bulk RNA datasets had few observations with dense measurements while more recent scRNA-seq datasets come with high numbers of observations and sparse measurements, both in 20k dimensions and more.
+These new data profit much from the application of the scalable machine learning tools of the Python ecosystem.
 
 
 # The AnnData object
 
-`AnnData` was inspired by similar data structures within the R ecosystem, in particular, `ExpressionSet` [@Huber2015], and the more recent `SingleCellExperiment` [@amezquita2020], and designed to provision data in analysis-ready form.
+`AnnData` was inspired by a similar data structure in the R ecosystem, `ExpressionSet` [@Huber2015], and designed to provision data in _analysis_-ready form.
 
 Within the pydata ecosystem, xarray [@Hoyer2017] enables to deal with labelled data tensors of arbitrary dimensions, while pandas [@McKinney2010] operates on single data matrices (tables) represented as `DataFrame` objects.
-anndata is positioned in between pandas and xarray by providing structure that organizes data matrix annotations. In contrast to pandas and xarray, `AnnData` offers a native on-disk representation that allows sharing data and structured analysis results in form of learned annotations.
+anndata is positioned in between pandas and xarray by providing structure that organizes data matrix annotations. In contrast to pandas and xarray, `AnnData` offers a native on-disk format that allows sharing data with analysis results in form of learned annotations.
 
 ![**Structure of the AnnData object.**
 **a,** The AnnData object is a collection of arrays aligned to the common dimensions of observations (`obs`) and variables (`var`).
@@ -80,19 +80,23 @@ Unstructured data which doesn’t fit this model, but should stay associated to 
 
 ## The data structure
 
-Standardized data structures facilitate data science, with one of the most adopted standards being *tidy data* [@Wickham2014]. anndata complies with *tidy data*, but introduces additional conventions by defining a data structure that makes use of conserved dimensions between data matrix and annotations. With that, `AnnData` makes a particular choice for data organization that has been left unaddressed by packages like scikit-learn or PyTorch [@Paszke2019], which model input and output of model transformations as unstructured sets of tensors.
+Standardized data structures facilitate data science, with one of the most adopted standards being *tidy data* [@Wickham2014]. anndata complies with *tidy data* but introduces additional conventions by defining a data structure that makes use of conserved dimensions between data matrix and annotations. With that, `AnnData` makes a particular choice for data organization that has been left unaddressed by packages like scikit-learn or PyTorch [@Paszke2019], which model input and output of model transformations as unstructured sets of tensors.
 
-At the core of `AnnData` is the measured data matrix from which we wish to generate insight (`X`). Each data matrix element stores a value and belongs to an observation in a row (`obs_names`) and a variable in a column (`var_names`), following the *tidy data* standard.
-One builds an understanding of the data matrix by annotating observations and variables using `AnnData`'s fields (\autoref{fig:overview}):
+At the core of `AnnData` is the measured data matrix from which we wish to generate insight (`X`).
+Each data matrix element stores a value and belongs to an observation in a row (`obs_names`) and a variable in a column (`var_names`), following the *tidy data* standard.
+In an _analysis_, one builds an understanding of the data matrix by annotating observations and variables using `AnnData`'s fields (\autoref{fig:overview}):
 
-* Annotations that can be stored in a single vector get added to the main annotation `DataFrames` for each axis, `obs` and `var`.
-* Multi-dimensional representations get added to `obsm` and `varm` and graph-like relations among observations are added to `obsp` and `varp`.
+* Annotations that can be stored in a single vector get added to the main annotation `DataFrame` for each axis, `obs` and `var`.
+* Multi-dimensional representations get added to `obsm` and `varm`.
+* Pair-wise relations among observations and variables get added to `obsp` and `varp` in form of sparse graph adjacency matrices.
 
-Prior annotations of observations will often denote experimental groups, while derived annotations of observations might be summary statistics, cluster assignments, low-dimensional representations or manifolds. Annotations of variables will often denote alternative names or feature importance measures.
+Prior annotations of observations will often denote the experimental groups and conditions that come along with measured data.
+Derived annotations of observations might be summary statistics, cluster assignments, low-dimensional representations or manifolds.
+Annotations of variables will often denote alternative names or measures quantifying feature importance.
 
-In the context of how *tidy data* [@Wickham2014] recommends to order variables by semantics beyond the concepts of *observations* and *variables*, one can think of `X` as contiguously grouping the data of a specific set of *measured* variables of interest, typically high-dimensional readout data in an experiment. Other tables aligned to the observations axis in `AnnData` are then available to store both *fixed* (meta-)data of the experiment and derived data.
+In the context of how [@Wickham2014] recommends to order variables, one can think of `X` as contiguously grouping the data of a specific set of *measured* variables of interest, typically high-dimensional readout data in an experiment. Other tables aligned to the observations axis in `AnnData` are then available to store both *fixed* (meta-)data of the experiment and derived data.
 
-We note that adoption of *tidy data* leaves some room for ambiguity. For instance, the R package `tidySummarizedExperiment` [@Mangiola2021] provisions tables for scRNA-seq data that take a long form that spreads variables belonging to the same observational unit (a cell) across multiple rows. Generally, when there is no canonical observational unit that is defined through a *joint measurement*, for instance, by measuring variables in the same system at the same time, the *tidy data* layout is ambiguous and can result in longer or wider table layouts depending on what users consider the observational unit.
+We note that adoption of *tidy data* [@Wickham2014] leaves some room for ambiguity. For instance, the R package `tidySummarizedExperiment` [@Mangiola2021] provisions tables for scRNA-seq data that take a long form that spreads variables belonging to the same observational unit (a cell) across multiple rows. Generally, it may occur that there is no unique observational unit that is defined through a *joint measurement*, for instance, by measuring variables in the same system at the same time. It such cases, the *tidy data* layout is ambiguous and results in longer or wider table layouts depending on what an analyst considers the observational unit.
 
 ## The data analysis workflow
 
