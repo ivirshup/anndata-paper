@@ -17,12 +17,12 @@ authors:
   - name: Fabian J. Theis
     orcid: 0000-0002-2419-1943
     affiliation: "2,3"
-  - name: Philipp Angerer^[co-creator]
+  - name: Philipp Angerer^[Co-creator, present address: Cellarity, Cambridge, MA.]
     orcid: 0000-0002-0369-2888
-    affiliation: "2,†,‡"
-  - name: F. Alexander Wolf^[co-creator]
+    affiliation: "2"
+  - name: F. Alexander Wolf^[Co-creator.]
     orcid: 0000-0002-8760-7838
-    affiliation: "2,†,‡"
+    affiliation: "2"
 affiliations:
  - name: "University of Melbourne."
    index: 1
