@@ -17,10 +17,10 @@ authors:
   - name: Fabian J. Theis
     orcid: 0000-0002-2419-1943
     affiliation: "2,3"
-  - name: Philipp Angerer
+  - name: Philipp Angerer^[co-creator]
     orcid: 0000-0002-0369-2888
     affiliation: "2,†,‡"
-  - name: F. Alexander Wolf
+  - name: F. Alexander Wolf^[co-creator]
     orcid: 0000-0002-8760-7838
     affiliation: "2,†,‡"
 affiliations:
@@ -30,10 +30,6 @@ affiliations:
    index: 2
  - name: "TU Munich."
    index: 3
- - name: "Co-creator."
-   index: †
- - name: "Present address: Cellarity, Cambridge, MA."
-   index: ‡
 date: December 16, 2021
 bibliography: [./paper.bib]
 ---
