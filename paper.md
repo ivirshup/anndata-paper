@@ -17,7 +17,7 @@ authors:
   - name: Fabian J. Theis
     orcid: 0000-0002-2419-1943
     affiliation: "2,3"
-  - name: Philipp Angerer^[Co-creator, present address: Cellarity, Cambridge, MA.]
+  - name: Philipp Angerer^[Co-creator; present affiliation at Cellarity, Cambridge, MA.]
     orcid: 0000-0002-0369-2888
     affiliation: "2"
   - name: F. Alexander Wolf^[Co-creator.]
